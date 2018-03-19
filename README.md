@@ -1,6 +1,6 @@
 # dwv-vue
 
-> A Vue.js project
+> Medical viewer DWV (DICOM Web Viewer) and Vue.js (based on the [Webpack + vue-loader](https://github.com/vuejs-templates/webpack/) template).
 
 ## Build Setup
 

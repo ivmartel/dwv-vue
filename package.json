@@ -1,8 +1,9 @@
 {
   "name": "dwv-vue",
-  "version": "1.0.0",
-  "description": "A Vue.js project",
+  "version": "0.1.0",
+  "description": "Medical viewer using DWV (DICOM Web Viewer) and Vue.js.",
   "author": "ivmartel",
+  "license": "GPL-3.0",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -14,7 +15,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "vue": "^2.5.2"
+    "vue": "^2.5.2",
+    "dwv": "~0.23.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
