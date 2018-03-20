@@ -1,8 +1,10 @@
 # dwv-vue
 
-> Medical viewer DWV (DICOM Web Viewer) and Vue.js (based on the [Webpack + vue-loader](https://github.com/vuejs-templates/webpack/) template).
+Medical viewer using [DWV](https://github.com/ivmartel/dwv) (DICOM Web Viewer) and [Vue.js](https://vuejs.org/).
 
-## Build Setup
+This project was generated with the [webpack](https://github.com/vuejs-templates/webpack/) template version 1.3.1 for the vue-cli.
+
+## Available Scripts
 
 ``` bash
 # install dependencies
@@ -26,5 +28,7 @@ npm run e2e
 # run all tests
 npm test
 ```
+
+Unit tests use [Jest](https://facebook.github.io/jest/) and e2e tests [Nightwatch.js](http://nightwatchjs.org/).
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
