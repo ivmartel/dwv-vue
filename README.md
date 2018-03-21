@@ -1,5 +1,7 @@
 # dwv-vue
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ivmartel/dwv-vue.svg)](https://greenkeeper.io/)
+
 Medical viewer using [DWV](https://github.com/ivmartel/dwv) (DICOM Web Viewer) and [Vue.js](https://vuejs.org/).
 
 All coding/implementation contributions and comments are welcome.
