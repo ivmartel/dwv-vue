@@ -1,6 +1,7 @@
 <template>
   <div id="dwv">
     <div class="button-row">
+      <button value="Scroll" v-on:click="onClick">Scroll</button>
       <button value="WindowLevel" v-on:click="onClick">WindowLevel</button>
       <button value="ZoomAndPan" v-on:click="onClick">ZoomAndPan</button>
     </div>
@@ -17,39 +18,41 @@
 import Vue from 'vue'
 import dwv from 'dwv'
 
-// overrides (appgui.js)
+// gui overrides
 
-// Progress
+// decode query
+dwv.utils.decodeQuery = dwv.utils.base.decodeQuery
+// progress
 dwv.gui.displayProgress = function () {}
-// Window
+// window
 dwv.gui.getWindowSize = dwv.gui.base.getWindowSize
 // get element
 dwv.gui.getElement = dwv.gui.base.getElement
-
-// launch (applauncher.js)
-
-// create app
-var myapp = new dwv.App()
-
-// initialise app
-myapp.init({
-  'containerDivId': 'dwv',
-  'fitToWindow': true,
-  'tools': ['Scroll', 'ZoomAndPan', 'WindowLevel'],
-  'isMobile': true
-})
-
-// load local dicom
-myapp.loadURLs(['./static/bbmri-53323131.dcm'])
+// refresh element
+dwv.gui.refreshElement = dwv.gui.base.refreshElement
 
 export default {
   name: 'dwv',
-  data () {
+  data: function () {
     return {
       legend: 'Powered by dwv ' + dwv.getVersion() + ' and Vue.js ' + Vue.version,
-      onClick: function (event) {
-        myapp.onChangeTool(event)
-      }
+      dwvApp: null
+    }
+  },
+  mounted () {
+    // create app
+    this.dwvApp = new dwv.App()
+    // initialise app
+    this.dwvApp.init({
+      'containerDivId': 'dwv',
+      'fitToWindow': true,
+      'tools': ['Scroll', 'ZoomAndPan', 'WindowLevel'],
+      'isMobile': true
+    })
+  },
+  methods: {
+    onClick: function (event) {
+      this.dwvApp.onChangeTool(event)
     }
   }
 }
@@ -57,6 +60,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#dwv { font-family: Arial, Helvetica, sans-serif; }
+
 .button-row {
   text-align: center;
   justify-content: space-around;
@@ -70,7 +75,7 @@ button:hover { background-color: #555; }
 button:disabled { background-color: #08b; }
 
 .legend {
-  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
   font-size: 8pt;
 }
 
