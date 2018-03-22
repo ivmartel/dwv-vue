@@ -4,10 +4,6 @@
 # we should be in /home/travis/build/ivmartel/dwv-vue
 echo -e "Starting to update gh-pages\n"
 
-# build deploy version (result in ./dist)
-# base href is set in config/index.js at build.assetsPublicPath
-yarn run build || exit 1
-
 # go to home and setup git
 cd $HOME
 git config --global user.email "travis@travis-ci.org"
