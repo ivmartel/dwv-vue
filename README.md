@@ -12,25 +12,25 @@ dwv-vue is not certified for diagnostic use. Released under GNU GPL-3.0 license 
 
 ``` bash
 # install dependencies
-npm install
+yarn install
 
 # serve with hot reload at localhost:8080
-npm run dev
+yarn run dev
 
 # build for production with minification
-npm run build
+yarn run build
 
 # build for production and view the bundle analyzer report
-npm run build --report
+yarn run build --report
 
 # run unit tests
-npm run unit
+yarn run unit
 
 # run e2e tests
-npm run e2e
+yarn run e2e
 
 # run all tests
-npm test
+yarn test
 ```
 
 Unit tests use [Jest](https://facebook.github.io/jest/) and e2e tests [Nightwatch.js](http://nightwatchjs.org/).
