@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "vue": "^2.5.2",
-    "dwv": "0.23.2"
+    "dwv": "0.23.3"
   },
   "devDependencies": {
     "autoprefixer": "^8.1.0",
