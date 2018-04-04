@@ -1,9 +1,9 @@
 <template>
   <div id="dwv">
     <div class="button-row">
-      <button value="Scroll" v-on:click="onClick">Scroll</button>
-      <button value="WindowLevel" v-on:click="onClick">WindowLevel</button>
-      <button value="ZoomAndPan" v-on:click="onClick">ZoomAndPan</button>
+      <md-button class="md-raised md-primary" value="Scroll" v-on:click="onClick">Scroll</md-button>
+      <md-button class="md-raised md-primary" value="WindowLevel" v-on:click="onClick">WindowLevel</md-button>
+      <md-button class="md-raised md-primary" value="ZoomAndPan" v-on:click="onClick">ZoomAndPan</md-button>
     </div>
     <div class="layerContainer">
       <div class="dropBox"></div>
@@ -16,7 +16,12 @@
 <script>
 // import
 import Vue from 'vue'
+import MdButton from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
 import dwv from 'dwv'
+
+Vue.use(MdButton)
 
 // gui overrides
 
@@ -64,15 +69,7 @@ export default {
 
 .button-row {
   text-align: center;
-  justify-content: space-around;
 }
-button {
-    margin: 5px; padding: 10px 10px;
-    border: 0 none; border-radius: 4px;
-    font-size: 14px; font-weight: 600;
-    color: #fff; background-color: #444; }
-button:hover { background-color: #555; }
-button:disabled { background-color: #08b; }
 
 .legend {
   text-align: center;
