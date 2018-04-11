@@ -34,6 +34,13 @@ dwv.gui.getElement = dwv.gui.base.getElement
 // refresh element
 dwv.gui.refreshElement = dwv.gui.base.refreshElement
 
+// Image decoders (for web workers)
+dwv.image.decoderScripts = {
+  'jpeg2000': 'static/dwv/decoders/pdfjs/decode-jpeg2000.js',
+  'jpeg-lossless': 'static/dwv/decoders/rii-mango/decode-jpegloss.js',
+  'jpeg-baseline': 'static/dwv/decoders/pdfjs/decode-jpegbaseline.js'
+}
+
 export default {
   name: 'dwv',
   data: function () {

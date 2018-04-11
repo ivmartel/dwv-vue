@@ -118,6 +118,11 @@ const webpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
+      },
+      {
+        from: path.resolve(__dirname, '../node_modules/dwv/decoders'),
+        to: config.dev.assetsSubDirectory + '/dwv/decoders',
+        ignore: ['.*']
       }
     ])
   ]
