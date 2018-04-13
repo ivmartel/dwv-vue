@@ -4,10 +4,12 @@
       <md-button class="md-raised md-primary" value="Scroll" v-on:click="onClick">Scroll</md-button>
       <md-button class="md-raised md-primary" value="WindowLevel" v-on:click="onClick">WindowLevel</md-button>
       <md-button class="md-raised md-primary" value="ZoomAndPan" v-on:click="onClick">ZoomAndPan</md-button>
+      <md-button class="md-raised md-primary" value="Draw" v-on:click="onClick">Draw</md-button>
     </div>
     <div class="layerContainer">
       <div class="dropBox"></div>
       <canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
+      <div class="drawDiv"></div>
     </div>
     <div class="legend">{{ legend }}</div>
   </div>
@@ -56,7 +58,8 @@ export default {
     this.dwvApp.init({
       'containerDivId': 'dwv',
       'fitToWindow': true,
-      'tools': ['Scroll', 'ZoomAndPan', 'WindowLevel'],
+      'tools': ['Scroll', 'ZoomAndPan', 'WindowLevel', 'Draw'],
+      'shapes': ['Ruler'],
       'isMobile': true
     })
   },
