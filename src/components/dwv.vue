@@ -91,6 +91,8 @@ export default {
 .imageLayer {
     position: absolute;
     left: 0px; }
+.drawDiv {
+    position: absolute; pointer-events: none; }
 
 /* drag&drop */
 .dropBox {
