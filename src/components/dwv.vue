@@ -1,5 +1,6 @@
 <template>
   <div id="dwv">
+    <md-progress-bar md-mode="determinate" :md-value="loaded"></md-progress-bar>
     <div class="button-row">
       <md-button class="md-raised md-primary" value="Scroll" v-on:click="onClick">Scroll</md-button>
       <md-button class="md-raised md-primary" value="WindowLevel" v-on:click="onClick">WindowLevel</md-button>
@@ -48,7 +49,8 @@ export default {
   data: function () {
     return {
       legend: 'Powered by dwv ' + dwv.getVersion() + ' and Vue.js ' + Vue.version,
-      dwvApp: null
+      dwvApp: null,
+      loaded: 0
     }
   },
   mounted () {
@@ -61,6 +63,11 @@ export default {
       'tools': ['Scroll', 'ZoomAndPan', 'WindowLevel', 'Draw'],
       'shapes': ['Ruler'],
       'isMobile': true
+    })
+    // progress
+    var self = this
+    this.dwvApp.addEventListener('load-progress', function (event) {
+      self.loaded = event.loaded
     })
   },
   methods: {
