@@ -6,6 +6,10 @@
       <md-button class="md-raised md-primary" value="WindowLevel" v-on:click="onClick">WindowLevel</md-button>
       <md-button class="md-raised md-primary" value="ZoomAndPan" v-on:click="onClick">ZoomAndPan</md-button>
       <md-button class="md-raised md-primary" value="Draw" v-on:click="onClick">Draw</md-button>
+      <md-button class="md-raised md-primary" value="Draw" v-on:click="showDicomTags = true">Tags</md-button>
+      <md-dialog :md-active.sync="showDicomTags">
+        <tagsTable :tagsData="tags"/>
+      </md-dialog>
     </div>
     <div class="layerContainer">
       <div class="dropBox"></div>
@@ -21,6 +25,7 @@
 import Vue from 'vue'
 import MdButton from 'vue-material'
 import dwv from 'dwv'
+import tagsTable from './tags-table'
 
 Vue.use(MdButton)
 
@@ -46,11 +51,16 @@ dwv.image.decoderScripts = {
 
 export default {
   name: 'dwv',
+  components: {
+    tagsTable
+  },
   data: function () {
     return {
       legend: 'Powered by dwv ' + dwv.getVersion() + ' and Vue.js ' + Vue.version,
       dwvApp: null,
-      loaded: 0
+      loaded: 0,
+      tags: null,
+      showDicomTags: false
     }
   },
   mounted () {
@@ -68,6 +78,9 @@ export default {
     var self = this
     this.dwvApp.addEventListener('load-progress', function (event) {
       self.loaded = event.loaded
+    })
+    this.dwvApp.addEventListener('load-end', function (event) {
+      self.tags = self.dwvApp.getTags()
     })
   },
   methods: {
@@ -106,4 +119,9 @@ export default {
     border: 5px dashed #ccc;
     margin: auto; text-align: center; }
 .dropBox.hover { border: 5px dashed #cc0; }
+
+.md-dialog {
+  width: 80%;
+  height: 90%;
+}
 </style>
