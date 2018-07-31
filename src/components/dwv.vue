@@ -1,18 +1,25 @@
 <template>
   <div id="dwv">
-    <md-progress-bar md-mode="determinate" :md-value="loaded"></md-progress-bar>
+    <md-progress-bar md-mode="determinate" :md-value="loadProgress"></md-progress-bar>
     <div class="button-row">
-      <md-button class="md-raised md-primary" value="Scroll" v-on:click="onClick">Scroll</md-button>
-      <md-button class="md-raised md-primary" value="WindowLevel" v-on:click="onClick">WindowLevel</md-button>
-      <md-button class="md-raised md-primary" value="ZoomAndPan" v-on:click="onClick">ZoomAndPan</md-button>
-      <md-button class="md-raised md-primary" value="Draw" v-on:click="onClick">Draw</md-button>
-      <md-button class="md-raised md-primary" value="Draw" v-on:click="showDicomTags = true">Tags</md-button>
+      <!-- action buttons -->
+      <md-menu md-size="medium" md-align-trigger>
+        <md-button class="md-raised md-primary" md-menu-trigger :disabled="!dataLoaded">
+          {{ selectedTool }} <md-icon>arrow_drop_down</md-icon></md-button>
+
+        <md-menu-content>
+          <md-menu-item v-for="tool in tools" :key="tool" v-on:click="onChangeTool(tool)">{{ tool }}</md-menu-item>
+        </md-menu-content>
+
+        <md-button class="md-raised md-primary" v-on:click="showDicomTags = true" :disabled="!dataLoaded">Tags</md-button>
+      </md-menu>
+      <!-- dicom tags dialog-->
       <md-dialog :md-active.sync="showDicomTags">
         <tagsTable :tagsData="tags"/>
       </md-dialog>
     </div>
     <div class="layerContainer">
-      <div class="dropBox"></div>
+      <div class="dropBox"><p>Drag and drop data here.</p></div>
       <canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
       <div class="drawDiv"></div>
     </div>
@@ -58,7 +65,10 @@ export default {
     return {
       legend: 'Powered by dwv ' + dwv.getVersion() + ' and Vue.js ' + Vue.version,
       dwvApp: null,
-      loaded: 0,
+      tools: ['Scroll', 'ZoomAndPan', 'WindowLevel', 'Draw'],
+      selectedTool: 'Select Tool',
+      loadProgress: 0,
+      dataLoaded: false,
       tags: null,
       showDicomTags: false
     }
@@ -70,22 +80,32 @@ export default {
     this.dwvApp.init({
       'containerDivId': 'dwv',
       'fitToWindow': true,
-      'tools': ['Scroll', 'ZoomAndPan', 'WindowLevel', 'Draw'],
+      'tools': this.tools,
       'shapes': ['Ruler'],
       'isMobile': true
     })
     // progress
     var self = this
     this.dwvApp.addEventListener('load-progress', function (event) {
-      self.loaded = event.loaded
+      self.loadProgress = event.loaded
     })
     this.dwvApp.addEventListener('load-end', function (event) {
+      // set data loaded flag
+      self.dataLoaded = true
+      // set dicom tags
       self.tags = self.dwvApp.getTags()
+      // set the selected tool
+      if (self.dwvApp.isMonoSliceData() && self.dwvApp.getImage().getNumberOfFrames() === 1) {
+        self.selectedTool = 'ZoomAndPan'
+      } else {
+        self.selectedTool = 'Scroll'
+      }
     })
   },
   methods: {
-    onClick: function (event) {
-      this.dwvApp.onChangeTool(event)
+    onChangeTool: function (tool) {
+      this.selectedTool = tool
+      this.dwvApp.onChangeTool({ currentTarget: { value: tool } })
     }
   }
 }
@@ -97,6 +117,7 @@ export default {
 
 .button-row {
   text-align: center;
+  padding: 5px;
 }
 
 .legend {
@@ -117,7 +138,9 @@ export default {
 /* drag&drop */
 .dropBox {
     border: 5px dashed #ccc;
-    margin: auto; text-align: center; }
+    margin: auto;
+    text-align: center; vertical-align: middle;
+    background: white; color: grey;  }
 .dropBox.hover { border: 5px dashed #cc0; }
 
 .md-dialog {
