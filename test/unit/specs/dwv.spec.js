@@ -4,9 +4,9 @@ import dwv from '@/components/dwv'
 
 describe('dwv.vue', () => {
   // Inspect the component instance on mount
-  it('sets an onClick hook when created', () => {
+  it('sets an onChangeTool hook when created', () => {
     const vm = new Vue(dwv).$mount()
-    expect(typeof vm.onClick).toBe('function')
+    expect(typeof vm.onChangeTool).toBe('function')
   })
 
   // Inspect the component instance on mount
