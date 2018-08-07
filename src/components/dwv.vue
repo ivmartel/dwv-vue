@@ -11,6 +11,7 @@
           <md-menu-item v-for="tool in tools" :key="tool" v-on:click="onChangeTool(tool)">{{ tool }}</md-menu-item>
         </md-menu-content>
 
+        <md-button class="md-raised md-primary" v-on:click="onReset()" :disabled="!dataLoaded">Reset</md-button>
         <md-button class="md-raised md-primary" v-on:click="showDicomTags = true" :disabled="!dataLoaded">Tags</md-button>
       </md-menu>
       <!-- dicom tags dialog-->
@@ -106,6 +107,9 @@ export default {
     onChangeTool: function (tool) {
       this.selectedTool = tool
       this.dwvApp.onChangeTool({ currentTarget: { value: tool } })
+    },
+    onReset: function () {
+      this.dwvApp.onDisplayReset()
     }
   }
 }
