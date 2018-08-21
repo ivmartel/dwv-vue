@@ -64,7 +64,8 @@ export default {
   },
   data: function () {
     return {
-      legend: 'Powered by dwv ' + dwv.getVersion() + ' and Vue.js ' + Vue.version,
+      legend: 'Powered by <a href="https://github.com/ivmartel/dwv" title="dwv on github">dwv</a> ' +
+        dwv.getVersion() + ' and Vue.js ' + Vue.version,
       dwvApp: null,
       tools: ['Scroll', 'ZoomAndPan', 'WindowLevel', 'Draw'],
       selectedTool: 'Select Tool',
@@ -127,6 +128,9 @@ export default {
 .legend {
   text-align: center;
   font-size: 8pt;
+}
+.legend a {
+  color: #ccc;
 }
 
 /* Layers */
