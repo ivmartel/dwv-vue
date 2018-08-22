@@ -24,7 +24,8 @@
       <canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
       <div class="drawDiv"></div>
     </div>
-    <div class="legend">{{ legend }}</div>
+    <div class="legend"><p>Powered by <a href="https://github.com/ivmartel/dwv" title="dwv on github">dwv</a>
+      {{versions.dwv}} and Vue.js {{versions.vue}}</p></div>
   </div>
 </template>
 
@@ -64,8 +65,10 @@ export default {
   },
   data: function () {
     return {
-      legend: 'Powered by <a href="https://github.com/ivmartel/dwv" title="dwv on github">dwv</a> ' +
-        dwv.getVersion() + ' and Vue.js ' + Vue.version,
+      versions: {
+        dwv: dwv.getVersion(),
+        vue: Vue.version
+      },
       dwvApp: null,
       tools: ['Scroll', 'ZoomAndPan', 'WindowLevel', 'Draw'],
       selectedTool: 'Select Tool',
@@ -128,9 +131,6 @@ export default {
 .legend {
   text-align: center;
   font-size: 8pt;
-}
-.legend a {
-  color: #ccc;
 }
 
 /* Layers */
