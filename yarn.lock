@@ -2335,9 +2335,9 @@ duplexify@^3.4.2, duplexify@^3.5.3:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
-dwv@0.24.0:
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/dwv/-/dwv-0.24.0.tgz#4bd54b22a559f3e184b0a9683ddebe822dc2977d"
+dwv@0.24.1:
+  version "0.24.1"
+  resolved "https://registry.yarnpkg.com/dwv/-/dwv-0.24.1.tgz#a3fcd19c15136df6e6fcbeae78066ce296ab1579"
   dependencies:
     i18next "~11.6.0"
     i18next-browser-languagedetector "~2.2.0"
