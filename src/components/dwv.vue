@@ -44,8 +44,6 @@ Vue.use(MdButton)
 dwv.utils.decodeQuery = dwv.utils.base.decodeQuery
 // progress
 dwv.gui.displayProgress = function () {}
-// window
-dwv.gui.getWindowSize = dwv.gui.base.getWindowSize
 // get element
 dwv.gui.getElement = dwv.gui.base.getElement
 // refresh element
@@ -84,7 +82,6 @@ export default {
     // initialise app
     this.dwvApp.init({
       'containerDivId': 'dwv',
-      'fitToWindow': true,
       'tools': this.tools,
       'shapes': ['Ruler'],
       'isMobile': true
@@ -121,7 +118,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#dwv { font-family: Arial, Helvetica, sans-serif; }
+#dwv {
+  font-family: Arial, Helvetica, sans-serif;
+  height: 90%; }
 
 .button-row {
   text-align: center;
@@ -131,6 +130,7 @@ export default {
 .legend {
   text-align: center;
   font-size: 8pt;
+  margin: 1em;
 }
 
 /* Layers */
