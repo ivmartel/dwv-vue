@@ -51,9 +51,9 @@ dwv.gui.refreshElement = dwv.gui.base.refreshElement
 
 // Image decoders (for web workers)
 dwv.image.decoderScripts = {
-  'jpeg2000': 'static/dwv/decoders/pdfjs/decode-jpeg2000.js',
-  'jpeg-lossless': 'static/dwv/decoders/rii-mango/decode-jpegloss.js',
-  'jpeg-baseline': 'static/dwv/decoders/pdfjs/decode-jpegbaseline.js'
+  'jpeg2000': 'assets/dwv/decoders/pdfjs/decode-jpeg2000.js',
+  'jpeg-lossless': 'assets/dwv/decoders/rii-mango/decode-jpegloss.js',
+  'jpeg-baseline': 'assets/dwv/decoders/pdfjs/decode-jpegbaseline.js'
 }
 
 export default {
@@ -91,7 +91,7 @@ export default {
     this.dwvApp.addEventListener('load-progress', function (event) {
       self.loadProgress = event.loaded
     })
-    this.dwvApp.addEventListener('load-end', function (event) {
+    this.dwvApp.addEventListener('load-end', function (/*event*/) {
       // set data loaded flag
       self.dataLoaded = true
       // set dicom tags
@@ -125,6 +125,10 @@ export default {
 .button-row {
   text-align: center;
   padding: 5px;
+}
+
+#dwv button {
+  margin: 2px;
 }
 
 .legend {

@@ -8,7 +8,7 @@
 import dwvVue from './components/dwv'
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
     dwvVue
   }

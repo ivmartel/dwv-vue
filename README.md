@@ -20,21 +20,15 @@ yarn run start
 # build for production with minification
 yarn run build
 
-# build for production and view the bundle analyzer report
-yarn run build --report
-
 # run unit tests
-yarn run unit
+yarn run test:unit
 
 # run e2e tests
-yarn run e2e
-
-# run all tests
-yarn run test
+yarn run test:e2e
 ```
 
 Unit tests use [Jest](https://facebook.github.io/jest/) and e2e tests [Nightwatch.js](http://nightwatchjs.org/).
 
-This project was generated with the [webpack](https://github.com/vuejs-templates/webpack/) template version 1.3.1 for the vue-cli.
+This project was generated with the [vue-cli](https://github.com/vuejs/vue-cli) version 3.0.1.
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+For a detailed explanation on how things work, check out the [vue-cli doc](https://cli.vuejs.org/).
