@@ -15,7 +15,7 @@ after_script: greenkeeper-lockfile-upload
 script:
 # base href is set in config/index.js at build.assetsPublicPath
 - yarn run build
-- yarn run test
+- yarn run test:unit
 
 after_success:
 # update gh-page only for master and not pull requests
