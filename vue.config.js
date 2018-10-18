@@ -1,7 +1,9 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  baseUrl: '/dwv-vue/demo/trunk/',
+  baseUrl: process.env.NODE_ENV === 'production'
+    ? '/dwv-vue/demo/trunk/'
+    : '/',
   configureWebpack: {
     plugins: [
       // copy decoders
