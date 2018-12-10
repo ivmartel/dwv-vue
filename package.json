@@ -15,7 +15,7 @@
   "dependencies": {
     "dwv": "0.25.2",
     "register-service-worker": "^1.0.0",
-    "vue": "^2.5.17",
+    "vue": "^2.5.20",
     "vue-material": "~1.0.0-beta"
   },
   "devDependencies": {
