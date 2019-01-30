@@ -11,10 +11,10 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.2/workbox-sw.js");
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/dwv-vue/demo/trunk/precache-manifest.825f47804aa7ebe1de898a22aee381a1.js"
+  "/dwv-vue/demo/trunk/precache-manifest.e40b5f024cee335a0ab2e52fae2abcfe.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "dwv-vue"});
