@@ -7,10 +7,11 @@
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve",
-    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e"
+    "test": "vue-cli-service test:unit --watch",
+    "test-ci": "vue-cli-service test:unit",
+    "e2e": "vue-cli-service test:e2e",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
     "dwv": "0.25.2",

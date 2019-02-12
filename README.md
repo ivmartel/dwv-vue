@@ -17,14 +17,17 @@ yarn install
 # serve with hot reload at localhost:8080
 yarn run start
 
-# build for production with minification
-yarn run build
+# run linting
+yarn run lint
 
-# run unit tests
-yarn run test:unit
+# run unit tests with hot reload
+yarn run test
 
 # run e2e tests
-yarn run test:e2e
+yarn run e2e
+
+# build for production
+yarn run build
 ```
 
 Unit tests use [Jest](https://facebook.github.io/jest/) and e2e tests [Nightwatch.js](http://nightwatchjs.org/).
