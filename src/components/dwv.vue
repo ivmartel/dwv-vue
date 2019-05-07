@@ -20,11 +20,11 @@
       </md-dialog>
     </div>
     <div class="layerContainer">
-      <div class="dropBox"><p>Drag and drop data here.</p></div>
+      <div class="dropBox md-body-1"><p>Drag and drop data here.</p></div>
       <canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
       <div class="drawDiv"></div>
     </div>
-    <div class="legend"><p>Powered by <a href="https://github.com/ivmartel/dwv" title="dwv on github">dwv</a>
+    <div class="md-caption"><p>Powered by <a href="https://github.com/ivmartel/dwv" title="dwv on github">dwv</a>
       {{versions.dwv}} and Vue.js {{versions.vue}}</p></div>
   </div>
 </template>
@@ -131,12 +131,6 @@ export default {
   margin: 2px;
 }
 
-.legend {
-  text-align: center;
-  font-size: 8pt;
-  margin: 1em;
-}
-
 /* Layers */
 .layerContainer {
     position: relative; padding: 0;
@@ -149,11 +143,10 @@ export default {
 
 /* drag&drop */
 .dropBox {
-    border: 5px dashed #ccc;
+    border: 5px dashed rgba(68,138,255,0.38);
     margin: auto;
-    text-align: center; vertical-align: middle;
-    background: white; color: grey;  }
-.dropBox.hover { border: 5px dashed #cc0; }
+    text-align: center; vertical-align: middle; }
+.dropBox.hover { border: 5px dashed var(--md-theme-default-primary); }
 
 .md-dialog {
   width: 80%;
