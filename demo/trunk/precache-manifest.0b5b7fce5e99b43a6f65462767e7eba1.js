@@ -8,11 +8,11 @@ self.__precacheManifest = [
     "url": "/dwv-vue/demo/trunk/js/chunk-vendors.d1ee6514.js"
   },
   {
-    "revision": "d5532476cbd2ddc6c873",
-    "url": "/dwv-vue/demo/trunk/js/app.ba0eb001.js"
+    "revision": "8a0d310e4ddd7e36bded",
+    "url": "/dwv-vue/demo/trunk/js/app.d990e847.js"
   },
   {
-    "revision": "e87074b02af82b793447c74cf338ede4",
+    "revision": "f153f14076a37c1e9999d8436aeb5519",
     "url": "/dwv-vue/demo/trunk/index.html"
   },
   {
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/dwv-vue/demo/trunk/css/chunk-vendors.bac6dd6c.css"
   },
   {
-    "revision": "d5532476cbd2ddc6c873",
-    "url": "/dwv-vue/demo/trunk/css/app.5fa90fc5.css"
+    "revision": "8a0d310e4ddd7e36bded",
+    "url": "/dwv-vue/demo/trunk/css/app.6a1f5d77.css"
   }
 ];
