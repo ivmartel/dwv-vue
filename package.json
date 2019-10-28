@@ -29,7 +29,7 @@
     "@vue/cli-service": "^4.0.3",
     "@vue/test-utils": "^1.0.0-beta.29",
     "babel-eslint": "^10.0.3",
-    "chromedriver": "77",
+    "chromedriver": "^78.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.3",
     "geckodriver": "^1.19.0",
