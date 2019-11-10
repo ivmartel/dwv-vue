@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "edcddc29b2680488b824",
+    "revision": "2132a3ca4d5accfc42f5",
     "url": "/dwv-vue/demo/trunk/css/app.6a1f5d77.css"
   },
   {
@@ -8,12 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/dwv-vue/demo/trunk/css/chunk-vendors.e30ee463.css"
   },
   {
-    "revision": "f40df89be63776158bf665aec1d387e6",
+    "revision": "2ac70ee3101212cd24e3df485b5ca672",
     "url": "/dwv-vue/demo/trunk/index.html"
   },
   {
-    "revision": "edcddc29b2680488b824",
-    "url": "/dwv-vue/demo/trunk/js/app.cbeef1c9.js"
+    "revision": "2132a3ca4d5accfc42f5",
+    "url": "/dwv-vue/demo/trunk/js/app.7cf7abfe.js"
   },
   {
     "revision": "f541df074f6107506df4",
