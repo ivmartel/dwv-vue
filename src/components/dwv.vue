@@ -126,7 +126,7 @@ export default {
         alert('Load was aborted.')
       }
     })
-    this.dwvApp.addEventListener('error', (event) => {
+    this.dwvApp.addEventListener('error', (/*event*/) => {
       //console.error(event.error)
       ++nReceivedError
     })
