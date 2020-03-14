@@ -127,7 +127,7 @@ export default {
       }
     })
     this.dwvApp.addEventListener('error', (event) => {
-      console.error(event.error)
+      //console.error(event.error)
       ++nReceivedError
     })
     this.dwvApp.addEventListener('abort', (/*event*/) => {
