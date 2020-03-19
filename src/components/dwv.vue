@@ -8,7 +8,7 @@
           {{ selectedTool }} <md-icon>arrow_drop_down</md-icon></md-button>
 
         <md-menu-content>
-          <md-menu-item v-for="tool in tools" :key="tool" v-on:click="onChangeTool(tool)">{{ tool }}</md-menu-item>
+          <md-menu-item v-for="tool in Object.keys(tools)" :key="tool" v-on:click="onChangeTool(tool)">{{ tool }}</md-menu-item>
         </md-menu-content>
 
         <md-button class="md-raised md-primary" v-on:click="onReset()" :disabled="!dataLoaded">Reset</md-button>
@@ -16,11 +16,13 @@
       </md-menu>
       <!-- dicom tags dialog-->
       <md-dialog :md-active.sync="showDicomTags">
-        <tagsTable :tagsData="tags"/>
+        <tagsTable :tagsData="metaData"/>
       </md-dialog>
     </div>
     <div class="layerContainer">
-      <div class="dropBox md-body-1"><p>Drag and drop data here.</p></div>
+      <div class="dropBox dropBoxBorder md-body-1">
+          <p>Drag and drop data here.</p>
+      </div>
       <canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
       <div class="drawDiv"></div>
     </div>
@@ -40,14 +42,8 @@ Vue.use(MdButton)
 
 // gui overrides
 
-// decode query
-dwv.utils.decodeQuery = dwv.utils.base.decodeQuery
-// progress
-dwv.gui.displayProgress = function () {}
 // get element
 dwv.gui.getElement = dwv.gui.base.getElement
-// refresh element
-dwv.gui.refreshElement = dwv.gui.base.refreshElement
 
 // Image decoders (for web workers)
 dwv.image.decoderScripts = {
@@ -69,12 +65,24 @@ export default {
         vue: Vue.version
       },
       dwvApp: null,
-      tools: ['Scroll', 'ZoomAndPan', 'WindowLevel', 'Draw'],
+      tools: {
+        Scroll: {},
+        ZoomAndPan: {},
+        WindowLevel: {},
+        Draw: {
+          options: ['Ruler'],
+          type: 'factory',
+          events: ['draw-create', 'draw-change', 'draw-move', 'draw-delete']
+        }
+      },
       selectedTool: 'Select Tool',
       loadProgress: 0,
       dataLoaded: false,
-      tags: null,
-      showDicomTags: false
+      metaData: null,
+      showDicomTags: false,
+      dropboxClassName: 'dropBox',
+      borderClassName: 'dropBoxBorder',
+      hoverClassName: 'hover'
     }
   },
   mounted () {
@@ -83,35 +91,131 @@ export default {
     // initialise app
     this.dwvApp.init({
       'containerDivId': 'dwv',
-      'tools': this.tools,
-      'shapes': ['Ruler'],
-      'isMobile': true
+      'tools': this.tools
     })
-    // progress
-    var self = this
-    this.dwvApp.addEventListener('load-progress', function (event) {
-      self.loadProgress = event.loaded
+    // handle load events
+    let nReceivedError = null;
+    let nReceivedAbort = null;
+    this.dwvApp.addEventListener('load-start', (/*event*/) => {
+      this.dataLoaded = false;
+      nReceivedError = 0;
+      nReceivedAbort = 0;
     })
-    this.dwvApp.addEventListener('load-end', function (/*event*/) {
-      // set data loaded flag
-      self.dataLoaded = true
+    this.dwvApp.addEventListener('load-progress', (event) => {
+      this.loadProgress = event.loaded
+    })
+    this.dwvApp.addEventListener('load', (/*event*/) => {
       // set dicom tags
-      self.tags = self.dwvApp.getTags()
+      this.metaData = dwv.utils.objectToArray(this.dwvApp.getMetaData());
       // set the selected tool
-      if (self.dwvApp.isMonoSliceData() && self.dwvApp.getImage().getNumberOfFrames() === 1) {
-        self.selectedTool = 'ZoomAndPan'
-      } else {
-        self.selectedTool = 'Scroll'
+      let selectedTool = 'Scroll'
+      if (this.dwvApp.isMonoSliceData() && this.dwvApp.getImage().getNumberOfFrames() === 1) {
+        selectedTool = 'ZoomAndPan'
+      }
+      this.onChangeTool(selectedTool)
+      // set data loaded flag
+      this.dataLoaded = true
+    })
+    this.dwvApp.addEventListener('load-end', (/*event*/) => {
+      if (nReceivedError) {
+        this.loadProgress = 0
+        alert('Received errors during load. Check log for details.')
+      }
+      if (nReceivedAbort) {
+        this.loadProgress = 0
+        alert('Load was aborted.')
       }
     })
+    this.dwvApp.addEventListener('error', (/*event*/) => {
+      //console.error(event.error)
+      ++nReceivedError
+    })
+    this.dwvApp.addEventListener('abort', (/*event*/) => {
+      ++nReceivedAbort
+    })
+
+    // handle key events
+    this.dwvApp.addEventListener('keydown', (event) => {
+        this.dwvApp.defaultOnKeydown(event)
+    })
+    // handle window resize
+    window.addEventListener('resize', this.dwvApp.onResize)
+
+    // setup drop box
+    this.setupDropbox()
+
+    // possible load from location
+    dwv.utils.loadFromUri(window.location.href, this.dwvApp)
   },
   methods: {
     onChangeTool: function (tool) {
       this.selectedTool = tool
-      this.dwvApp.onChangeTool({ currentTarget: { value: tool } })
+      this.dwvApp.setTool(tool)
+      if (tool === 'Draw') {
+        this.onChangeShape(this.tools.Draw.options[0]);
+      }
+    },
+    onChangeShape: function (shape) {
+      if ( this.dwvApp && this.selectedTool === 'Draw') {
+        this.dwvApp.setDrawShape(shape);
+      }
     },
     onReset: function () {
-      this.dwvApp.onDisplayReset()
+      this.dwvApp.resetDisplay()
+    },
+    setupDropbox () {
+        // start listening to drag events on the layer container
+        const layerContainer = this.dwvApp.getElement('layerContainer');
+        if (layerContainer) {
+          layerContainer.addEventListener('dragover', this.onDragOver);
+          layerContainer.addEventListener('dragleave', this.onDragLeave);
+          layerContainer.addEventListener('drop', this.onDrop);
+        }
+        // set the initial drop box size
+        const box = this.dwvApp.getElement(this.dropboxClassName);
+        if (box) {
+          const size = this.dwvApp.getLayerContainerSize();
+          const dropBoxSize = 2 * size.height / 3;
+          box.setAttribute(
+            'style',
+            'width:' + dropBoxSize + 'px;height:' + dropBoxSize + 'px');
+        }
+    },
+    onDragOver: function (event) {
+      // prevent default handling
+      event.stopPropagation();
+      event.preventDefault();
+      // update box border
+      const box = this.dwvApp.getElement(this.borderClassName);
+      if (box && box.className.indexOf(this.hoverClassName) === -1) {
+        box.className += ' ' + this.hoverClassName;
+      }
+    },
+    onDragLeave: function (event) {
+      // prevent default handling
+      event.stopPropagation();
+      event.preventDefault();
+      // update box class
+      const box = this.dwvApp.getElement(this.borderClassName + ' hover');
+      if (box && box.className.indexOf(this.hoverClassName) !== -1) {
+        box.className = box.className.replace(' ' + this.hoverClassName, '');
+      }
+    },
+    hideDropbox: function () {
+      // remove box
+      const box = this.dwvApp.getElement(this.dropboxClassName);
+      if (box) {
+        box.parentNode.removeChild(box);
+      }
+    },
+    onDrop: function (event) {
+      // prevent default handling
+      event.stopPropagation();
+      event.preventDefault();
+      // load files
+      this.dwvApp.loadFiles(event.dataTransfer.files);
+      // hide drop box
+      this.hideDropbox();
     }
   }
 }
