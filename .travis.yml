@@ -6,11 +6,6 @@ env:
   global:
   - secure: Tt3sYZXl1Midk7AxOOG/NRbPObpxTDUPIM6XdVgvtbXPdrdp0ylRY2nQQ3HQZCPYJZwHVb82AQ4msHPMjcibOf9RgbfXWpIDs/kXyVEWChicGEMjyM/+zJnOA5Mce9YbJZa6MqoDDBrG8x+80kQQMOFJmfQA2qKlzhaUadN8gQXBJxSTjDJgiW+1REP+39VfFgrpcPsR31rasjdkP48+A4WVmOnCLcHmdkYP9IRHUovBXRtFIY6HsJZKRQ0Fu0oUsYLZqF0zOK2YPZ64J02F/lIxkcz9VsxR0didKjUILW8+wZ5YhB7OfduocOkTHVqFsVJIsXOMAaAPcbVqsUeN5WA661MrTLVyXWivtKjGMvw1iA2L5coWZ/QAI8LN+8zJuCLVMcsS6vGMtee7Fmmmwtg7tdXJhfzZGKISET5j3Xz5x6yIxB47IeZxg9cMKmcP+UWQFKEW732jzDx1E7B995qf33/A+KDlRXc7aeFvVskg3BzEkPzTkmmhZoBg+v+mNKn0zW8c9pZKoFp942PoCEsX3skSnua0Yoc5K8pDSf56SrDCUoliaSy673/i7IUuJ9KPnnrYmVsBnETwbxE/Yj3d0BpD53YW6ZRZ+ol9Ninast3hbIX5eguhN3J/utpz0eeWGwzN0xQ1aFmanYJuJLs9E6K33PuS5M/OHSxIJyY=
 
-# greenkeeper lock file
-before_install: yarn global add greenkeeper-lockfile@1
-before_script: greenkeeper-lockfile-update
-after_script: greenkeeper-lockfile-upload
-
 # main
 script:
 - yarn run lint
