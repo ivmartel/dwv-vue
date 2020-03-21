@@ -16,7 +16,7 @@
   "dependencies": {
     "core-js": "^3.6.1",
     "dwv": "0.27.0",
-    "register-service-worker": "^1.6.2",
+    "register-service-worker": "^1.7.1",
     "vue": "^2.6.10",
     "vue-material": "~1.0.0-beta"
   },
