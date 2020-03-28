@@ -20,7 +20,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/dwv-vue/demo/trunk/js/chunk-vendors.2bbd08f8.js"
   },
   {
-    "revision": "38d6f64d14bbd336e9112f8625658a7f",
+    "revision": "148a7b5c9ff9fec270911cfa1f8e8448",
     "url": "/dwv-vue/demo/trunk/manifest.json"
   },
   {
