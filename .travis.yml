@@ -10,7 +10,7 @@ env:
 script:
 - yarn run lint
 - yarn run test-ci
-# base href is set in config/index.js at build.assetsPublicPath
+# base href is set in vue.config.js at publicPath
 - yarn run build
 
 after_success:

@@ -4,8 +4,8 @@
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#4DBA87",
-  "start_url": "/dwv-vue/demo/trunk/index.html",
-  "scope": "/dwv-vue/demo/trunk",
+  "scope": ".",
+  "start_url": "index.html",
   "icons": [
     {
       "src": "img/icons/icon-16.png",
