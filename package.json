@@ -17,7 +17,7 @@
     "core-js": "^3.6.1",
     "dwv": "0.27.0",
     "register-service-worker": "^1.6.2",
-    "vue": "^2.6.10",
+    "vue": "^2.6.11",
     "vue-material": "~1.0.0-beta"
   },
   "devDependencies": {
@@ -33,6 +33,6 @@
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.0.0",
     "geckodriver": "^1.19.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.11"
   }
 }
