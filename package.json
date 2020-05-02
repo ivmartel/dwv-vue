@@ -11,14 +11,17 @@
     "test": "vue-cli-service test:unit --watch",
     "test-ci": "vue-cli-service test:unit",
     "e2e": "vue-cli-service test:e2e",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "snyk-protect": "snyk protect",
+    "prepare": "yarn run snyk-protect"
   },
   "dependencies": {
     "core-js": "^3.6.1",
     "dwv": "0.27.0",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
-    "vue-material": "~1.0.0-beta"
+    "vue-material": "~1.0.0-beta",
+    "snyk": "^1.316.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.3.1",
@@ -34,5 +37,6 @@
     "eslint-plugin-vue": "^6.0.0",
     "geckodriver": "^1.19.0",
     "vue-template-compiler": "^2.6.11"
-  }
+  },
+  "snyk": true
 }
