@@ -27,7 +27,7 @@
     "@vue/cli-plugin-pwa": "^4.5.6",
     "@vue/cli-plugin-unit-jest": "^4.5.6",
     "@vue/cli-service": "^4.5.6",
-    "@vue/test-utils": "^1.0.2",
+    "@vue/test-utils": "^1.1.0",
     "babel-eslint": "^10.0.3",
     "chromedriver": "^80.0.2",
     "eslint": "^6.8.0",
