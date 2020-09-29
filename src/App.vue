@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <dwvVue/>
+    <dwvVue />
   </div>
 </template>
 

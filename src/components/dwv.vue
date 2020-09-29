@@ -1,33 +1,61 @@
 <template>
   <div id="dwv">
-    <md-progress-bar md-mode="determinate" :md-value="loadProgress"></md-progress-bar>
+    <md-progress-bar
+      md-mode="determinate"
+      :md-value="loadProgress"
+    ></md-progress-bar>
     <div class="button-row">
       <!-- action buttons -->
       <md-menu md-size="medium" md-align-trigger>
-        <md-button class="md-raised md-primary" md-menu-trigger :disabled="!dataLoaded">
-          {{ selectedTool }} <md-icon>arrow_drop_down</md-icon></md-button>
+        <md-button
+          class="md-raised md-primary"
+          md-menu-trigger
+          :disabled="!dataLoaded"
+        >
+          {{ selectedTool }} <md-icon>arrow_drop_down</md-icon></md-button
+        >
 
         <md-menu-content>
-          <md-menu-item v-for="tool in Object.keys(tools)" :key="tool" v-on:click="onChangeTool(tool)">{{ tool }}</md-menu-item>
+          <md-menu-item
+            v-for="tool in Object.keys(tools)"
+            :key="tool"
+            v-on:click="onChangeTool(tool)"
+            >{{ tool }}</md-menu-item
+          >
         </md-menu-content>
 
-        <md-button class="md-raised md-primary" v-on:click="onReset()" :disabled="!dataLoaded">Reset</md-button>
-        <md-button class="md-raised md-primary" v-on:click="showDicomTags = true" :disabled="!dataLoaded">Tags</md-button>
+        <md-button
+          class="md-raised md-primary"
+          v-on:click="onReset()"
+          :disabled="!dataLoaded"
+          >Reset</md-button
+        >
+        <md-button
+          class="md-raised md-primary"
+          v-on:click="showDicomTags = true"
+          :disabled="!dataLoaded"
+          >Tags</md-button
+        >
       </md-menu>
       <!-- dicom tags dialog-->
       <md-dialog :md-active.sync="showDicomTags">
-        <tagsTable :tagsData="metaData"/>
+        <tagsTable :tagsData="metaData" />
       </md-dialog>
     </div>
     <div class="layerContainer">
       <div class="dropBox dropBoxBorder md-body-1">
-          <p>Drag and drop data here.</p>
+        <p>Drag and drop data here.</p>
       </div>
       <canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
       <div class="drawDiv"></div>
     </div>
-    <div class="legend md-caption"><p>Powered by <a href="https://github.com/ivmartel/dwv" title="dwv on github">dwv</a>
-      {{versions.dwv}} and Vue.js {{versions.vue}}</p></div>
+    <div class="legend md-caption">
+      <p>
+        Powered by
+        <a href="https://github.com/ivmartel/dwv" title="dwv on github">dwv</a>
+        {{ versions.dwv }} and Vue.js {{ versions.vue }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -47,10 +75,10 @@ dwv.gui.getElement = dwv.gui.base.getElement
 
 // Image decoders (for web workers)
 dwv.image.decoderScripts = {
-  'jpeg2000': 'assets/dwv/decoders/pdfjs/decode-jpeg2000.js',
+  jpeg2000: 'assets/dwv/decoders/pdfjs/decode-jpeg2000.js',
   'jpeg-lossless': 'assets/dwv/decoders/rii-mango/decode-jpegloss.js',
   'jpeg-baseline': 'assets/dwv/decoders/pdfjs/decode-jpegbaseline.js',
-  'rle': 'assets/dwv/decoders/dwv/decode-rle.js'
+  rle: 'assets/dwv/decoders/dwv/decode-rle.js'
 }
 
 export default {
@@ -85,31 +113,34 @@ export default {
       hoverClassName: 'hover'
     }
   },
-  mounted () {
+  mounted() {
     // create app
     this.dwvApp = new dwv.App()
     // initialise app
     this.dwvApp.init({
-      'containerDivId': 'dwv',
-      'tools': this.tools
+      containerDivId: 'dwv',
+      tools: this.tools
     })
     // handle load events
-    let nReceivedError = null;
-    let nReceivedAbort = null;
+    let nReceivedError = null
+    let nReceivedAbort = null
     this.dwvApp.addEventListener('load-start', (/*event*/) => {
-      this.dataLoaded = false;
-      nReceivedError = 0;
-      nReceivedAbort = 0;
+      this.dataLoaded = false
+      nReceivedError = 0
+      nReceivedAbort = 0
     })
-    this.dwvApp.addEventListener('load-progress', (event) => {
+    this.dwvApp.addEventListener('load-progress', event => {
       this.loadProgress = event.loaded
     })
     this.dwvApp.addEventListener('load', (/*event*/) => {
       // set dicom tags
-      this.metaData = dwv.utils.objectToArray(this.dwvApp.getMetaData());
+      this.metaData = dwv.utils.objectToArray(this.dwvApp.getMetaData())
       // set the selected tool
       let selectedTool = 'Scroll'
-      if (this.dwvApp.isMonoSliceData() && this.dwvApp.getImage().getNumberOfFrames() === 1) {
+      if (
+        this.dwvApp.isMonoSliceData() &&
+        this.dwvApp.getImage().getNumberOfFrames() === 1
+      ) {
         selectedTool = 'ZoomAndPan'
       }
       this.onChangeTool(selectedTool)
@@ -126,8 +157,8 @@ export default {
         alert('Load was aborted.')
       }
     })
-    this.dwvApp.addEventListener('error', (/*event*/) => {
-      //console.error(event.error)
+    this.dwvApp.addEventListener('error', event => {
+      console.error(event.error)
       ++nReceivedError
     })
     this.dwvApp.addEventListener('abort', (/*event*/) => {
@@ -135,8 +166,8 @@ export default {
     })
 
     // handle key events
-    this.dwvApp.addEventListener('keydown', (event) => {
-        this.dwvApp.defaultOnKeydown(event)
+    this.dwvApp.addEventListener('keydown', event => {
+      this.dwvApp.defaultOnKeydown(event)
     })
     // handle window resize
     window.addEventListener('resize', this.dwvApp.onResize)
@@ -152,70 +183,71 @@ export default {
       this.selectedTool = tool
       this.dwvApp.setTool(tool)
       if (tool === 'Draw') {
-        this.onChangeShape(this.tools.Draw.options[0]);
+        this.onChangeShape(this.tools.Draw.options[0])
       }
     },
     onChangeShape: function (shape) {
-      if ( this.dwvApp && this.selectedTool === 'Draw') {
-        this.dwvApp.setDrawShape(shape);
+      if (this.dwvApp && this.selectedTool === 'Draw') {
+        this.dwvApp.setDrawShape(shape)
       }
     },
     onReset: function () {
       this.dwvApp.resetDisplay()
     },
-    setupDropbox () {
-        // start listening to drag events on the layer container
-        const layerContainer = this.dwvApp.getElement('layerContainer');
-        if (layerContainer) {
-          layerContainer.addEventListener('dragover', this.onDragOver);
-          layerContainer.addEventListener('dragleave', this.onDragLeave);
-          layerContainer.addEventListener('drop', this.onDrop);
-        }
-        // set the initial drop box size
-        const box = this.dwvApp.getElement(this.dropboxClassName);
-        if (box) {
-          const size = this.dwvApp.getLayerContainerSize();
-          const dropBoxSize = 2 * size.height / 3;
-          box.setAttribute(
-            'style',
-            'width:' + dropBoxSize + 'px;height:' + dropBoxSize + 'px');
-        }
+    setupDropbox() {
+      // start listening to drag events on the layer container
+      const layerContainer = this.dwvApp.getElement('layerContainer')
+      if (layerContainer) {
+        layerContainer.addEventListener('dragover', this.onDragOver)
+        layerContainer.addEventListener('dragleave', this.onDragLeave)
+        layerContainer.addEventListener('drop', this.onDrop)
+      }
+      // set the initial drop box size
+      const box = this.dwvApp.getElement(this.dropboxClassName)
+      if (box) {
+        const size = this.dwvApp.getLayerContainerSize()
+        const dropBoxSize = (2 * size.height) / 3
+        box.setAttribute(
+          'style',
+          'width:' + dropBoxSize + 'px;height:' + dropBoxSize + 'px'
+        )
+      }
     },
     onDragOver: function (event) {
       // prevent default handling
-      event.stopPropagation();
-      event.preventDefault();
+      event.stopPropagation()
+      event.preventDefault()
       // update box border
-      const box = this.dwvApp.getElement(this.borderClassName);
+      const box = this.dwvApp.getElement(this.borderClassName)
       if (box && box.className.indexOf(this.hoverClassName) === -1) {
-        box.className += ' ' + this.hoverClassName;
+        box.className += ' ' + this.hoverClassName
       }
     },
     onDragLeave: function (event) {
       // prevent default handling
-      event.stopPropagation();
-      event.preventDefault();
+      event.stopPropagation()
+      event.preventDefault()
       // update box class
-      const box = this.dwvApp.getElement(this.borderClassName + ' hover');
+      const box = this.dwvApp.getElement(this.borderClassName + ' hover')
       if (box && box.className.indexOf(this.hoverClassName) !== -1) {
-        box.className = box.className.replace(' ' + this.hoverClassName, '');
+        box.className = box.className.replace(' ' + this.hoverClassName, '')
       }
     },
     hideDropbox: function () {
       // remove box
-      const box = this.dwvApp.getElement(this.dropboxClassName);
+      const box = this.dwvApp.getElement(this.dropboxClassName)
       if (box) {
-        box.parentNode.removeChild(box);
+        box.parentNode.removeChild(box)
       }
     },
     onDrop: function (event) {
       // prevent default handling
-      event.stopPropagation();
-      event.preventDefault();
+      event.stopPropagation()
+      event.preventDefault()
       // load files
-      this.dwvApp.loadFiles(event.dataTransfer.files);
+      this.dwvApp.loadFiles(event.dataTransfer.files)
       // hide drop box
-      this.hideDropbox();
+      this.hideDropbox()
     }
   }
 }
@@ -225,7 +257,8 @@ export default {
 <style scoped>
 #dwv {
   font-family: Arial, Helvetica, sans-serif;
-  height: 90%; }
+  height: 90%;
+}
 
 .button-row {
   text-align: center;
@@ -238,20 +271,30 @@ export default {
 
 /* Layers */
 .layerContainer {
-    position: relative; padding: 0;
-    margin: auto; text-align: center; }
+  position: relative;
+  padding: 0;
+  margin: auto;
+  text-align: center;
+}
 .imageLayer {
-    position: absolute;
-    left: 0px; }
+  position: absolute;
+  left: 0px;
+}
 .drawDiv {
-    position: absolute; pointer-events: none; }
+  position: absolute;
+  pointer-events: none;
+}
 
 /* drag&drop */
 .dropBox {
-    border: 5px dashed rgba(68,138,255,0.38);
-    margin: auto;
-    text-align: center; vertical-align: middle; }
-.dropBox.hover { border: 5px dashed var(--md-theme-default-primary); }
+  border: 5px dashed rgba(68, 138, 255, 0.38);
+  margin: auto;
+  text-align: center;
+  vertical-align: middle;
+}
+.dropBox.hover {
+  border: 5px dashed var(--md-theme-default-primary);
+}
 
 .md-dialog {
   width: 80%;
