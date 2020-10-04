@@ -7,12 +7,12 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    quotes: ['error', 'single'],
+    // stay in vue style, no semi colon at end of line
     semi: ['error', 'never'],
-    'space-before-function-paren': [
-      'error',
-      { anonymous: 'always', named: 'never' }
-    ]
+    // force single quotes (default 'double')
+    quotes: ['error', 'single'],
+    // no space for named functions (default 'always')
+    'space-before-function-paren': ['error', { named: 'never' }]
   },
   parserOptions: {
     parser: 'babel-eslint'
