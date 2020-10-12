@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/dwv-vue/demo/trunk/precache-manifest.dab65c12ff2b995b8be4b71a09767a71.js"
+  "/dwv-vue/demo/trunk/precache-manifest.eacde86657afa75d0ad80bd4386049df.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "dwv-vue"});
