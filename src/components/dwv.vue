@@ -43,9 +43,7 @@
       </md-dialog>
     </div>
     <div class="layerContainer">
-      <div class="dropBox dropBoxBorder md-body-1">
-        <p>Drag and drop data here.</p>
-      </div>
+      <div class="dropBox"></div>
       <canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
       <div class="drawDiv"></div>
     </div>
@@ -122,12 +120,17 @@ export default {
       tools: this.tools
     })
     // handle load events
+    let nLoadItem = null
     let nReceivedError = null
     let nReceivedAbort = null
     this.dwvApp.addEventListener('load-start', (/*event*/) => {
+      // reset flags
       this.dataLoaded = false
+      nLoadItem = 0
       nReceivedError = 0
       nReceivedAbort = 0
+      // hide drop box
+      this.showDropbox(false)
     })
     this.dwvApp.addEventListener('load-progress', event => {
       this.loadProgress = event.loaded
@@ -151,14 +154,22 @@ export default {
       if (nReceivedError) {
         this.loadProgress = 0
         alert('Received errors during load. Check log for details.')
+        // show drop box if nothing has been loaded
+        if (!nLoadItem) {
+          this.showDropbox(true)
+        }
       }
       if (nReceivedAbort) {
         this.loadProgress = 0
         alert('Load was aborted.')
+        this.showDropbox(true)
       }
     })
+    this.dwvApp.addEventListener('load-item', (/*event*/) => {
+      ++nLoadItem
+    })
     this.dwvApp.addEventListener('error', (/*event*/) => {
-      //console.error(event.error)
+      // console.error(event)
       ++nReceivedError
     })
     this.dwvApp.addEventListener('abort', (/*event*/) => {
@@ -198,19 +209,12 @@ export default {
       // start listening to drag events on the layer container
       const layerContainer = this.dwvApp.getElement('layerContainer')
       if (layerContainer) {
+        // show drop box
+        this.showDropbox(true)
+        // start listening to drag events on the layer container
         layerContainer.addEventListener('dragover', this.onDragOver)
         layerContainer.addEventListener('dragleave', this.onDragLeave)
         layerContainer.addEventListener('drop', this.onDrop)
-      }
-      // set the initial drop box size
-      const box = this.dwvApp.getElement(this.dropboxClassName)
-      if (box) {
-        const size = this.dwvApp.getLayerContainerSize()
-        const dropBoxSize = (2 * size.height) / 3
-        box.setAttribute(
-          'style',
-          'width:' + dropBoxSize + 'px;height:' + dropBoxSize + 'px'
-        )
       }
     },
     onDragOver: function (event) {
@@ -233,11 +237,32 @@ export default {
         box.className = box.className.replace(' ' + this.hoverClassName, '')
       }
     },
-    hideDropbox: function () {
-      // remove box
+    showDropbox: function (show) {
       const box = this.dwvApp.getElement(this.dropboxClassName)
       if (box) {
-        box.parentNode.removeChild(box)
+        if (show) {
+          // reset css class
+          box.className = this.dropboxClassName + ' ' + this.borderClassName
+          // check content
+          if (box.innerHTML === '') {
+            box.innerHTML = 'Drag and drop data here.'
+          }
+          const size = this.dwvApp.getLayerContainerSize()
+          // set the initial drop box size
+          const dropBoxSize = 2 * size.height / 3
+          box.setAttribute(
+            'style',
+            'width:' + dropBoxSize + 'px;height:' + dropBoxSize + 'px')
+        } else {
+          // remove border css class
+          box.className = this.dropboxClassName
+          // remove content
+          box.innerHTML = ''
+          // make not visible
+          box.setAttribute(
+            'style',
+            'visible:false;')
+        }
       }
     },
     onDrop: function (event) {
@@ -246,8 +271,6 @@ export default {
       event.preventDefault()
       // load files
       this.dwvApp.loadFiles(event.dataTransfer.files)
-      // hide drop box
-      this.hideDropbox()
     }
   }
 }
@@ -287,14 +310,14 @@ export default {
 
 /* drag&drop */
 .dropBox {
-  border: 5px dashed rgba(68, 138, 255, 0.38);
   margin: auto;
   text-align: center;
   vertical-align: middle;
 }
-.dropBox.hover {
-  border: 5px dashed var(--md-theme-default-primary);
-}
+.dropBoxBorder {
+    border: 5px dashed rgba(68, 138, 255, 0.38); }
+.dropBoxBorder.hover {
+    border: 5px dashed var(--md-theme-default-primary); }
 
 .md-dialog {
   width: 80%;
