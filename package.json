@@ -21,7 +21,7 @@
     "vue-material": "~1.0.0-beta"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.7",
+    "@vue/cli-plugin-babel": "^4.5.8",
     "@vue/cli-plugin-e2e-nightwatch": "^4.5.7",
     "@vue/cli-plugin-eslint": "^4.5.7",
     "@vue/cli-plugin-pwa": "^4.5.7",
