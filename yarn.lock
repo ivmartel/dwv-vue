@@ -3251,15 +3251,16 @@ chrome-trace-event@^1.0.2:
   dependencies:
     tslib "^1.9.0"
 
-chromedriver@^80.0.2:
-  version "80.0.2"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-80.0.2.tgz#005b9bf19abebf678b5d5670a9f16605c437a154"
-  integrity sha512-MKrTzBtykWuIswRYgUw9dHXr96BShQYSy8NdLlo2LN1mZ17A9nxtz9v0h9z1zKWTVaxT7e0qvo41rSY5BL1i+Q==
+chromedriver@^86.0.0:
+  version "86.0.0"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-86.0.0.tgz#4b9504d5bbbcd4c6bd6d6fd1dd8247ab8cdeca67"
+  integrity sha512-byLJWhAfuYOmzRYPDf4asJgGDbI4gJGHa+i8dnQZGuv+6WW1nW1Fg+8zbBMOfLvGn7sKL41kVdmCEVpQHn9oyg==
   dependencies:
     "@testim/chrome-version" "^1.0.7"
     axios "^0.19.2"
     del "^5.1.0"
-    extract-zip "^2.0.0"
+    extract-zip "^2.0.1"
+    https-proxy-agent "^5.0.0"
     mkdirp "^1.0.4"
     tcp-port-used "^1.0.1"
 
@@ -4886,10 +4887,10 @@ extract-from-css@^0.4.4:
   dependencies:
     css "^2.1.0"
 
-extract-zip@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/extract-zip/-/extract-zip-2.0.0.tgz#f53b71d44f4ff5a4527a2259ade000fb8b303492"
-  integrity sha512-i42GQ498yibjdvIhivUsRslx608whtGoFIhF26Z7O4MYncBxp8CwalOs1lnHy21A9sIohWO2+uiE4SRtC9JXDg==
+extract-zip@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/extract-zip/-/extract-zip-2.0.1.tgz#663dca56fe46df890d5f131ef4a06d22bb8ba13a"
+  integrity sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==
   dependencies:
     debug "^4.1.1"
     get-stream "^5.1.0"
@@ -5801,7 +5802,7 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-https-proxy-agent@5.0.0:
+https-proxy-agent@5.0.0, https-proxy-agent@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-5.0.0.tgz#e2a90542abb68a762e0a0850f6c9edadfd8506b2"
   integrity sha512-EkYm5BcKUGiduxzSt3Eppko+PiNWNEpa4ySk9vTC6wDsQJW9rHSa+UhGNJoRYp7bz6Ht1eaRIa6QaJqO5rCFbA==
@@ -7672,14 +7673,14 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
-mkdirp@0.5.4, mkdirp@0.x, mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@~0.5.1:
+mkdirp@0.5.4:
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.4.tgz#fd01504a6797ec5c9be81ff43d204961ed64a512"
   integrity sha512-iG9AK/dJLtJ0XNgTuDbSyNS3zECqDlAhnQW4CsNxBG3LQJBbHmRX1egw39DmtOdCAqY+dKXV+sgPgilNWUKMVw==
   dependencies:
     minimist "^1.2.5"
 
-mkdirp@^0.5.5:
+mkdirp@0.x, mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@^0.5.5, mkdirp@~0.5.1:
   version "0.5.5"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
   integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
