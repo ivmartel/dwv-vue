@@ -6,11 +6,19 @@ module.exports = {
     'eslint:recommended'
   ],
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    // stay in vue style, no semi colon at end of line (default: always)
+    // require triple equal
+    // https://eslint.org/docs/rules/eqeqeq
+    eqeqeq: 'error',
+    // force no semi colon (vue style, default: always)
     // https://eslint.org/docs/rules/semi
     semi: ['error', 'never'],
+
+    // no console
+    // https://eslint.org/docs/rules/no-console
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // no debugger statement
+    // https://eslint.org/docs/rules/no-debugger
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
     // formatting rules
 
@@ -45,10 +53,14 @@ module.exports = {
     'brace-style': 'error',
     // give error for long lines (default: 80)
     // https://eslint.org/docs/rules/max-len
-    'max-len': 'error',
+    'max-len': ['error',
+      {'ignoreRegExpLiterals': true, 'ignoreUrls': true}],
     // spaces in parenthesis (default: never)
     // https://eslint.org/docs/rules/space-in-parens
     'space-in-parens': 'error',
+    // space before blocks
+    // https://eslint.org/docs/rules/space-before-blocks
+    'space-before-blocks': 'error',
     // spaces inside brackets (default: never)
     // https://eslint.org/docs/rules/array-bracket-spacing
     'array-bracket-spacing': 'error',
@@ -88,7 +100,10 @@ module.exports = {
     'no-multi-spaces': 'error',
     // no space for named functions (default {'max': 2})
     // https://eslint.org/docs/rules/no-multiple-empty-lines
-    'no-multiple-empty-lines': 'error'
+    'no-multiple-empty-lines': 'error',
+    // linebreak after operator
+    // https://eslint.org/docs/rules/operator-linebreak
+    'operator-linebreak': 'error'
   },
   parserOptions: {parser: 'babel-eslint'}
 }
