@@ -16,7 +16,7 @@
   "dependencies": {
     "core-js": "^3.8.1",
     "dwv": "0.27.1",
-    "register-service-worker": "^1.7.1",
+    "register-service-worker": "^1.7.2",
     "vue": "^2.6.12",
     "vue-material": "~1.0.0-beta"
   },
@@ -29,10 +29,10 @@
     "@vue/cli-service": "^4.5.9",
     "@vue/test-utils": "^1.1.1",
     "babel-eslint": "^10.0.3",
-    "chromedriver": "^87.0.2",
+    "chromedriver": "^87.0.4",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^7.4.0",
-    "geckodriver": "^1.20.0",
+    "geckodriver": "^1.21.1",
     "vue-template-compiler": "^2.6.12"
   }
 }
