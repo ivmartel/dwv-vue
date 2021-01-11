@@ -51,7 +51,9 @@
       <p>
         Powered by
         <a href="https://github.com/ivmartel/dwv" title="dwv on github">dwv</a>
-        {{ versions.dwv }} and Vue.js {{ versions.vue }}
+        {{ versions.dwv }} and 
+        <a href="https://github.com/vuejs/vue" title="vue on github">Vue.js</a>
+        {{ versions.vue }}
       </p>
     </div>
   </div>
