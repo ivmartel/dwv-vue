@@ -6,7 +6,7 @@ All coding/implementation contributions and comments are welcome. Releases shoul
 
 dwv-vue is not certified for diagnostic use. Released under GNU GPL-3.0 license (see [license.txt](license.txt)).
 
-[![Build Status](https://travis-ci.org/ivmartel/dwv-vue.svg?branch=master)](https://travis-ci.org/ivmartel/dwv-vue)
+[![Build Status](https://travis-ci.com/ivmartel/dwv-vue.svg?branch=master)](https://travis-ci.com/ivmartel/dwv-vue)
 
 ## Steps to run the viewer from scratch
 
