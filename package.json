@@ -21,12 +21,12 @@
     "vue-material": "~1.0.0-beta"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.10",
-    "@vue/cli-plugin-e2e-nightwatch": "^4.5.10",
-    "@vue/cli-plugin-eslint": "^4.5.10",
-    "@vue/cli-plugin-pwa": "^4.5.10",
-    "@vue/cli-plugin-unit-jest": "^4.5.10",
-    "@vue/cli-service": "^4.5.10",
+    "@vue/cli-plugin-babel": "^4.5.11",
+    "@vue/cli-plugin-e2e-nightwatch": "^4.5.11",
+    "@vue/cli-plugin-eslint": "^4.5.11",
+    "@vue/cli-plugin-pwa": "^4.5.11",
+    "@vue/cli-plugin-unit-jest": "^4.5.11",
+    "@vue/cli-service": "^4.5.11",
     "@vue/test-utils": "^1.1.2",
     "babel-eslint": "^10.0.3",
     "chromedriver": "^87.0.5",
