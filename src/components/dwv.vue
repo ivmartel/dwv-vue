@@ -17,7 +17,7 @@
 
         <md-menu-content>
           <md-menu-item
-            v-for="tool in Object.keys(tools)"
+            v-for="tool in toolNames"
             :key="tool"
             v-on:click="onChangeTool(tool)"
             >{{ tool }}</md-menu-item
@@ -103,6 +103,7 @@ export default {
           events: ['drawcreate', 'drawchange', 'drawmove', 'drawdelete']
         }
       },
+      toolNames: [],
       selectedTool: 'Select Tool',
       loadProgress: 0,
       dataLoaded: false,
@@ -141,14 +142,15 @@ export default {
       // set dicom tags
       this.metaData = dwv.utils.objectToArray(this.dwvApp.getMetaData())
       // set the selected tool
-      let selectedTool = 'Scroll'
-      if (
-        this.dwvApp.isMonoSliceData() &&
-        this.dwvApp.getImage().getNumberOfFrames() === 1
-      ) {
-        selectedTool = 'ZoomAndPan'
+      this.toolNames = []
+      for (const key in this.tools) {
+        if ((key === 'Scroll' && this.dwvApp.canScroll()) ||
+          (key === 'WindowLevel' && this.dwvApp.canWindowLevel()) ||
+          (key !== 'Scroll' && key !== 'WindowLevel')) {
+          this.toolNames.push(key)
+        }
       }
-      this.onChangeTool(selectedTool)
+      this.onChangeTool(this.toolNames[0])
       // set data loaded flag
       this.dataLoaded = true
     })
