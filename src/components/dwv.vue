@@ -72,6 +72,12 @@ Vue.use(MdButton)
 
 // get element
 dwv.gui.getElement = dwv.gui.base.getElement
+// prompt
+// (no direct assign to avoid Illegal invocation error
+// see: https://stackoverflow.com/questions/9677985/uncaught-typeerror-illegal-invocation-in-chrome)
+dwv.gui.prompt = function (message, def) {
+  return prompt(message, def)
+}
 
 // Image decoders (for web workers)
 dwv.image.decoderScripts = {
