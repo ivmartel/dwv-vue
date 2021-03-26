@@ -11,7 +11,9 @@
     "test": "vue-cli-service test:unit --watch",
     "test-ci": "vue-cli-service test:unit",
     "e2e": "vue-cli-service test:e2e",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "build-trunk": "NODE_ENV=production DEPLOY_NAME=trunk vue-cli-service build",
+    "build-stable": "NODE_ENV=production DEPLOY_NAME=stable vue-cli-service build"
   },
   "dependencies": {
     "core-js": "^3.9.1",
