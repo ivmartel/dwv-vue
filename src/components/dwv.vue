@@ -42,11 +42,8 @@
         <tagsTable :tagsData="metaData" />
       </md-dialog>
     </div>
-    <div class="layerContainer">
-      <div class="dropBox"></div>
-      <canvas class="imageLayer">Only for HTML5 compatible browsers...</canvas>
-      <div class="drawDiv"></div>
-    </div>
+    <div id="dropBox"></div>
+    <div class="layerContainer"></div>
     <div class="legend md-caption">
       <p>
         Powered by
@@ -115,6 +112,7 @@ export default {
       dataLoaded: false,
       metaData: null,
       showDicomTags: false,
+      dropboxDivId: 'dropBox',
       dropboxClassName: 'dropBox',
       borderClassName: 'dropBoxBorder',
       hoverClassName: 'hover'
@@ -216,71 +214,82 @@ export default {
       this.dwvApp.resetDisplay()
     },
     setupDropbox() {
-      // start listening to drag events on the layer container
-      const layerContainer = this.dwvApp.getElement('layerContainer')
-      if (layerContainer) {
-        // show drop box
-        this.showDropbox(true)
-        // start listening to drag events on the layer container
-        layerContainer.addEventListener('dragover', this.onDragOver)
-        layerContainer.addEventListener('dragleave', this.onDragLeave)
-        layerContainer.addEventListener('drop', this.onDrop)
-      }
+      this.showDropbox(true)
     },
-    onDragOver: function (event) {
+    defaultHandleDragEvent: function (event) {
       // prevent default handling
       event.stopPropagation()
       event.preventDefault()
+    },
+    onBoxDragOver: function (event) {
+      this.defaultHandleDragEvent(event)
       // update box border
       const box = this.dwvApp.getElement(this.borderClassName)
       if (box && box.className.indexOf(this.hoverClassName) === -1) {
         box.className += ' ' + this.hoverClassName
       }
     },
-    onDragLeave: function (event) {
-      // prevent default handling
-      event.stopPropagation()
-      event.preventDefault()
+    onBoxDragLeave: function (event) {
+      this.defaultHandleDragEvent(event)
       // update box class
       const box = this.dwvApp.getElement(this.borderClassName + ' hover')
       if (box && box.className.indexOf(this.hoverClassName) !== -1) {
         box.className = box.className.replace(' ' + this.hoverClassName, '')
       }
     },
+    onDrop: function (event) {
+      this.defaultHandleDragEvent(event)
+      // load files
+      this.dwvApp.loadFiles(event.dataTransfer.files)
+    },
     showDropbox: function (show) {
-      const box = this.dwvApp.getElement(this.dropboxClassName)
+      const box = document.getElementById(this.dropboxClassName)
+      const isBoxShown = box && box.offsetHeight !== 0
+      const layerDiv = this.dwvApp?.getElement('layerContainer')
+
       if (box) {
-        if (show) {
+        if (show && !isBoxShown) {
           // reset css class
           box.className = this.dropboxClassName + ' ' + this.borderClassName
           // check content
           if (box.innerHTML === '') {
-            box.innerHTML = 'Drag and drop data here.'
+            const p = document.createElement('p')
+            p.appendChild(document.createTextNode('Drag and drop data here'))
+            box.appendChild(p)
           }
-          const size = this.dwvApp.getLayerContainerSize()
-          // set the initial drop box size
-          const dropBoxSize = 2 * size.height / 3
-          box.setAttribute(
-            'style',
-            'width:' + dropBoxSize + 'px;height:' + dropBoxSize + 'px')
+          // show box
+          box.setAttribute('style', 'visible:true;width:50%;height:75%')
+          // stop layer listening
+          if (layerDiv) {
+            layerDiv.removeEventListener(
+              'dragover', this.defaultHandleDragEvent)
+            layerDiv.removeEventListener(
+              'dragleave', this.defaultHandleDragEvent)
+            layerDiv.removeEventListener('drop', this.onDrop)
+          }
+          // listen to box events
+          box.addEventListener('dragover', this.onBoxDragOver)
+          box.addEventListener('dragleave', this.onBoxDragLeave)
+          box.addEventListener('drop', this.onDrop)
         } else {
           // remove border css class
           box.className = this.dropboxClassName
           // remove content
           box.innerHTML = ''
-          // make not visible
-          box.setAttribute(
-            'style',
-            'visible:false;')
+          // hide box
+          box.setAttribute('style', 'visible:false;width:0;height:0')
+          // stop box listening
+          box.removeEventListener('dragover', this.onBoxDragOver)
+          box.removeEventListener('dragleave', this.onBoxDragLeave)
+          box.removeEventListener('drop', this.onDrop)
+          // listen to layer events
+          if (layerDiv) {
+            layerDiv.addEventListener('dragover', this.defaultHandleDragEvent)
+            layerDiv.addEventListener('dragleave', this.defaultHandleDragEvent)
+            layerDiv.addEventListener('drop', this.onDrop)
+          }
         }
       }
-    },
-    onDrop: function (event) {
-      // prevent default handling
-      event.stopPropagation()
-      event.preventDefault()
-      // load files
-      this.dwvApp.loadFiles(event.dataTransfer.files)
     }
   }
 }
@@ -309,28 +318,33 @@ export default {
   margin: auto;
   text-align: center;
 }
-.imageLayer {
-  position: absolute;
-  left: 0px;
-}
-.drawDiv {
-  position: absolute;
-  pointer-events: none;
-}
 
 /* drag&drop */
 .dropBox {
   margin: auto;
   text-align: center;
   vertical-align: middle;
+  width: 50%; height: 75%;
 }
 .dropBoxBorder {
-    border: 5px dashed rgba(68, 138, 255, 0.38); }
+  border: 5px dashed rgba(68, 138, 255, 0.38); }
 .dropBoxBorder.hover {
-    border: 5px dashed var(--md-theme-default-primary); }
+  border: 5px dashed var(--md-theme-default-primary); }
 
 .md-dialog {
   width: 80%;
   height: 90%;
+}
+.layer {
+  position: absolute;
+  pointer-events: none;
+}
+
+</style>
+<!-- non "scoped" style -->
+<style>
+.layer {
+  position: absolute;
+  pointer-events: none;
 }
 </style>
