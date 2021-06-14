@@ -224,7 +224,7 @@ export default {
     onBoxDragOver: function (event) {
       this.defaultHandleDragEvent(event)
       // update box border
-      const box = this.dwvApp.getElement(this.borderClassName)
+      const box = document.getElementById(this.dropboxDivId)
       if (box && box.className.indexOf(this.hoverClassName) === -1) {
         box.className += ' ' + this.hoverClassName
       }
@@ -232,7 +232,7 @@ export default {
     onBoxDragLeave: function (event) {
       this.defaultHandleDragEvent(event)
       // update box class
-      const box = this.dwvApp.getElement(this.borderClassName + ' hover')
+      const box = document.getElementById(this.dropboxDivId)
       if (box && box.className.indexOf(this.hoverClassName) !== -1) {
         box.className = box.className.replace(' ' + this.hoverClassName, '')
       }
@@ -243,7 +243,7 @@ export default {
       this.dwvApp.loadFiles(event.dataTransfer.files)
     },
     showDropbox: function (show) {
-      const box = document.getElementById(this.dropboxClassName)
+      const box = document.getElementById(this.dropboxDivId)
       const isBoxShown = box && box.offsetHeight !== 0
       const layerDiv = this.dwvApp?.getElement('layerContainer')
 
