@@ -33,7 +33,7 @@
     "babel-eslint": "^10.0.3",
     "chromedriver": "^95.0.0",
     "eslint": "^6.8.0",
-    "eslint-plugin-vue": "^7.17.0",
+    "eslint-plugin-vue": "^8.0.3",
     "geckodriver": "^2.0.4",
     "vue-template-compiler": "^2.6.14"
   }
