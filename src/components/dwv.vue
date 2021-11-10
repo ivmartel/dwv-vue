@@ -85,7 +85,7 @@ dwv.image.decoderScripts = {
 }
 
 export default {
-  name: 'dwv',
+  name: 'dwv-vue',
   components: {
     tagsTable
   },
