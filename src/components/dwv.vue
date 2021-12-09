@@ -43,7 +43,7 @@
       </md-dialog>
     </div>
     <div id="dropBox"></div>
-    <div class="layerContainer"></div>
+    <div id="layerGroup0" class="layerGroup"></div>
     <div class="legend md-caption">
       <p>
         Powered by
@@ -66,15 +66,6 @@ import tagsTable from './tags-table'
 Vue.use(MdButton)
 
 // gui overrides
-
-// get element
-dwv.gui.getElement = dwv.gui.base.getElement
-// prompt
-// (no direct assign to avoid Illegal invocation error
-// see: https://stackoverflow.com/questions/9677985/uncaught-typeerror-illegal-invocation-in-chrome)
-dwv.gui.prompt = function (message, def) {
-  return prompt(message, def)
-}
 
 // Image decoders (for web workers)
 dwv.image.decoderScripts = {
@@ -123,38 +114,45 @@ export default {
     this.dwvApp = new dwv.App()
     // initialise app
     this.dwvApp.init({
-      containerDivId: 'dwv',
+      dataViewConfigs: {'*': [{divId: 'layerGroup0'}]},
       tools: this.tools
     })
     // handle load events
     let nLoadItem = null
     let nReceivedError = null
     let nReceivedAbort = null
+    let isFirstRender = null
     this.dwvApp.addEventListener('loadstart', (/*event*/) => {
       // reset flags
       this.dataLoaded = false
       nLoadItem = 0
       nReceivedError = 0
       nReceivedAbort = 0
+      isFirstRender = true
       // hide drop box
       this.showDropbox(false)
     })
     this.dwvApp.addEventListener('loadprogress', event => {
       this.loadProgress = event.loaded
     })
+    this.dwvApp.addEventListener('renderend', (/*event*/) => {
+      if (isFirstRender) {
+        isFirstRender = false
+        // available tools
+        this.toolNames = []
+        for (const key in this.tools) {
+          if ((key === 'Scroll' && this.dwvApp.canScroll()) ||
+            (key === 'WindowLevel' && this.dwvApp.canWindowLevel()) ||
+            (key !== 'Scroll' && key !== 'WindowLevel')) {
+            this.toolNames.push(key)
+          }
+        }
+        this.onChangeTool(this.toolNames[0])
+      }
+    })
     this.dwvApp.addEventListener('load', (/*event*/) => {
       // set dicom tags
-      this.metaData = dwv.utils.objectToArray(this.dwvApp.getMetaData())
-      // set the selected tool
-      this.toolNames = []
-      for (const key in this.tools) {
-        if ((key === 'Scroll' && this.dwvApp.canScroll()) ||
-          (key === 'WindowLevel' && this.dwvApp.canWindowLevel()) ||
-          (key !== 'Scroll' && key !== 'WindowLevel')) {
-          this.toolNames.push(key)
-        }
-      }
-      this.onChangeTool(this.toolNames[0])
+      this.metaData = dwv.utils.objectToArray(this.dwvApp.getMetaData(0))
       // set data loaded flag
       this.dataLoaded = true
     })
@@ -312,11 +310,16 @@ export default {
 }
 
 /* Layers */
-.layerContainer {
+.layerGroup {
   position: relative;
   padding: 0;
-  margin: auto;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  height: 90%;
+}
+.layer {
+  position: absolute;
+  pointer-events: none;
 }
 
 /* drag&drop */
@@ -334,10 +337,6 @@ export default {
 .md-dialog {
   width: 80%;
   height: 90%;
-}
-.layer {
-  position: absolute;
-  pointer-events: none;
 }
 
 </style>
