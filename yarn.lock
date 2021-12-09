@@ -1029,6 +1029,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.14.6":
+  version "7.16.3"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.3.tgz#b86f0db02a04187a3c17caa77de69840165d42d5"
+  integrity sha512-WBwekcqacdY2e9AF/Q7WLFUWmdJGJTkbjqTjoMDgXkVZ3ZRUvOPsLb5KdwISoQVsbP+DQzVZW4Zhci0DvpbNTQ==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.0.0":
   version "7.12.13"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.12.13.tgz#530265be8a2589dbb37523844c5bcb55947fb327"
@@ -4374,16 +4381,16 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
-dwv@0.29.1:
-  version "0.29.1"
-  resolved "https://registry.yarnpkg.com/dwv/-/dwv-0.29.1.tgz#5ff4328326a84ad022febbed43609df4a8dbe1fc"
-  integrity sha512-wwPX75zmCVnc/4jEO/kyc9vweYSe+LogkZSTu4G0qyoPYf+hT+3tdpWrzp3C56PW6kOwOzS3+vV3LdFvoNkoug==
+dwv@0.30.2:
+  version "0.30.2"
+  resolved "https://registry.yarnpkg.com/dwv/-/dwv-0.30.2.tgz#b11a3f891fbe6c0534c7269db6b4b2fd5314e595"
+  integrity sha512-uQVuYzrQjO3NMU9e6PnRMJmXYGa4eoNLi5yfA0I0xGGOJOi1l4fWCWVgBL55c0gsS5cgeaaXUHqirx7CX5y+hg==
   dependencies:
-    i18next "~20.1.0"
-    i18next-browser-languagedetector "~6.0.1"
+    i18next "~20.6.0"
+    i18next-browser-languagedetector "~6.1.2"
     i18next-xhr-backend "~3.2.2"
-    jszip "~3.5.0"
-    konva "~7.2.2"
+    jszip "~3.7.0"
+    konva "~8.3.0"
     magic-wand-tool "~1.1.7"
 
 easy-stack@^1.0.0:
@@ -5908,12 +5915,12 @@ human-signals@^1.1.1:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-1.1.1.tgz#c5b1cd14f50aeae09ab6c59fe63ba3395fe4dfa3"
   integrity sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==
 
-i18next-browser-languagedetector@~6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/i18next-browser-languagedetector/-/i18next-browser-languagedetector-6.0.1.tgz#83654bc87302be2a6a5a75146ffea97b4ca268cf"
-  integrity sha512-3H+OsNQn3FciomUU0d4zPFHsvJv4X66lBelXk9hnIDYDsveIgT7dWZ3/VvcSlpKk9lvCK770blRZ/CwHMXZqWw==
+i18next-browser-languagedetector@~6.1.2:
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/i18next-browser-languagedetector/-/i18next-browser-languagedetector-6.1.2.tgz#68565a28b929cbc98ab6a56826ef2faf0e927ff8"
+  integrity sha512-YDzIGHhMRvr7M+c8B3EQUKyiMBhfqox4o1qkFvt4QXuu5V2cxf74+NCr+VEkUuU0y+RwcupA238eeolW1Yn80g==
   dependencies:
-    "@babel/runtime" "^7.5.5"
+    "@babel/runtime" "^7.14.6"
 
 i18next-xhr-backend@~3.2.2:
   version "3.2.2"
@@ -5922,10 +5929,10 @@ i18next-xhr-backend@~3.2.2:
   dependencies:
     "@babel/runtime" "^7.5.5"
 
-i18next@~20.1.0:
-  version "20.1.0"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-20.1.0.tgz#397dce9ad230ea822f487dc62d6128df5b678456"
-  integrity sha512-sV+ZwTM4Ik4d6wKdwNS/ocKmvXi6DFA/YHMgdQX3i4L5993jnbo1/j1pK/c4+zBOjexer4dt+c5JHsFj4CUoXQ==
+i18next@~20.6.0:
+  version "20.6.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-20.6.1.tgz#535e5f6e5baeb685c7d25df70db63bf3cc0aa345"
+  integrity sha512-yCMYTMEJ9ihCwEQQ3phLo7I/Pwycf8uAx+sRHwwk5U9Aui/IZYgQRyMqXafQOw5QQ7DM1Z+WyEXWIqSuJHhG2A==
   dependencies:
     "@babel/runtime" "^7.12.0"
 
@@ -7107,10 +7114,10 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-jszip@~3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/jszip/-/jszip-3.5.0.tgz#b4fd1f368245346658e781fec9675802489e15f6"
-  integrity sha512-WRtu7TPCmYePR1nazfrtuF216cIVon/3GWOvHS9QR5bIwSbnxtdpma6un3jyGGNhHsKCSzn5Ypk+EkDRvTGiFA==
+jszip@~3.7.0:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/jszip/-/jszip-3.7.1.tgz#bd63401221c15625a1228c556ca8a68da6fda3d9"
+  integrity sha512-ghL0tz1XG9ZEmRMcEN2vt7xabrDdqHHeykgARpmZ0BiIctWxM47Vt63ZO2dnp4QYt/xJVLLy5Zv1l/xRdh2byg==
   dependencies:
     lie "~3.3.0"
     pako "~1.0.2"
@@ -7158,10 +7165,10 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
-konva@~7.2.2:
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/konva/-/konva-7.2.2.tgz#e46598850d864b0dca68c82013f1e436b1eef55d"
-  integrity sha512-3vtCLFV8S9ooMEC/ELMoHJLWK3YtVUIx44FZFdM1FUBZi88qF4ctdzeII5hfT9Lx6ulVlhC0a6cRdP0uRWjMmw==
+konva@~8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-8.3.0.tgz#538452fedc0d0e135415f5f53787f779e8530027"
+  integrity sha512-V83lFjf1xPJp7SzWKktOgRFPYa8SOHKVfgru3jjdMjKTGNpCGrIh3CuJeKC/tJ5Fg0P3lOpPCR30gDbDsATmDA==
 
 launch-editor-middleware@^2.2.1:
   version "2.2.1"
