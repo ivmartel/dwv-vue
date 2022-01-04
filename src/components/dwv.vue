@@ -176,7 +176,7 @@ export default {
       ++nLoadItem
     })
     this.dwvApp.addEventListener('error', (/*event*/) => {
-      // console.error(event)
+      // console.error('load error', event)
       ++nReceivedError
     })
     this.dwvApp.addEventListener('abort', (/*event*/) => {
