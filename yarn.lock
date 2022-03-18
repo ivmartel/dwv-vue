@@ -1881,15 +1881,15 @@
   dependencies:
     "@vue/cli-shared-utils" "^4.5.15"
 
-"@vue/cli-plugin-unit-jest@^4.5.15":
-  version "4.5.15"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-unit-jest/-/cli-plugin-unit-jest-4.5.15.tgz#7be914ca1507ca344487eb377ed925c9db0b772a"
-  integrity sha512-oE3RDMerb21P6ALg70Zh2zU+RYYjoe09/7ZXYUj03uTb2obqUbcINpFfeVwM0B/J6H1YmqWJpnNBxWURhrqQHg==
+"@vue/cli-plugin-unit-jest@^4.5.16":
+  version "4.5.16"
+  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-unit-jest/-/cli-plugin-unit-jest-4.5.16.tgz#9a6b84c78ba4e9eb49598a5b1f471b91fd726df6"
+  integrity sha512-jGsRWsFCVEvNBjcKlaVim7d9oWXKe0oC1BzUVVCk1rB8rCLqrE5yV+aefA0kBe9cZPvVnThrvtHchY+mM1bbZA==
   dependencies:
     "@babel/core" "^7.11.0"
     "@babel/plugin-transform-modules-commonjs" "^7.9.6"
     "@types/jest" "^24.0.19"
-    "@vue/cli-shared-utils" "^4.5.15"
+    "@vue/cli-shared-utils" "^4.5.16"
     babel-core "^7.0.0-bridge.0"
     babel-jest "^24.9.0"
     babel-plugin-transform-es2015-modules-commonjs "^6.26.2"
@@ -1970,17 +1970,17 @@
   optionalDependencies:
     vue-loader-v16 "npm:vue-loader@^16.1.0"
 
-"@vue/cli-shared-utils@^4.5.15":
-  version "4.5.15"
-  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-4.5.15.tgz#dba3858165dbe3465755f256a4890e69084532d6"
-  integrity sha512-SKaej9hHzzjKSOw1NlFmc6BSE0vcqUQMQiv1cxQ2DhVyy4QxZXBmzmiLBUBe+hYZZs1neXW7n//udeN9bCAY+Q==
+"@vue/cli-shared-utils@^4.5.15", "@vue/cli-shared-utils@^4.5.16":
+  version "4.5.16"
+  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-4.5.16.tgz#8b3b35eec8cf8e3374223dc970e2f0a947a97f89"
+  integrity sha512-9VrTpMmK2fE5JQlaXP79Xdhxv+opAsqtnj7QoFqahcz01lzLaBzzuag7W5oduhwqenrHRG3vaRUs563fwbOtZA==
   dependencies:
     "@hapi/joi" "^15.0.1"
     chalk "^2.4.2"
     execa "^1.0.0"
     launch-editor "^2.2.1"
     lru-cache "^5.1.1"
-    node-ipc "^9.1.1"
+    node-ipc "9.2.1"
     open "^6.3.0"
     ora "^3.4.0"
     read-pkg "^5.1.1"
@@ -3718,10 +3718,10 @@ core-js@^2.4.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
   integrity sha512-5wjnpaT/3dV+XB4borEsnAYQchn00XSgTAWKDkEqv+K8KevjbzmofK6hfJ9TZIlpj2N0xQpazy7PiRQiWHqzWg==
 
-core-js@^3.21.0, core-js@^3.6.5:
-  version "3.21.0"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.21.0.tgz#f479dbfc3dffb035a0827602dd056839a774aa71"
-  integrity sha512-YUdI3fFu4TF/2WykQ2xzSiTQdldLB4KVuL9WeAy5XONZYt5Cun/fpQvctoKbCgvPhmzADeesTk/j2Rdx77AcKQ==
+core-js@^3.21.1, core-js@^3.6.5:
+  version "3.21.1"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.21.1.tgz#f2e0ddc1fc43da6f904706e8e955bc19d06a0d94"
+  integrity sha512-FRq5b/VMrWlrmCzwRrpDYNxyHP9BcAZC+xHJaqTgIE5091ZV1NTmyh0sGOg5XqpnHvR0svdy0sv1gWA1zmhxig==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -4459,10 +4459,10 @@ dwv@0.30.8:
     konva "~8.3.0"
     magic-wand-tool "~1.1.7"
 
-easy-stack@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/easy-stack/-/easy-stack-1.0.0.tgz#12c91b3085a37f0baa336e9486eac4bf94e3e788"
-  integrity sha1-EskbMIWjfwuqM26UhurEv5Tj54g=
+easy-stack@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/easy-stack/-/easy-stack-1.0.1.tgz#8afe4264626988cabb11f3c704ccd0c835411066"
+  integrity sha512-wK2sCs4feiiJeFXn3zvY0p41mdU5VUgbgs1rNsc/y5ngFUijdWd+iIN8eoyuZHKB8xN6BL4PdWmzqFmxNg6V2w==
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"
@@ -7008,17 +7008,17 @@ js-beautify@^1.6.12, js-beautify@^1.6.14:
     mkdirp "~0.5.1"
     nopt "~4.0.1"
 
-js-message@1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/js-message/-/js-message-1.0.5.tgz#2300d24b1af08e89dd095bc1a4c9c9cfcb892d15"
-  integrity sha1-IwDSSxrwjondCVvBpMnJz8uJLRU=
+js-message@1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/js-message/-/js-message-1.0.7.tgz#fbddd053c7a47021871bb8b2c95397cc17c20e47"
+  integrity sha512-efJLHhLjIyKRewNS9EGZ4UpI8NguuL6fKkhRxVuMmrGV2xN/0APGdQYwLFky5w9naebSZ0OwAGp0G6/2Cg90rA==
 
-js-queue@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/js-queue/-/js-queue-2.0.0.tgz#362213cf860f468f0125fc6c96abc1742531f948"
-  integrity sha1-NiITz4YPRo8BJfxslqvBdCUx+Ug=
+js-queue@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/js-queue/-/js-queue-2.0.2.tgz#0be590338f903b36c73d33c31883a821412cd482"
+  integrity sha512-pbKLsbCfi7kriM3s1J4DDCo7jQkI58zPLHi0heXPzPlj0hjUsm+FesPUbE0DSbIVIK503A36aUBoCN7eMFedkA==
   dependencies:
-    easy-stack "^1.0.0"
+    easy-stack "^1.0.1"
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
@@ -8080,14 +8080,14 @@ node-int64@^0.4.0:
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
   integrity sha1-h6kGXNs1XTGC2PlM4RGIuCXGijs=
 
-node-ipc@^9.1.1:
-  version "9.1.1"
-  resolved "https://registry.yarnpkg.com/node-ipc/-/node-ipc-9.1.1.tgz#4e245ed6938e65100e595ebc5dc34b16e8dd5d69"
-  integrity sha512-FAyICv0sIRJxVp3GW5fzgaf9jwwRQxAKDJlmNFUL5hOy+W4X/I5AypyHoq0DXXbo9o/gt79gj++4cMr4jVWE/w==
+node-ipc@9.2.1:
+  version "9.2.1"
+  resolved "https://registry.yarnpkg.com/node-ipc/-/node-ipc-9.2.1.tgz#b32f66115f9d6ce841dc4ec2009d6a733f98bb6b"
+  integrity sha512-mJzaM6O3xHf9VT8BULvJSbdVbmHUKRNOH7zDDkCrA1/T+CVjq2WVIDfLt0azZRXpgArJtl3rtmEozrbXPZ9GaQ==
   dependencies:
     event-pubsub "4.3.0"
-    js-message "1.0.5"
-    js-queue "2.0.0"
+    js-message "1.0.7"
+    js-queue "2.0.2"
 
 node-libs-browser@^2.2.1:
   version "2.2.1"
