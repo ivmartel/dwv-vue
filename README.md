@@ -8,58 +8,35 @@ dwv-vue is not certified for diagnostic use. Released under GNU GPL-3.0 license 
 
 [![Node.js CI](https://github.com/ivmartel/dwv-vue/actions/workflows/nodejs-ci.yml/badge.svg)](https://github.com/ivmartel/dwv-vue/actions/workflows/nodejs-ci.yml)
 
-## Steps to run the viewer from scratch
-
-Get the code:
-
-```sh
-git clone https://github.com/ivmartel/dwv-vue.git
-```
-
-Move to its folder:
-
-```sh
-cd dwv-vue
-```
-
-Install dependencies (using `yarn`, replace with `npm` if you prefer):
-
-```sh
-yarn install
-```
-
-Call the start script to launch the viewer on a local server:
-
-```sh
-yarn run start
-```
-
-You can now open a browser at http://localhost:8080 and enjoy!
-
 ## Available Scripts
 
-```bash
-# install dependencies
-yarn install
-
-# serve with hot reload at localhost:8080
-yarn run start
-
-# run linting
-yarn run lint
-
-# run unit tests with hot reload
-yarn run test
-
-# run e2e tests
-yarn run e2e
-
-# build for production
-yarn run build
-```
+ - `ìnstall`: install dependencies
+ - `start`: serve with hot reload at localhost:8080
+ - `lint`: run linting
+ - `test`: run unit tests with hot reload
+ - `e2e`: run e2e tests
+ - `build`: build for production
 
 Unit tests use [Jest](https://facebook.github.io/jest/) and e2e tests [Nightwatch.js](http://nightwatchjs.org/).
 
 This project was generated with the [vue-cli](https://github.com/vuejs/vue-cli) version 3.0.1.
 
 For a detailed explanation on how things work, check out the [vue-cli doc](https://cli.vuejs.org/).
+
+## Steps to run the viewer from scratch
+
+```sh
+# get the code
+git clone https://github.com/ivmartel/dwv-vue.git
+
+# move to its folder
+cd dwv-vue
+
+# install dependencies
+yarn install
+
+# call the start script to launch the viewer on a local server
+yarn run start
+```
+
+You can now open a browser at http://localhost:8080 and enjoy!
