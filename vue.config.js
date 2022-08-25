@@ -7,12 +7,12 @@ module.exports = {
   configureWebpack: {
     plugins: [
       // copy decoders
-      new CopyWebpackPlugin([
-        {
+      new CopyWebpackPlugin({
+        patterns: [{
           from: './node_modules/dwv/decoders',
           to: 'assets/dwv/decoders'
-        }
-      ])
+        }]
+      })
     ]
   }
 }

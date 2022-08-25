@@ -105,5 +105,5 @@ module.exports = {
     // https://eslint.org/docs/rules/operator-linebreak
     'operator-linebreak': 'error'
   },
-  parserOptions: {parser: 'babel-eslint'}
+  parserOptions: {parser: '@babel/eslint-parser'}
 }
