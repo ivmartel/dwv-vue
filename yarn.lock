@@ -4559,15 +4559,15 @@ gauge@^3.0.0:
     strip-ansi "^6.0.1"
     wide-align "^1.1.2"
 
-geckodriver@^3.0.1:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-3.0.2.tgz#6bd69166a24859c5edbc6ece9868339378b6c97b"
-  integrity sha512-GHOQzQnTeZOJdcdEXLuzmcRwkbHuei1VivXkn2BLyleKiT6lTvl0T7vm+d0wvr/EZC7jr0m1u1pBHSfqtuFuNQ==
+geckodriver@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-3.2.0.tgz#6b0a85e2aafbce209bca30e2d53af857707b1034"
+  integrity sha512-p+qR2RKlI/TQoCEYrSuTaYCLqsJNni96WmEukTyXmOmLn+3FLdgPAEwMZ0sG2Cwi9hozUzGAWyT6zLuhF6cpiQ==
   dependencies:
     adm-zip "0.5.9"
     bluebird "3.7.2"
     got "11.8.5"
-    https-proxy-agent "5.0.0"
+    https-proxy-agent "5.0.1"
     tar "6.1.11"
 
 gensync@^1.0.0-beta.2:
@@ -4978,15 +4978,7 @@ http2-wrapper@^1.0.0-beta.5.2:
     quick-lru "^5.1.1"
     resolve-alpn "^1.0.0"
 
-https-proxy-agent@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-5.0.0.tgz#e2a90542abb68a762e0a0850f6c9edadfd8506b2"
-  integrity sha512-EkYm5BcKUGiduxzSt3Eppko+PiNWNEpa4ySk9vTC6wDsQJW9rHSa+UhGNJoRYp7bz6Ht1eaRIa6QaJqO5rCFbA==
-  dependencies:
-    agent-base "6"
-    debug "4"
-
-https-proxy-agent@^5.0.0, https-proxy-agent@^5.0.1:
+https-proxy-agent@5.0.1, https-proxy-agent@^5.0.0, https-proxy-agent@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-5.0.1.tgz#c59ef224a04fe8b754f3db0063a25ea30d0005d6"
   integrity sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==
