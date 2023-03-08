@@ -93,9 +93,7 @@ export default {
         ZoomAndPan: {},
         WindowLevel: {},
         Draw: {
-          options: ['Ruler'],
-          type: 'factory',
-          events: ['drawcreate', 'drawchange', 'drawmove', 'drawdelete']
+          options: ['Ruler']
         }
       },
       toolNames: [],
@@ -120,15 +118,15 @@ export default {
     })
     // handle load events
     let nLoadItem = null
-    let nReceivedError = null
-    let nReceivedAbort = null
+    let nReceivedLoadError = null
+    let nReceivedLoadAbort = null
     let isFirstRender = null
     this.dwvApp.addEventListener('loadstart', (/*event*/) => {
       // reset flags
       this.dataLoaded = false
       nLoadItem = 0
-      nReceivedError = 0
-      nReceivedAbort = 0
+      nReceivedLoadError = 0
+      nReceivedLoadAbort = 0
       isFirstRender = true
       // hide drop box
       this.showDropbox(false)
@@ -158,7 +156,7 @@ export default {
       this.dataLoaded = true
     })
     this.dwvApp.addEventListener('loadend', (/*event*/) => {
-      if (nReceivedError) {
+      if (nReceivedLoadError) {
         this.loadProgress = 0
         alert('Received errors during load. Check log for details.')
         // show drop box if nothing has been loaded
@@ -166,7 +164,7 @@ export default {
           this.showDropbox(true)
         }
       }
-      if (nReceivedAbort) {
+      if (nReceivedLoadAbort) {
         this.loadProgress = 0
         alert('Load was aborted.')
         this.showDropbox(true)
@@ -175,12 +173,12 @@ export default {
     this.dwvApp.addEventListener('loaditem', (/*event*/) => {
       ++nLoadItem
     })
-    this.dwvApp.addEventListener('error', (/*event*/) => {
+    this.dwvApp.addEventListener('loaderror', (/*event*/) => {
       // console.error('load error', event)
-      ++nReceivedError
+      ++nReceivedLoadError
     })
-    this.dwvApp.addEventListener('abort', (/*event*/) => {
-      ++nReceivedAbort
+    this.dwvApp.addEventListener('loadabort', (/*event*/) => {
+      ++nReceivedLoadAbort
     })
 
     // handle key events
@@ -206,7 +204,7 @@ export default {
     },
     onChangeShape: function (shape) {
       if (this.dwvApp && this.selectedTool === 'Draw') {
-        this.dwvApp.setDrawShape(shape)
+        this.dwvApp.setToolFeatures({shapeName: shape})
       }
     },
     onReset: function () {
