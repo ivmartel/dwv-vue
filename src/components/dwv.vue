@@ -6,37 +6,29 @@
     ></md-progress-bar>
     <div class="button-row">
       <!-- action buttons -->
-      <md-menu md-size="medium" md-align-trigger>
-        <md-button
-          class="md-raised md-primary"
-          md-menu-trigger
-          :disabled="!dataLoaded"
-        >
-          {{ selectedTool }} <md-icon>arrow_drop_down</md-icon></md-button
-        >
+      <md-button
+        class="md-icon-button md-raised md-primary"
+        v-for="tool in toolNames"
+        :key="tool"
+        :id="tool"
+        v-on:click="onChangeTool(tool)"
+        :disabled="!dataLoaded || !canRunTool(tool)"
+        ><md-icon>{{ getToolIcon(tool)}}</md-icon>
+      </md-button>
 
-        <md-menu-content>
-          <md-menu-item
-            v-for="tool in toolNames"
-            :key="tool"
-            v-on:click="onChangeTool(tool)"
-            >{{ tool }}</md-menu-item
-          >
-        </md-menu-content>
+      <md-button
+        class="md-icon-button md-raised md-primary"
+        v-on:click="onReset()"
+        :disabled="!dataLoaded"
+        ><md-icon>refresh</md-icon>
+      </md-button>
 
-        <md-button
-          class="md-raised md-primary"
-          v-on:click="onReset()"
-          :disabled="!dataLoaded"
-          >Reset</md-button
-        >
-        <md-button
-          class="md-raised md-primary"
-          v-on:click="showDicomTags = true"
-          :disabled="!dataLoaded"
-          >Tags</md-button
-        >
-      </md-menu>
+      <md-button
+        class="md-icon-button md-raised md-primary"
+        v-on:click="showDicomTags = true"
+        :disabled="!dataLoaded"
+        ><md-icon>library_books</md-icon>
+      </md-button>
       <!-- dicom tags dialog-->
       <md-dialog :md-active.sync="showDicomTags">
         <tagsTable :tagsData="metaData" />
@@ -82,7 +74,7 @@ export default {
     tagsTable
   },
   data: function () {
-    return {
+    let res = {
       versions: {
         dwv: dwv.getVersion(),
         vue: Vue.version
@@ -96,7 +88,7 @@ export default {
           options: ['Ruler']
         }
       },
-      toolNames: [],
+
       selectedTool: 'Select Tool',
       loadProgress: 0,
       dataLoaded: false,
@@ -107,6 +99,8 @@ export default {
       borderClassName: 'dropBoxBorder',
       hoverClassName: 'hover'
     }
+    res.toolNames = Object.keys(res.tools)
+    return res
   },
   mounted() {
     // create app
@@ -138,15 +132,11 @@ export default {
       if (isFirstRender) {
         isFirstRender = false
         // available tools
-        this.toolNames = []
-        for (const key in this.tools) {
-          if ((key === 'Scroll' && this.dwvApp.canScroll()) ||
-            (key === 'WindowLevel' && this.dwvApp.canWindowLevel()) ||
-            (key !== 'Scroll' && key !== 'WindowLevel')) {
-            this.toolNames.push(key)
-          }
+        let selectedTool = 'ZoomAndPan'
+        if (this.dwvApp.canScroll()) {
+          selectedTool = 'Scroll'
         }
-        this.onChangeTool(this.toolNames[0])
+        this.onChangeTool(selectedTool)
       }
     })
     this.dwvApp.addEventListener('load', (/*event*/) => {
@@ -195,11 +185,46 @@ export default {
     dwv.utils.loadFromUri(window.location.href, this.dwvApp)
   },
   methods: {
+    getToolIcon: function (tool) {
+      var res
+      if (tool === 'Scroll') {
+        res = 'menu'
+      } else if (tool === 'ZoomAndPan') {
+        res = 'search'
+      } else if (tool === 'WindowLevel') {
+        res = 'contrast'
+      } else if (tool === 'Draw') {
+        res = 'straighten'
+      }
+      return res
+    },
     onChangeTool: function (tool) {
       this.selectedTool = tool
+      for (const t of this.toolNames) {
+        this.activateTool(t, false)
+      }
+      this.activateTool(tool, true)
       this.dwvApp.setTool(tool)
       if (tool === 'Draw') {
         this.onChangeShape(this.tools.Draw.options[0])
+      }
+    },
+    canRunTool: function (tool) {
+      let res
+      if (tool === 'Scroll') {
+        res = this.dwvApp.canScroll()
+      } else if (tool === 'WindowLevel') {
+        res = this.dwvApp.canWindowLevel()
+      } else {
+        res = true
+      }
+      return res
+    },
+    activateTool: function (tool, flag) {
+      if (flag) {
+        document.getElementById(tool).classList.add('active')
+      } else {
+        document.getElementById(tool).classList.remove('active')
       }
     },
     onChangeShape: function (shape) {
@@ -304,6 +329,9 @@ export default {
 
 #dwv button {
   margin: 2px;
+}
+#dwv button.active{
+  background-color: var(--md-theme-default-accent);
 }
 
 /* Layers */
