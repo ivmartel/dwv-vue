@@ -13,6 +13,10 @@ module.exports = {
           to: 'assets/dwv/decoders'
         }]
       })
-    ]
+    ],
+    performance: {
+      maxEntrypointSize: 1512000,
+      maxAssetSize: 1512000
+    }
   }
 }
