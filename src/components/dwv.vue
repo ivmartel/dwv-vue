@@ -11,6 +11,7 @@
         v-for="tool in toolNames"
         :key="tool"
         :id="tool"
+        :title="tool"
         v-on:click="onChangeTool(tool)"
         :disabled="!dataLoaded || !canRunTool(tool)"
         ><md-icon>{{ getToolIcon(tool)}}</md-icon>
@@ -18,6 +19,7 @@
 
       <md-button
         class="md-icon-button md-raised md-primary"
+        title="Reset"
         v-on:click="onReset()"
         :disabled="!dataLoaded"
         ><md-icon>refresh</md-icon>
@@ -25,6 +27,7 @@
 
       <md-button
         class="md-icon-button md-raised md-primary"
+        title="Toggle Orientation"
         v-on:click="toggleOrientation()"
         :disabled="!dataLoaded"
         ><md-icon>cameraswitch</md-icon>
@@ -32,6 +35,7 @@
 
       <md-button
         class="md-icon-button md-raised md-primary"
+        title="Tags"
         v-on:click="showDicomTags = true"
         :disabled="!dataLoaded"
         ><md-icon>library_books</md-icon>
