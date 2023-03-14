@@ -25,6 +25,13 @@
 
       <md-button
         class="md-icon-button md-raised md-primary"
+        v-on:click="toggleOrientation()"
+        :disabled="!dataLoaded"
+        ><md-icon>cameraswitch</md-icon>
+      </md-button>
+
+      <md-button
+        class="md-icon-button md-raised md-primary"
         v-on:click="showDicomTags = true"
         :disabled="!dataLoaded"
         ><md-icon>library_books</md-icon>
@@ -93,6 +100,7 @@ export default {
       loadProgress: 0,
       dataLoaded: false,
       metaData: null,
+      orientation: undefined,
       showDicomTags: false,
       dropboxDivId: 'dropBox',
       dropboxClassName: 'dropBox',
@@ -225,6 +233,34 @@ export default {
         document.getElementById(tool).classList.add('active')
       } else {
         document.getElementById(tool).classList.remove('active')
+      }
+    },
+    toggleOrientation: function () {
+      if (typeof this.orientation !== 'undefined') {
+        if (this.orientation === 'axial') {
+          this.orientation = 'coronal'
+        } else if (this.orientation === 'coronal') {
+          this.orientation = 'sagittal'
+        } else if (this.orientation === 'sagittal') {
+          this.orientation = 'axial'
+        }
+      } else {
+        // default is most probably axial
+        this.orientation = 'coronal'
+      }
+      // update data view config
+      const config = {
+        '*': [
+          {
+            divId: 'layerGroup0',
+            orientation: this.orientation
+          }
+        ]
+      }
+      this.dwvApp.setDataViewConfig(config)
+      // render data
+      for (let i = 0; i < this.dwvApp.getNumberOfLoadedData(); ++i) {
+        this.dwvApp.render(i)
       }
     },
     onChangeShape: function (shape) {
