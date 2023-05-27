@@ -2,8 +2,6 @@
   <div>
     <md-table
       v-model="searched"
-      md-sort="name"
-      md-sort-order="asc"
       md-card
       md-fixed-header
     >
