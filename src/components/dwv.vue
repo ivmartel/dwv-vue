@@ -398,12 +398,6 @@ export default {
   border: 5px dashed rgba(68, 138, 255, 0.38); }
 .dropBoxBorder.hover {
   border: 5px dashed var(--md-theme-default-primary); }
-
-.md-dialog {
-  width: 80%;
-  height: 90%;
-}
-
 </style>
 <!-- non "scoped" style -->
 <style>
