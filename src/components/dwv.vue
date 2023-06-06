@@ -64,7 +64,11 @@
 // import
 import Vue from 'vue'
 import MdButton from 'vue-material'
-import dwv from 'dwv'
+import {
+  App,
+  getDwvVersion,
+  decoderScripts
+} from 'dwv'
 import tagsTable from './tags-table'
 
 Vue.use(MdButton)
@@ -72,12 +76,12 @@ Vue.use(MdButton)
 // gui overrides
 
 // Image decoders (for web workers)
-dwv.image.decoderScripts = {
-  jpeg2000: 'assets/dwv/decoders/pdfjs/decode-jpeg2000.js',
-  'jpeg-lossless': 'assets/dwv/decoders/rii-mango/decode-jpegloss.js',
-  'jpeg-baseline': 'assets/dwv/decoders/pdfjs/decode-jpegbaseline.js',
-  rle: 'assets/dwv/decoders/dwv/decode-rle.js'
-}
+decoderScripts.jpeg2000 = 'assets/dwv/decoders/pdfjs/decode-jpeg2000.js'
+decoderScripts['jpeg-lossless'] =
+  'assets/dwv/decoders/rii-mango/decode-jpegloss.js'
+decoderScripts['jpeg-baseline'] =
+  'assets/dwv/decoders/pdfjs/decode-jpegbaseline.js'
+decoderScripts.rle = 'assets/dwv/decoders/dwv/decode-rle.js'
 
 export default {
   name: 'dwv-vue',
@@ -87,7 +91,7 @@ export default {
   data: function () {
     let res = {
       versions: {
-        dwv: dwv.getVersion(),
+        dwv: getDwvVersion(),
         vue: Vue.version
       },
       dwvApp: null,
@@ -116,7 +120,7 @@ export default {
   },
   mounted() {
     // create app
-    this.dwvApp = new dwv.App()
+    this.dwvApp = new App()
     // initialise app
     this.dwvApp.init({
       dataViewConfigs: {'*': [{divId: 'layerGroup0'}]},
@@ -194,7 +198,7 @@ export default {
     this.setupDropbox()
 
     // possible load from location
-    dwv.utils.loadFromUri(window.location.href, this.dwvApp)
+    this.dwvApp.loadFromUri(window.location.href)
   },
   methods: {
     getToolIcon: function (tool) {
