@@ -74,12 +74,31 @@ const searchAll = (items, term) => {
 }
 
 const getMetaArray = (tagData, instanceNumber) => {
-  const reducer = getTagReducer(tagData, instanceNumber, '')
+  let reducer
+  if (isDicomMeta(tagData)) {
+    reducer = getDicomTagReducer(tagData, instanceNumber, '')
+  } else {
+    reducer = getTagReducer(tagData)
+  }
   const keys = Object.keys(tagData)
   return keys.reduce(reducer, [])
 }
 
-const getTagReducer = (tagData, instanceNumber, prefix) => {
+const isDicomMeta = (meta) => {
+  return typeof meta['00020010'] !== 'undefined'
+}
+
+const getTagReducer = (tagData) => {
+  return function (accumulator, currentValue) {
+    accumulator.push({
+      name: currentValue,
+      value: tagData[currentValue].value
+    })
+    return accumulator
+  }
+}
+
+const getDicomTagReducer = (tagData, instanceNumber, prefix) => {
   return (accumulator, currentValue) => {
     const tag = getTagFromKey(currentValue)
     let key = tag.getNameFromDictionary()
@@ -112,7 +131,7 @@ const getTagReducer = (tagData, instanceNumber, prefix) => {
         const sqItems = value[i]
         const keys = Object.keys(sqItems)
         const res = keys.reduce(
-          getTagReducer(
+          getDicomTagReducer(
             sqItems, instanceNumber, prefix + '[' + i + ']'), []
         )
         accumulator = accumulator.concat(res)
@@ -154,17 +173,20 @@ export default {
   },
   created() {
     // set slider with instance numbers ('00200013')
-    let instanceNumbers = this.tagsData['00200013'].value
-    if (typeof instanceNumbers === 'string') {
-      instanceNumbers = [instanceNumbers]
-    }
-    // convert string to numbers
-    const numbers = instanceNumbers.map(Number)
-    numbers.sort((a, b) => a - b)
+    const instanceElement = this.tagsData['00200013']
+    if (typeof instanceElement !== 'undefined') {
+      let instanceNumbers = instanceElement.value
+      if (typeof instanceNumbers === 'string') {
+        instanceNumbers = [instanceNumbers]
+      }
+      // convert string to numbers
+      const numbers = instanceNumbers.map(Number)
+      numbers.sort((a, b) => a - b)
 
-    this.sliderMin = numbers[0]
-    this.sliderMax = numbers[numbers.length - 1]
-    this.instanceNumber = numbers[0]
+      this.sliderMin = numbers[0]
+      this.sliderMax = numbers[numbers.length - 1]
+      this.instanceNumber = numbers[0]
+    }
 
     const metaArray = getMetaArray(this.tagsData, this.instanceNumber)
     this.searched = metaArray
