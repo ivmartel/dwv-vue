@@ -38,7 +38,7 @@
     "chromedriver": "^114.0.1",
     "eslint": "^8.42.0",
     "eslint-plugin-vue": "^9.14.1",
-    "geckodriver": "^4.0.3",
+    "geckodriver": "^4.0.4",
     "jest": "^27.1.0",
     "vue-template-compiler": "^2.7.14"
   }
