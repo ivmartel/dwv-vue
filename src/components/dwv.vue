@@ -308,6 +308,11 @@ export default {
       // load files
       this.dwvApp.loadFiles(event.dataTransfer.files)
     },
+    onInputFile: function (event) {
+      if (event.target && event.target.files) {
+        this.dwvApp.loadFiles(event.target.files)
+      }
+    },
     showDropbox: function (show) {
       const box = document.getElementById(this.dropboxDivId)
       if (!box) {
@@ -321,7 +326,23 @@ export default {
         // check content
         if (box.innerHTML === '') {
           const p = document.createElement('p')
-          p.appendChild(document.createTextNode('Drag and drop data here'))
+          p.appendChild(document.createTextNode('Drag and drop data here or '))
+          // input file
+          const input = document.createElement('input')
+          input.onchange = this.onInputFile
+          input.type = 'file'
+          input.multiple = true
+          input.id = 'input-file'
+          input.style.display = 'none'
+          const label = document.createElement('label')
+          label.htmlFor = 'input-file'
+          const link = document.createElement('a')
+          link.appendChild(document.createTextNode('click here'))
+          link.id = 'input-file-link'
+          label.appendChild(link)
+          p.appendChild(input)
+          p.appendChild(label)
+
           box.appendChild(p)
         }
         // show box
