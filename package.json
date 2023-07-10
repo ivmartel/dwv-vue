@@ -16,7 +16,7 @@
     "build-stable": "NODE_ENV=production DEPLOY_NAME=stable vue-cli-service build"
   },
   "dependencies": {
-    "core-js": "^3.31.0",
+    "core-js": "^3.31.1",
     "dwv": "0.32.1",
     "register-service-worker": "^1.7.2",
     "vue": "~2.7.14",
