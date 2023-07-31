@@ -37,7 +37,7 @@
     "canvas": "^2.11.2",
     "chromedriver": "^114.0.3",
     "eslint": "^8.45.0",
-    "eslint-plugin-vue": "^9.15.1",
+    "eslint-plugin-vue": "^9.16.1",
     "geckodriver": "^4.0.5",
     "jest": "^27.1.0",
     "vue-template-compiler": "^2.7.14"
