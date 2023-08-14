@@ -4642,10 +4642,10 @@ gauge@^3.0.0:
     strip-ansi "^6.0.1"
     wide-align "^1.1.2"
 
-geckodriver@^4.0.5:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-4.0.5.tgz#269c91c3496e3ced6cec81f8d019f663009ad74e"
-  integrity sha512-y3pEjCOz61/ExmFwF5buJ/E36NhN7nZAsLxY9boJNZQMdhticWsKdJ4WmVaNWtEqSt7PNzJl+UFJPavUGf0EQg==
+geckodriver@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-4.2.0.tgz#a385370011ae29fa8c68351b01d054a92b92d945"
+  integrity sha512-I2BlybeMFMzpxHRrh8X4VwP4ys74JHszyUgfezOrbTR7PEybFneDcuEjKIQxKV6vFPmsdwhwF1x8AshdQo56xA==
   dependencies:
     "@wdio/logger" "^8.11.0"
     decamelize "^6.0.0"
