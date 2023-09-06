@@ -66,6 +66,9 @@ import Vue from 'vue'
 import MdButton from 'vue-material'
 import {
   App,
+  AppOptions,
+  ViewConfig,
+  ToolConfig,
   getDwvVersion,
   decoderScripts
 } from 'dwv'
@@ -96,12 +99,10 @@ export default {
       },
       dwvApp: null,
       tools: {
-        Scroll: {},
-        ZoomAndPan: {},
-        WindowLevel: {},
-        Draw: {
-          options: ['Ruler']
-        }
+        Scroll: new ToolConfig(),
+        ZoomAndPan: new ToolConfig(),
+        WindowLevel: new ToolConfig(),
+        Draw: new ToolConfig(['Ruler'])
       },
 
       selectedTool: 'Select Tool',
@@ -122,10 +123,11 @@ export default {
     // create app
     this.dwvApp = new App()
     // initialise app
-    this.dwvApp.init({
-      dataViewConfigs: {'*': [{divId: 'layerGroup0'}]},
-      tools: this.tools
-    })
+    const viewConfig0 = new ViewConfig('layerGroup0')
+    const viewConfigs = {'*': [viewConfig0]}
+    const options = new AppOptions(viewConfigs)
+    options.tools = this.tools
+    this.dwvApp.init(options)
     // handle load events
     let nLoadItem = null
     let nReceivedLoadError = null
@@ -257,15 +259,10 @@ export default {
         this.orientation = 'coronal'
       }
       // update data view config
-      const config = {
-        '*': [
-          {
-            divId: 'layerGroup0',
-            orientation: this.orientation
-          }
-        ]
-      }
-      this.dwvApp.setDataViewConfig(config)
+      const viewConfig0 = new ViewConfig('layerGroup0')
+      viewConfig0.orientation = this.orientation
+      const viewConfigs = {'*': [viewConfig0]}
+      this.dwvApp.setDataViewConfigs(viewConfigs)
       // render data
       for (let i = 0; i < this.dwvApp.getNumberOfLoadedData(); ++i) {
         this.dwvApp.render(i)
