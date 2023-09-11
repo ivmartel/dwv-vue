@@ -23,7 +23,7 @@
     "vue-material": "~1.0.0-beta"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.11",
+    "@babel/core": "^7.22.17",
     "@babel/eslint-parser": "^7.22.15",
     "@vue/cli-plugin-babel": "~5.0.8",
     "@vue/cli-plugin-e2e-nightwatch": "~5.0.8",
