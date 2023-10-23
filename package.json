@@ -35,7 +35,7 @@
     "@vue/vue2-jest": "^27.0.0",
     "babel-jest": "^27.5.1",
     "canvas": "^2.11.2",
-    "chromedriver": "^118.0.0",
+    "chromedriver": "^118.0.1",
     "eslint": "^8.51.0",
     "eslint-plugin-vue": "^9.17.0",
     "geckodriver": "^4.2.1",
