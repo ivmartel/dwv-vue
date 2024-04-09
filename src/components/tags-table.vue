@@ -23,7 +23,7 @@
             step="1"
             :min="sliderMin"
             :max="sliderMax"
-            :value="instanceNumber"
+            value=0
             @input="onSliderChange"
             title="Instance number"/>
           <div class="instancenumber"
@@ -159,7 +159,8 @@ export default {
     searched: [],
     sliderMin: undefined,
     sliderMax: undefined,
-    instanceNumber: undefined
+    instanceNumber: 0,
+    instanceNumbers: []
   }),
   methods: {
     searchOnTable() {
@@ -167,7 +168,7 @@ export default {
       this.searched = searchAll(metaArray, this.search)
     },
     onSliderChange(event) {
-      this.instanceNumber = event.target.value
+      this.instanceNumber = this.instanceNumbers[event.target.value]
       this.searchOnTable()
     }
   },
@@ -175,17 +176,17 @@ export default {
     // set slider with instance numbers ('00200013')
     const instanceElement = this.tagsData['00200013']
     if (typeof instanceElement !== 'undefined') {
-      let instanceNumbers = instanceElement.value
-      if (typeof instanceNumbers === 'string') {
-        instanceNumbers = [instanceNumbers]
+      let instanceNumberValue = instanceElement.value
+      if (typeof instanceNumberValue === 'string') {
+        instanceNumberValue = [instanceNumberValue]
       }
       // convert string to numbers
-      const numbers = instanceNumbers.map(Number)
-      numbers.sort((a, b) => a - b)
+      this.instanceNumbers = instanceNumberValue.map(Number)
+      this.instanceNumbers.sort((a, b) => a - b)
 
-      this.sliderMin = numbers[0]
-      this.sliderMax = numbers[numbers.length - 1]
-      this.instanceNumber = numbers[0]
+      this.sliderMin = 0
+      this.sliderMax = this.instanceNumbers.length - 1
+      this.instanceNumber = this.instanceNumbers[this.sliderMin]
     }
 
     const metaArray = getMetaArray(this.tagsData, this.instanceNumber)
