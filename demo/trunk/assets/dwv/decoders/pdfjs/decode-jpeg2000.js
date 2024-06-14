@@ -1,1 +1,0 @@
-importScripts("jpx.js","util.js","arithmetic_decoder.js"),self.addEventListener("message",(function(e){var s=new JpxImage;s.parse(e.data.buffer);var t=s.tiles[0].items;self.postMessage([t])}),!1);

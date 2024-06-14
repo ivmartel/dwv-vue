@@ -1,1 +1,0 @@
-importScripts("rle.js"),self.addEventListener("message",(function(e){var a=new dwvdecoder.RleDecoder;self.postMessage([a.decode(e.data.buffer,e.data.meta.bitsAllocated,e.data.meta.isSigned,e.data.meta.sliceSize,e.data.meta.samplesPerPixel,e.data.meta.planarConfiguration)])}),!1);

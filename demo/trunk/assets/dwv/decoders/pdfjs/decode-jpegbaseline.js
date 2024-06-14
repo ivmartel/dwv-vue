@@ -1,1 +1,0 @@
-importScripts("jpg.js"),self.addEventListener("message",(function(e){var a=new JpegImage;a.parse(e.data.buffer);var s=a.getData(a.width,a.height);self.postMessage([s])}),!1);
