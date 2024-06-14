@@ -11,17 +11,16 @@ dwv-vue is not certified for diagnostic use. Released under GNU GPL-3.0 license 
 ## Available Scripts
 
  - `ìnstall`: install dependencies
- - `start`: serve with hot reload at localhost:8080
+ - `dev`: serve with hot reload at localhost:5173
  - `lint`: run linting
  - `test`: run unit tests with hot reload
- - `e2e`: run e2e tests
  - `build`: build for production
 
-Unit tests use [Jest](https://facebook.github.io/jest/) and e2e tests [Nightwatch.js](http://nightwatchjs.org/).
+Unit tests use [Vitest](dev).
 
-This project was generated with the [vue-cli](https://github.com/vuejs/vue-cli) version 3.0.1.
+This project was generated with [vite](https://vitejs.dev) version 5.2.0.
 
-For a detailed explanation on how things work, check out the [vue-cli doc](https://cli.vuejs.org/).
+For a detailed explanation on how things work, check out the [vite guide](https://vitejs.dev/guide/).
 
 ## Steps to run the viewer from scratch
 
@@ -36,7 +35,7 @@ cd dwv-vue
 yarn install
 
 # call the start script to launch the viewer on a local server
-yarn run start
+yarn run dwv
 ```
 
-You can now open a browser at http://localhost:8080 and enjoy!
+You can now open a browser at http://localhost:5173 and enjoy!

@@ -1,59 +1,90 @@
 <template>
   <div id="dwv">
-    <md-progress-bar
-      md-mode="determinate"
-      :md-value="loadProgress"
-    ></md-progress-bar>
-    <div class="button-row">
+    <v-progress-linear
+      :model-value="loadProgress"
+      color="primary"
+    />
+
+    <!-- toolbar -->
+    <v-container>
       <!-- action buttons -->
-      <md-button
-        class="md-icon-button md-raised md-primary"
-        v-for="tool in toolNames"
-        :key="tool"
-        :id="tool"
-        :title="tool"
-        v-on:click="onChangeTool(tool)"
-        :disabled="!dataLoaded || !canRunTool(tool)"
-        ><md-icon>{{ getToolIcon(tool)}}</md-icon>
-      </md-button>
+      <v-btn-toggle
+        v-model="selectedToolIndex"
+        mandatory
+        color="primary"
+        divided
+      >
+        <v-btn
+          v-for="tool in toolNames"
+          :id="tool"
+          :key="tool"
+          :title="tool"
+          :disabled="!dataLoaded || !canRunTool(tool)"
+          :icon="getToolIcon(tool)"
+          @click="onChangeTool(tool)"
+        />
+      </v-btn-toggle>
 
-      <md-button
-        class="md-icon-button md-raised md-primary"
+      <v-btn
+        class="rounded-lg"
         title="Reset"
-        v-on:click="onReset()"
         :disabled="!dataLoaded"
-        ><md-icon>refresh</md-icon>
-      </md-button>
+        icon="refresh"
+        @click="onReset()"
+      />
 
-      <md-button
-        class="md-icon-button md-raised md-primary"
+      <v-btn
+        class="rounded-lg"
         title="Toggle Orientation"
-        v-on:click="toggleOrientation()"
         :disabled="!dataLoaded"
-        ><md-icon>cameraswitch</md-icon>
-      </md-button>
+        icon="cameraswitch"
+        @click="toggleOrientation()"
+      />
 
-      <md-button
-        class="md-icon-button md-raised md-primary"
-        title="Tags"
-        v-on:click="showDicomTags = true"
-        :disabled="!dataLoaded"
-        ><md-icon>library_books</md-icon>
-      </md-button>
       <!-- dicom tags dialog-->
-      <md-dialog :md-active.sync="showDicomTags">
-        <tagsTable :tagsData="metaData" />
-      </md-dialog>
+      <v-dialog
+        max-width="800px"
+        scrollable
+      >
+        <template #activator="{ props: activatorProps }">
+          <v-btn
+            class="rounded-lg"
+            title="Tags"
+            :disabled="!dataLoaded"
+            icon="library_books"
+            v-bind="activatorProps"
+            @click="showDicomTags = true"
+          />
+        </template>
+        <template #default>
+          <TagsTable
+            :tags-data="metaData"
+          />
+        </template>
+      </v-dialog>
+    </v-container>
+
+    <!-- dwv layer group -->
+    <div
+      id="layerGroup0"
+      class="layerGroup"
+    >
+      <div id="dropBox" />
     </div>
-    <div id="layerGroup0" class="layerGroup">
-      <div id="dropBox"></div>
-    </div>
+
+    <!-- legend -->
     <div class="legend md-caption">
       <p>
         Powered by
-        <a href="https://github.com/ivmartel/dwv" title="dwv on github">dwv</a>
+        <a
+          href="https://github.com/ivmartel/dwv"
+          title="dwv on github"
+        >dwv</a>
         {{ versions.dwv }} and
-        <a href="https://github.com/vuejs/vue" title="vue on github">Vue.js</a>
+        <a
+          href="https://github.com/vuejs/vue"
+          title="vue on github"
+        >Vue.js</a>
         {{ versions.vue }}
       </p>
     </div>
@@ -62,8 +93,7 @@
 
 <script>
 // import
-import Vue from 'vue'
-import MdButton from 'vue-material'
+import { ref, version, isProxy, toRaw } from 'vue'
 import {
   App,
   AppOptions,
@@ -72,9 +102,7 @@ import {
   getDwvVersion,
   decoderScripts
 } from 'dwv'
-import tagsTable from './tags-table'
-
-Vue.use(MdButton)
+import TagsTable from './TagsTable.vue'
 
 // gui overrides
 
@@ -87,28 +115,31 @@ decoderScripts['jpeg-baseline'] =
 decoderScripts.rle = 'assets/dwv/decoders/dwv/decode-rle.js'
 
 export default {
-  name: 'dwv-vue',
+  //name: 'dwv-vue',
   components: {
-    tagsTable
+    TagsTable
   },
-  data: function () {
+  setup() {
+    const count = ref(0)
+    return { count }
+  },
+  data() {
     let res = {
       versions: {
         dwv: getDwvVersion(),
-        vue: Vue.version
+        vue: version
       },
-      dwvApp: null,
       tools: {
         Scroll: new ToolConfig(),
         ZoomAndPan: new ToolConfig(),
         WindowLevel: new ToolConfig(),
         Draw: new ToolConfig(['Ruler'])
       },
-
       selectedTool: 'Select Tool',
+      selectedToolIndex: undefined,
       loadProgress: 0,
       dataLoaded: false,
-      metaData: null,
+      metaData: undefined,
       orientation: undefined,
       showDicomTags: false,
       dropboxDivId: 'dropBox',
@@ -117,6 +148,9 @@ export default {
       hoverClassName: 'hover'
     }
     res.toolNames = Object.keys(res.tools)
+    if (isProxy(this)) {
+      res.dwvApp = toRaw(this).dwvApp
+    }
     return res
   },
   mounted() {
@@ -203,7 +237,7 @@ export default {
     this.dwvApp.loadFromUri(window.location.href)
   },
   methods: {
-    getToolIcon: function (tool) {
+    getToolIcon(tool) {
       var res
       if (tool === 'Scroll') {
         res = 'menu'
@@ -216,8 +250,11 @@ export default {
       }
       return res
     },
-    onChangeTool: function (tool) {
-      this.selectedTool = tool
+    onChangeTool(tool) {
+      this.selectedTool =
+      this.selectedToolIndex = this.toolNames.findIndex(
+        (element) => element === tool
+      )
       for (const t of this.toolNames) {
         this.activateTool(t, false)
       }
@@ -227,7 +264,7 @@ export default {
         this.onChangeShape(this.tools.Draw.options[0])
       }
     },
-    canRunTool: function (tool) {
+    canRunTool(tool) {
       let res
       if (tool === 'Scroll') {
         res = this.dwvApp.canScroll()
@@ -238,14 +275,14 @@ export default {
       }
       return res
     },
-    activateTool: function (tool, flag) {
+    activateTool(tool, flag) {
       if (flag) {
         document.getElementById(tool).classList.add('active')
       } else {
         document.getElementById(tool).classList.remove('active')
       }
     },
-    toggleOrientation: function () {
+    toggleOrientation() {
       if (typeof this.orientation !== 'undefined') {
         if (this.orientation === 'axial') {
           this.orientation = 'coronal'
@@ -269,23 +306,23 @@ export default {
         this.dwvApp.render(dataId)
       }
     },
-    onChangeShape: function (shape) {
+    onChangeShape(shape) {
       if (this.dwvApp && this.selectedTool === 'Draw') {
         this.dwvApp.setToolFeatures({shapeName: shape})
       }
     },
-    onReset: function () {
+    onReset() {
       this.dwvApp.resetDisplay()
     },
     setupDropbox() {
       this.showDropbox(true)
     },
-    defaultHandleDragEvent: function (event) {
+    defaultHandleDragEvent(event) {
       // prevent default handling
       event.stopPropagation()
       event.preventDefault()
     },
-    onBoxDragOver: function (event) {
+    onBoxDragOver(event) {
       this.defaultHandleDragEvent(event)
       // update box border
       const box = document.getElementById(this.dropboxDivId)
@@ -293,7 +330,7 @@ export default {
         box.className += ' ' + this.hoverClassName
       }
     },
-    onBoxDragLeave: function (event) {
+    onBoxDragLeave(event) {
       this.defaultHandleDragEvent(event)
       // update box class
       const box = document.getElementById(this.dropboxDivId)
@@ -301,17 +338,17 @@ export default {
         box.className = box.className.replace(' ' + this.hoverClassName, '')
       }
     },
-    onDrop: function (event) {
+    onDrop(event) {
       this.defaultHandleDragEvent(event)
       // load files
       this.dwvApp.loadFiles(event.dataTransfer.files)
     },
-    onInputFile: function (event) {
+    onInputFile(event) {
       if (event.target && event.target.files) {
         this.dwvApp.loadFiles(event.target.files)
       }
     },
-    showDropbox: function (show) {
+    showDropbox(show) {
       const box = document.getElementById(this.dropboxDivId)
       if (!box) {
         return
@@ -381,20 +418,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #dwv {
-  font-family: Arial, Helvetica, sans-serif;
   height: 90%;
 }
 
-.button-row {
-  text-align: center;
-  padding: 5px;
-}
-
-#dwv button {
+button {
   margin: 2px;
-}
-#dwv button.active{
-  background-color: var(--md-theme-default-accent);
 }
 
 /* Layers */
@@ -422,6 +450,7 @@ export default {
 .dropBoxBorder.hover {
   border: 5px dashed var(--md-theme-default-primary); }
 </style>
+
 <!-- non "scoped" style -->
 <style>
 .layer {

@@ -1,56 +1,59 @@
 <template>
-  <div>
-    <md-table
-      v-model="searched"
-      md-card
-      md-fixed-header
-    >
-      <md-table-toolbar>
-        <div class="md-toolbar-section-start">
-          <h1 class="md-title">DICOM Tags</h1>
-        </div>
-
-        <div class="md-toolbar-section-end">
-          <md-field md-clearable>
-            <md-input
-              placeholder="Search..."
-              class="md-caption"
-              v-model="search"
-              @input="searchOnTable"
-            />
-          </md-field>
-          <input type="range"
+  <v-card
+    title="DICOM Tags"
+    class="px-2"
+    flat
+  >
+    <v-container>
+      <v-row no-gutters>
+        <v-col>
+          <!-- search -->
+          <v-text-field
+            v-model="search"
+            label="Search"
+            width="90%"
+            clearable
+            hide-details
+            single-line
+          />
+        </v-col>
+        <v-col>
+          <!-- instance slider -->
+          <v-slider
+            value="0"
             step="1"
-            :min="sliderMin"
             :max="sliderMax"
-            value=0
-            @input="onSliderChange"
-            title="Instance number"/>
-          <div class="instancenumber"
-            title="Instance number">{{ instanceNumber }}</div>
-        </div>
-
-      </md-table-toolbar>
-
-      <md-table-empty-state
-        md-label="No tags found"
-        :md-description="`No tags found for this '${search}' query.`"
-      >
-      </md-table-empty-state>
-
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell md-label="Name" md-sort-by="name" md-numeric>{{
-          item.name
-        }}</md-table-cell>
-        <md-table-cell md-label="Value" md-sort-by="value">{{
-          item.value
-        }}</md-table-cell>
-      </md-table-row>
-    </md-table>
-  </div>
+            :min="sliderMin"
+            title="Instance number"
+            width="90%"
+            hide-details
+            @update:model-value="onSliderChange"
+          >
+            <template #append>
+              <div
+                class="instancenumber"
+                title="Instance number"
+              >
+                {{ instanceNumber }}
+              </div>
+            </template>
+          </v-slider>
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- tags table -->
+    <v-data-table
+      :items="searched"
+      :search="search"
+      disable-pagination
+      items-per-page="-1"
+      hide-default-footer
+    />
+  </v-card>
 </template>
 
 <script>
+import { ref } from 'vue'
 import {getTagFromKey} from 'dwv'
 
 const toLower = text => {
@@ -152,26 +155,27 @@ const getDicomTagReducer = (tagData, instanceNumber, prefix) => {
 }
 
 export default {
-  name: 'TagsTable',
-  props: ['tagsData'],
+  //name: 'TagsTable',
+  props: {
+    'tagsData': {
+      type: Object,
+      default(rawProps) {
+        return {}
+      }
+    }
+  },
+  setup(props) {
+    const count = ref(0)
+    return { count }
+  },
   data: () => ({
-    search: null,
+    search: '',
     searched: [],
     sliderMin: undefined,
     sliderMax: undefined,
     instanceNumber: 0,
     instanceNumbers: []
   }),
-  methods: {
-    searchOnTable() {
-      const metaArray = getMetaArray(this.tagsData, this.instanceNumber)
-      this.searched = searchAll(metaArray, this.search)
-    },
-    onSliderChange(event) {
-      this.instanceNumber = this.instanceNumbers[event.target.value]
-      this.searchOnTable()
-    }
-  },
   created() {
     // set slider with instance numbers ('00200013')
     const instanceElement = this.tagsData['00200013']
@@ -191,6 +195,16 @@ export default {
 
     const metaArray = getMetaArray(this.tagsData, this.instanceNumber)
     this.searched = metaArray
+  },
+  methods: {
+    searchOnTable() {
+      const metaArray = getMetaArray(this.tagsData, this.instanceNumber)
+      this.searched = searchAll(metaArray, this.search)
+    },
+    onSliderChange(event) {
+      this.instanceNumber = this.instanceNumbers[event]
+      this.searchOnTable()
+    }
   }
 }
 </script>

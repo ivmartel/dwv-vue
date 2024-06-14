@@ -1,27 +1,14 @@
-<template>
-  <div id="app">
-    <dwvVue />
-  </div>
-</template>
-
-<script>
-import dwvVue from './components/dwv'
-
-export default {
-  name: 'app',
-  components: {
-    dwvVue
-  }
-}
+<script setup>
+import DicomView from './components/DicomView.vue'
 </script>
 
-<style>
-@import '../node_modules/vue-material/dist/theme/default.css'
-  (prefers-color-scheme: light);
-@import '../node_modules/vue-material/dist/theme/default-dark.css'
-  (prefers-color-scheme: dark);
+<template>
+  <DicomView />
+</template>
 
+<style>
 #app {
+  font-family: Arial, Helvetica, sans-serif;
   text-align: center;
   height: 100vh;
 }
