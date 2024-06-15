@@ -73,7 +73,7 @@
     </div>
 
     <!-- legend -->
-    <div class="legend md-caption">
+    <div class="legend">
       <p>
         Powered by
         <a
@@ -425,6 +425,12 @@ button {
   margin: 2px;
 }
 
+.legend {
+  text-align: center;
+  font-size: 8pt;
+  margin: 1em;
+}
+
 /* Layers */
 .layerGroup {
   position: relative;
@@ -446,9 +452,9 @@ button {
   width: 50%; height: 75%;
 }
 .dropBoxBorder {
-  border: 5px dashed rgba(68, 138, 255, 0.38); }
-.dropBoxBorder.hover {
-  border: 5px dashed var(--md-theme-default-primary); }
+  border: 5px dashed rgb(var(--v-theme-primary)); }
+.dropBoxBorder:hover {
+  border: 5px dashed rgb(var(--v-theme-secondary)); }
 </style>
 
 <!-- non "scoped" style -->
