@@ -251,7 +251,7 @@ export default {
       return res
     },
     onChangeTool(tool) {
-      this.selectedTool =
+      this.selectedTool = tool
       this.selectedToolIndex = this.toolNames.findIndex(
         (element) => element === tool
       )
