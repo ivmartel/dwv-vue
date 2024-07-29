@@ -21,7 +21,7 @@
     "vue": "^3.4.34"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.5",
+    "@vitejs/plugin-vue": "^5.1.1",
     "@vue/test-utils": "^2.4.6",
     "canvas": "^2.11.2",
     "eslint": "^9.7.0",
