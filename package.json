@@ -30,6 +30,6 @@
     "vite": "^5.4.6",
     "vite-plugin-pwa": "^0.20.5",
     "vitest": "^2.1.1",
-    "vuetify": "^3.7.1"
+    "vuetify": "^3.7.2"
   }
 }
