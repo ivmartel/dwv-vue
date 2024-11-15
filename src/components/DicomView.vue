@@ -107,12 +107,14 @@ import TagsTable from './TagsTable.vue'
 // gui overrides
 
 // Image decoders (for web workers)
-decoderScripts.jpeg2000 = 'assets/dwv/decoders/pdfjs/decode-jpeg2000.js'
+decoderScripts.jpeg2000 =
+  './node_modules/dwv/decoders/pdfjs/decode-jpeg2000.js'
 decoderScripts['jpeg-lossless'] =
-  'assets/dwv/decoders/rii-mango/decode-jpegloss.js'
+  './node_modules/dwv/decoders/rii-mango/decode-jpegloss.js'
 decoderScripts['jpeg-baseline'] =
-  'assets/dwv/decoders/pdfjs/decode-jpegbaseline.js'
-decoderScripts.rle = 'assets/dwv/decoders/dwv/decode-rle.js'
+  './node_modules/dwv/decoders/pdfjs/decode-jpegbaseline.js'
+decoderScripts.rle =
+  './node_modules/dwv/decoders/dwv/decode-rle.js'
 
 export default {
   //name: 'dwv-vue',
