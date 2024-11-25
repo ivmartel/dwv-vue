@@ -1,1 +1,129 @@
-var dwvdecoder=dwvdecoder||{};dwvdecoder.RleDecoder=function(){},dwvdecoder.RleDecoder.prototype.decode=function(e,r,n,t,a,f){var d=r/8,o=new DataView(e.buffer,e.byteOffset),w=new Int8Array(e.buffer,e.byteOffset),v=new ArrayBuffer(t*a*d),y=new Int8Array(v),c=o.getInt32(0,!0),i=1,l=1;1!==a&&0===f&&(l*=a),1!==d&&(l*=d),i*=l;for(var u=0,A=0,I=0,b=0,g=0,s=0;s<c;++s){1!==l&&(I=s%l,0===I&&(g=b),u=g+I,2===d&&(u+=I%d?-1:1));var D=o.getInt32(4*(s+1),!0),h=o.getInt32(4*(s+2),!0);s!==c-1&&0!==h||(h=e.length),A=D;var p=0;while(A<h)if(p=w[A],++A,p>=0&&p<=127)for(var O=0;O<p+1;++O)y[u]=w[A],++A,u+=i;else if(p<=-1&&p>=-127){var R=w[A];++A;for(var U=0;U<1-p;++U)y[u]=R,u+=i}u>b&&(b=u)}var B=null;return 8===r?B=n?new Int8Array(v):new Uint8Array(v):16===r&&(B=n?new Int16Array(v):new Uint16Array(v)),B};
+// namespaces
+// (do not use dwv since it is the exported module name)
+var dwvdecoder = dwvdecoder || {};
+
+/**
+ * RLE (Run-length encoding) decoder class.
+ * @constructor
+ */
+dwvdecoder.RleDecoder = function () {};
+
+/**
+ * Decode a RLE buffer.
+ * @param {Array} buffer The buffer to decode.
+ * @param {Number} bitsAllocated The bits allocated per element in the buffer.
+ * @param {Boolean} isSigned Is the data signed.
+ * @param {Number} sliceSize The size of a slice
+    (number of rows per number of columns).
+ * @param {Number} samplesPerPixel The number of samples per pixel (3 for RGB).
+ * @param {Number} planarConfiguration The planar configuration.
+ * @returns The decoded buffer.
+ * @see http://dicom.nema.org/dicom/2013/output/chtml/part05/sect_G.3.html
+ */
+dwvdecoder.RleDecoder.prototype.decode = function (buffer,
+  bitsAllocated, isSigned, sliceSize, samplesPerPixel, planarConfiguration) {
+
+  // bytes per element
+  var bpe = bitsAllocated / 8;
+
+  // input
+  var inputDataView = new DataView(buffer.buffer, buffer.byteOffset);
+  var inputArray = new Int8Array(buffer.buffer, buffer.byteOffset);
+  // output
+  var outputBuffer = new ArrayBuffer(sliceSize * samplesPerPixel * bpe);
+  var outputArray = new Int8Array(outputBuffer);
+
+  // first value of the RLE header is the number of segments
+  var numberOfSegments = inputDataView.getInt32(0, true);
+
+  // index increment in output array
+  var outputIndexIncrement = 1;
+  var incrementFactor = 1;
+  if (samplesPerPixel !== 1 && planarConfiguration === 0) {
+    incrementFactor *= samplesPerPixel;
+  }
+  if (bpe !== 1) {
+    incrementFactor *= bpe;
+  }
+  outputIndexIncrement *= incrementFactor;
+
+  // loop on segments
+  var outputIndex = 0;
+  var inputIndex = 0;
+  var remainder = 0;
+  var maxOutputIndex = 0;
+  var groupOutputIndex = 0;
+  for (var segment = 0; segment < numberOfSegments; ++segment) {
+    // handle special cases:
+    // - more than one sample per pixel: one segment per channel
+    // - 16bits: sort high and low bytes
+    if (incrementFactor !== 1) {
+      remainder = segment % incrementFactor;
+      if (remainder === 0) {
+        groupOutputIndex = maxOutputIndex;
+      }
+      outputIndex = groupOutputIndex + remainder;
+      // 16bits data
+      if (bpe === 2) {
+        outputIndex += (remainder % bpe ? -1 : 1);
+      }
+    }
+
+    // RLE header: list of segment sizes
+    var segmentStartIndex = inputDataView.getInt32((segment + 1) * 4, true);
+    var nextSegmentStartIndex = inputDataView.getInt32((segment + 2) * 4, true);
+    if (segment === numberOfSegments - 1 || nextSegmentStartIndex === 0) {
+      nextSegmentStartIndex = buffer.length;
+    }
+    // decode segment
+    inputIndex = segmentStartIndex;
+    var count = 0;
+    while (inputIndex < nextSegmentStartIndex) {
+      // get the count value
+      count = inputArray[inputIndex];
+      ++inputIndex;
+      // store according to count
+      if (count >= 0 && count <= 127) {
+        // output the next count+1 bytes literally
+        for (var i = 0; i < count + 1; ++i) {
+          // store
+          outputArray[outputIndex] = inputArray[inputIndex];
+          // increment indexes
+          ++inputIndex;
+          outputIndex += outputIndexIncrement;
+        }
+      } else if (count <= -1 && count >= -127) {
+        // output the next byte -count+1 times
+        var value = inputArray[inputIndex];
+        ++inputIndex;
+        for (var j = 0; j < -count + 1; ++j) {
+          // store
+          outputArray[outputIndex] = value;
+          // increment index
+          outputIndex += outputIndexIncrement;
+        }
+      }
+    }
+
+    if (outputIndex > maxOutputIndex) {
+      maxOutputIndex = outputIndex;
+    }
+  }
+
+  var decodedBuffer = null;
+  if (bitsAllocated === 8) {
+    if (isSigned) {
+      decodedBuffer = new Int8Array(outputBuffer);
+    } else {
+      decodedBuffer = new Uint8Array(outputBuffer);
+    }
+  } else if (bitsAllocated === 16) {
+    if (isSigned) {
+      decodedBuffer = new Int16Array(outputBuffer);
+    } else {
+      decodedBuffer = new Uint16Array(outputBuffer);
+    }
+  }
+
+  return decodedBuffer;
+};
