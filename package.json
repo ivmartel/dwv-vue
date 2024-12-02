@@ -24,7 +24,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
     "canvas": "^2.11.2",
-    "eslint": "^9.15.0",
+    "eslint": "^9.16.0",
     "eslint-plugin-vue": "^9.31.0",
     "jsdom": "^25.0.1",
     "vite": "^5.4.11",
