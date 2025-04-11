@@ -27,7 +27,7 @@
     "eslint": "^9.22.0",
     "eslint-plugin-vue": "^9.33.0",
     "jsdom": "^26.0.0",
-    "vite": "^6.2.5",
+    "vite": "^6.2.6",
     "vite-plugin-pwa": "^1.0.0",
     "vitest": "^3.0.9",
     "vuetify": "^3.7.19"
