@@ -99,22 +99,9 @@ import {
   AppOptions,
   ViewConfig,
   ToolConfig,
-  getDwvVersion,
-  decoderScripts
+  getDwvVersion
 } from 'dwv'
 import TagsTable from './TagsTable.vue'
-
-// gui overrides
-
-// Image decoders (for web workers)
-decoderScripts.jpeg2000 =
-  '/assets/dwv/decoders/pdfjs/decode-jpeg2000.js'
-decoderScripts['jpeg-lossless'] =
-  '/assets/dwv/decoders/rii-mango/decode-jpegloss.js'
-decoderScripts['jpeg-baseline'] =
-  '/assets/dwv/decoders/pdfjs/decode-jpegbaseline.js'
-decoderScripts.rle =
-  '/assets/dwv/decoders/dwv/decode-rle.js'
 
 export default {
   //name: 'dwv-vue',
@@ -139,6 +126,8 @@ export default {
       },
       selectedTool: 'Select Tool',
       selectedToolIndex: undefined,
+      canScroll: false,
+      canWindowLevel: false,
       loadProgress: 0,
       dataLoaded: false,
       metaData: undefined,
@@ -182,12 +171,21 @@ export default {
     this.dwvApp.addEventListener('loadprogress', event => {
       this.loadProgress = event.loaded
     })
-    this.dwvApp.addEventListener('renderend', (/*event*/) => {
+    this.dwvApp.addEventListener('renderend', (event) => {
       if (isFirstRender) {
         isFirstRender = false
+        const vl = this.dwvApp.getViewLayersByDataId(event.dataid)[0];
+        const vc = vl.getViewController();
         // available tools
+        if (vc.canScroll()) {
+          this.canScroll = true;
+        }
+        if (vc.isMonochrome()) {
+          this.canWindowLevel = true;
+        }
+        // selected tools
         let selectedTool = 'ZoomAndPan'
-        if (this.dwvApp.canScroll()) {
+        if (this.canScroll) {
           selectedTool = 'Scroll'
         }
         this.onChangeTool(selectedTool)
@@ -264,14 +262,19 @@ export default {
       this.dwvApp.setTool(tool)
       if (tool === 'Draw') {
         this.onChangeShape(this.tools.Draw.options[0])
+      } else {
+        // if draw was created, active is now a draw layer...
+        // reset to view layer
+        const lg = this.dwvApp.getActiveLayerGroup();
+        lg?.setActiveLayer(0);
       }
     },
     canRunTool(tool) {
       let res
       if (tool === 'Scroll') {
-        res = this.dwvApp.canScroll()
+        res = this.canScroll
       } else if (tool === 'WindowLevel') {
-        res = this.dwvApp.canWindowLevel()
+        res = this.canWindowLevel
       } else {
         res = true
       }
@@ -314,7 +317,7 @@ export default {
       }
     },
     onReset() {
-      this.dwvApp.resetDisplay()
+      this.dwvApp.resetLayout()
     },
     setupDropbox() {
       this.showDropbox(true)

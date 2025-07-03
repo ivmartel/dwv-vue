@@ -17,7 +17,7 @@
     "lint": "eslint src/**/*.{js,vue}"
   },
   "dependencies": {
-    "dwv": "0.34.2",
+    "dwv": "0.35.0",
     "vue": "^3.5.17"
   },
   "devDependencies": {
