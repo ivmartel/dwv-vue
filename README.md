@@ -35,7 +35,7 @@ cd dwv-vue
 yarn install
 
 # call the start script to launch the viewer on a local server
-yarn run dwv
+yarn run dev
 ```
 
 You can now open a browser at http://localhost:5173 and enjoy!
@@ -44,3 +44,10 @@ You can now open a browser at http://localhost:5173 and enjoy!
 Web workers used in dwv do not get automatically imported in the dev environment or build,
 they need to be available in the `public/assets` folder. Do not forget to update them if they are
 changed when updating dwv.
+
+Note: vite can process a worker creation and add it to the `dist` assets if it is created with
+`new Worker(new URL('./worker.js, import.meta.url))`. But webpack modifies this creation
+when creating the dwv bundle... See the webpack [issue](https://github.com/webpack/webpack/issues/12719).
+The vite processing works only for build (`yarn run build && yarn run preview`), but not for
+dev... The only way I got it to work is by copying the workers to the deps cache folder:
+`cp node_modules/dwv/dist/*worker* node_modules/.vite/deps`.
