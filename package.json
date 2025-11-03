@@ -29,7 +29,7 @@
     "jsdom": "^27.0.1",
     "vite": "^7.1.12",
     "vite-plugin-pwa": "^1.1.0",
-    "vitest": "^4.0.3",
+    "vitest": "^4.0.6",
     "vuetify": "^3.10.8"
   }
 }
