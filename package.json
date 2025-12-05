@@ -31,5 +31,6 @@
     "vite-plugin-pwa": "^1.1.0",
     "vitest": "^4.0.14",
     "vuetify": "^3.10.11"
-  }
+  },
+  "packageManager": "yarn@4.12.0"
 }
