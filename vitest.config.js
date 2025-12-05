@@ -12,5 +12,15 @@ export default defineConfig({
         inline: ['vuetify'],
       },
     },
+    coverage: {
+      provider: 'v8',
+      reporter: ['text-summary', 'html'],
+      thresholds: {
+        statements: 10,
+        branches: 10,
+        functions: 10,
+        lines: 10
+      }
+    }
   }
 })
