@@ -64,8 +64,7 @@
     </div>
 
     <div class="content">
-      <div
-        id="layerGroup0"
+      <div id="layerGroup0"
         class="layerGroup">
         <div id="dropBox" />
       </div>
