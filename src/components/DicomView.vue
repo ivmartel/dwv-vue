@@ -5,74 +5,72 @@
       color="primary"
     />
 
-    <!-- toolbar -->
-    <v-container>
-      <!-- action buttons -->
-      <v-btn
-        v-for="tool in toolNames"
-        class="rounded-lg"
-        :id="tool"
-        :key="tool"
-        :title="tool"
-        :variant="tool === selectedTool ? 'flat' : 'tonal'"
-        :disabled="!dataLoaded || !canRunTool(tool)"
-        :icon="getToolIcon(tool)"
-        @click="onChangeTool(tool)"
-      />
+    <div class="header">
+      <v-container>
+        <!-- action buttons -->
+        <v-btn
+          v-for="tool in toolNames"
+          class="rounded-lg"
+          :id="tool"
+          :key="tool"
+          :title="tool"
+          :variant="tool === selectedTool ? 'flat' : 'tonal'"
+          :disabled="!dataLoaded || !canRunTool(tool)"
+          :icon="getToolIcon(tool)"
+          @click="onChangeTool(tool)"
+        />
 
-      <v-btn
-        class="rounded-lg"
-        title="Reset"
-        variant="tonal"
-        :disabled="!dataLoaded"
-        icon="refresh"
-        @click="onReset()"
-      />
+        <v-btn
+          class="rounded-lg"
+          title="Reset"
+          variant="tonal"
+          :disabled="!dataLoaded"
+          icon="refresh"
+          @click="onReset()"
+        />
 
-      <v-btn
-        class="rounded-lg"
-        title="Toggle Orientation"
-        variant="tonal"
-        :disabled="!dataLoaded"
-        icon="cameraswitch"
-        @click="toggleOrientation()"
-      />
+        <v-btn
+          class="rounded-lg"
+          title="Toggle Orientation"
+          variant="tonal"
+          :disabled="!dataLoaded"
+          icon="cameraswitch"
+          @click="toggleOrientation()"
+        />
 
-      <!-- dicom tags dialog-->
-      <v-dialog
-        max-width="800px"
-        scrollable
-      >
-        <template #activator="{ props: activatorProps }">
-          <v-btn
-            class="rounded-lg"
-            title="Tags"
-            variant="tonal"
-            :disabled="!dataLoaded"
-            icon="library_books"
-            v-bind="activatorProps"
-            @click="showDicomTags = true"
-          />
-        </template>
-        <template #default>
-          <TagsTable
-            :tags-data="metaData"
-          />
-        </template>
-      </v-dialog>
-    </v-container>
-
-    <!-- dwv layer group -->
-    <div
-      id="layerGroup0"
-      class="layerGroup"
-    >
-      <div id="dropBox" />
+        <!-- dicom tags dialog-->
+        <v-dialog
+          max-width="800px"
+          scrollable
+        >
+          <template #activator="{ props: activatorProps }">
+            <v-btn
+              class="rounded-lg"
+              title="Tags"
+              variant="tonal"
+              :disabled="!dataLoaded"
+              icon="library_books"
+              v-bind="activatorProps"
+              @click="showDicomTags = true"
+            />
+          </template>
+          <template #default>
+            <TagsTable
+              :tags-data="metaData"
+            />
+          </template>
+        </v-dialog>
+      </v-container>
     </div>
 
-    <!-- legend -->
-    <div class="legend">
-      <p>
+    <div class="content">
+      <div id="layerGroup0" class="layerGroup">
+        <div id="dropBox"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p class="legend">
         Powered by
         <a
           href="https://github.com/ivmartel/dwv"
@@ -424,16 +422,12 @@ export default {
 <style scoped>
 #dwv {
   height: 90%;
+  display: flex;
+  flex-direction: column;
 }
 
 button {
   margin: 2px;
-}
-
-.legend {
-  text-align: center;
-  font-size: 8pt;
-  margin: 1em;
 }
 
 /* Layers */
@@ -442,7 +436,8 @@ button {
   padding: 0;
   display: flex;
   justify-content: center;
-  height: 90%;
+  flex: 1;
+  min-height: 0;
 }
 .layer {
   position: absolute;
@@ -460,6 +455,7 @@ button {
   border: 5px dashed rgb(var(--v-theme-primary)); }
 .dropBoxBorder:hover {
   border: 5px dashed rgb(var(--v-theme-secondary)); }
+
 </style>
 
 <!-- non "scoped" style -->
@@ -559,5 +555,26 @@ button {
   bottom: 0;
   right: 0;
   text-align: right;
+}
+
+/* header */
+.header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+}
+/* content */
+.content {
+  /* occupy space left by header and footer */
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+/* footer */
+.footer {
+  text-align: center;
+  font-size: 8pt;
+  margin: 1em;
 }
 </style>
