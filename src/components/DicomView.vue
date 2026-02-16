@@ -10,10 +10,10 @@
         <!-- action buttons -->
         <v-btn
           v-for="tool in toolNames"
-          class="rounded-lg"
           :id="tool"
           :key="tool"
           :title="tool"
+          class="rounded-lg"
           :variant="tool === selectedTool ? 'flat' : 'tonal'"
           :disabled="!dataLoaded || !canRunTool(tool)"
           :icon="getToolIcon(tool)"
