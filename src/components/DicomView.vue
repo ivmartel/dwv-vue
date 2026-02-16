@@ -8,26 +8,22 @@
     <!-- toolbar -->
     <v-container>
       <!-- action buttons -->
-      <v-btn-toggle
-        v-model="selectedToolIndex"
-        mandatory
-        color="primary"
-        divided
-      >
-        <v-btn
-          v-for="tool in toolNames"
-          :id="tool"
-          :key="tool"
-          :title="tool"
-          :disabled="!dataLoaded || !canRunTool(tool)"
-          :icon="getToolIcon(tool)"
-          @click="onChangeTool(tool)"
-        />
-      </v-btn-toggle>
+      <v-btn
+        v-for="tool in toolNames"
+        class="rounded-lg"
+        :id="tool"
+        :key="tool"
+        :title="tool"
+        :variant="tool === selectedTool ? 'flat' : 'tonal'"
+        :disabled="!dataLoaded || !canRunTool(tool)"
+        :icon="getToolIcon(tool)"
+        @click="onChangeTool(tool)"
+      />
 
       <v-btn
         class="rounded-lg"
         title="Reset"
+        variant="tonal"
         :disabled="!dataLoaded"
         icon="refresh"
         @click="onReset()"
@@ -36,6 +32,7 @@
       <v-btn
         class="rounded-lg"
         title="Toggle Orientation"
+        variant="tonal"
         :disabled="!dataLoaded"
         icon="cameraswitch"
         @click="toggleOrientation()"
@@ -50,6 +47,7 @@
           <v-btn
             class="rounded-lg"
             title="Tags"
+            variant="tonal"
             :disabled="!dataLoaded"
             icon="library_books"
             v-bind="activatorProps"
