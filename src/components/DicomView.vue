@@ -99,6 +99,7 @@ import {
   ToolConfig,
   getDwvVersion
 } from 'dwv'
+import {overlayConfig} from './overlays.js';
 import TagsTable from './TagsTable.vue'
 
 export default {
@@ -150,6 +151,7 @@ export default {
     const viewConfigs = {'*': [viewConfig0]}
     const options = new AppOptions(viewConfigs)
     options.tools = this.tools
+    options.overlayConfig = overlayConfig
     this.dwvApp.init(options)
     // handle load events
     let nLoadItem = null
@@ -465,5 +467,97 @@ button {
 .layer {
   position: absolute;
   pointer-events: none;
+}
+
+/* Info layer */
+.infoLayer {
+  position: absolute;
+  pointer-events: none;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+}
+.infoLayer ul {
+  margin: 0;
+  padding: 2px;
+  list-style-type: none;
+}
+.infoLayer li {
+  margin-top: 0;
+}
+.infoLayer canvas {
+  margin: 0;
+  padding: 2px;
+}
+.info {
+  font-size: 80%;
+  max-width: 50%;
+  max-height: 50%;
+  overflow: auto;
+}
+/* position indicators (c, tl, tc, bl...)
+  need to be in sync with those defined
+  in the overlay.json file */
+/* center */
+.info-c {
+  font-size: 120%;
+}
+/* top left */
+.info-tl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: left;
+}
+/* top center */
+.info-tc {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: 50%;
+  text-align: center;
+}
+/* top right */
+.info-tr {
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-align: right;
+}
+/* center left */
+.info-cl {
+  position: absolute;
+  bottom: 50%;
+  left: 0;
+  text-align: left;
+}
+/* center right */
+.info-cr {
+  position: absolute;
+  bottom: 50%;
+  right: 2px;
+  text-align: right;
+}
+/* bottom left */
+.info-bl {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  text-align: left;
+}
+/* bottom center */
+.info-bc {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  right: 50%;
+  text-align: center;
+}
+/* bottom right */
+.info-br {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  text-align: right;
 }
 </style>
