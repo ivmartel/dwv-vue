@@ -6,20 +6,81 @@
     />
 
     <div class="header">
-      <v-container>
-        <!-- action buttons -->
-        <v-btn
-          v-for="tool in toolNames"
-          :id="tool"
-          :key="tool"
-          :title="tool"
-          class="rounded-lg"
-          :variant="tool === selectedTool ? 'flat' : 'tonal'"
-          :disabled="!dataLoaded || !canRunTool(tool)"
-          :icon="getToolIcon(tool)"
-          @click="onChangeTool(tool)"
-        />
+      <!-- action buttons -->
+      <template
+        v-for="tool in toolNames"
+        :key="tool"
+      >
+        <div class="toolbar-item">
+          <v-btn
+            :id="tool"
+            :title="tool"
+            class="rounded-lg"
+            :variant="tool === selectedTool ? 'flat' : 'tonal'"
+            :disabled="!dataLoaded || !canRunTool(tool)"
+            :icon="getToolIcon(tool)"
+            @click="setSelectedTool(tool)"
+          />
+          <div
+            v-if="tool === 'WindowLevel'"
+            id="presetSelectDiv"
+            key="presetSelectDiv"
+            class="select-wrapper"
+          >
+            <v-btn
+              class="rounded-lg"
+              title="presetArrow"
+              variant="tonal"
+              :disabled="!dataLoaded"
+              icon="keyboard_arrow_down"
+            />
+            <select
+              id="presetSelect"
+              key="presetSelect"
+              v-model="selectedPreset"
+              :style="{ colorScheme: 'light' }"
+            >
+              <option
+                v-for="preset in presetNames"
+                :id="preset"
+                :key="preset"
+              >
+                {{ preset }}
+              </option>
+            </select>
+          </div>
+          <div
+            v-if="tool === 'Draw'"
+            id="shapeSelectDiv"
+            key="shapeSelectDiv"
+            class="select-wrapper"
+          >
+            <v-btn
+              class="rounded-lg"
+              title="shapeArrow"
+              variant="tonal"
+              :disabled="!dataLoaded"
+              icon="keyboard_arrow_down"
+            />
+            <select
+              id="shapeSelect"
+              key="shapeSelect"
+              v-model="selectedShape"
+              :style="{ colorScheme: 'light' }"
+            >
+              <option
+                v-for="shape in shapeNames"
+                :id="shape"
+                :key="shape"
+              >
+                {{ shape }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </template>
 
+      <div class="toolbar-item">
         <v-btn
           class="rounded-lg"
           title="Reset"
@@ -28,7 +89,9 @@
           icon="refresh"
           @click="onReset()"
         />
+      </div>
 
+      <div class="toolbar-item">
         <v-btn
           class="rounded-lg"
           title="Toggle Orientation"
@@ -37,7 +100,9 @@
           icon="cameraswitch"
           @click="toggleOrientation()"
         />
+      </div>
 
+      <div class="toolbar-item">
         <!-- dicom tags dialog-->
         <v-dialog
           max-width="800px"
@@ -60,7 +125,7 @@
             />
           </template>
         </v-dialog>
-      </v-container>
+      </div>
     </div>
 
     <div class="content">
@@ -92,7 +157,7 @@
 
 <script>
 // import
-import { ref, version, isProxy, toRaw } from 'vue'
+import { ref, version, isProxy, toRaw, watch } from 'vue'
 import {
   App,
   AppOptions,
@@ -113,21 +178,33 @@ export default {
     return { count }
   },
   data() {
+    const shapes = [
+      'Ruler',
+      'Arrow',
+      'Rectangle',
+      'Circle',
+      'Ellipse',
+      'Protractor',
+      'Roi'
+    ];
     let res = {
       versions: {
         dwv: getDwvVersion(),
         vue: version
       },
+      shapeNames: shapes,
+      selectedShape: shapes[0],
       tools: {
         Scroll: new ToolConfig(),
         ZoomAndPan: new ToolConfig(),
         WindowLevel: new ToolConfig(),
-        Draw: new ToolConfig(['Ruler'])
+        Draw: new ToolConfig(shapes)
       },
       selectedTool: 'Select Tool',
-      selectedToolIndex: undefined,
       canScroll: false,
       canWindowLevel: false,
+      presetNames: [],
+      selectedPreset: '',
       loadProgress: 0,
       dataLoaded: false,
       metaData: undefined,
@@ -143,6 +220,14 @@ export default {
       res.dwvApp = toRaw(this).dwvApp
     }
     return res
+  },
+  watch: {
+    selectedPreset() {
+      this.applySelectedPreset();
+    },
+    selectedShape() {
+      this.applySelectedShape();
+    }
   },
   mounted() {
     // create app
@@ -175,21 +260,29 @@ export default {
     this.dwvApp.addEventListener('renderend', (event) => {
       if (isFirstRender) {
         isFirstRender = false
-        const vl = this.dwvApp.getViewLayersByDataId(event.dataid)[0];
-        const vc = vl.getViewController();
+        const vl = this.dwvApp.getViewLayersByDataId(event.dataid)[0]
+        const vc = vl.getViewController()
         // available tools
-        if (vc.canScroll()) {
-          this.canScroll = true;
+        if (this.toolNames.includes('Scroll') && vc.canScroll()) {
+          this.canScroll = true
         }
-        if (vc.isMonochrome()) {
-          this.canWindowLevel = true;
+        if (this.toolNames.includes('WindowLevel') && vc.isMonochrome()) {
+          this.canWindowLevel = true
         }
         // selected tools
-        let selectedTool = 'ZoomAndPan'
-        if (this.canScroll) {
-          selectedTool = 'Scroll'
+        let selectedTool = this.toolNames[0]
+        if (selectedTool === 'Scroll' &&
+          !vc.canScroll() &&
+          this.toolNames.length > 0) {
+          selectedTool = this.toolNames[1]
         }
-        this.onChangeTool(selectedTool)
+        this.setSelectedTool(selectedTool)
+
+        // get window level presets
+        if (this.toolNames.includes('WindowLevel')) {
+          this.presetNames = vc.getWindowLevelPresetsNames()
+          this.selectedPreset = this.presetNames[0]
+        }
       }
     })
     this.dwvApp.addEventListener('load', (event) => {
@@ -228,6 +321,19 @@ export default {
     this.dwvApp.addEventListener('keydown', event => {
       this.dwvApp.defaultOnKeydown(event)
     })
+    // listen to 'wlchange'
+    this.dwvApp.addEventListener('wlchange', event => {
+      // value: [center, width, name]
+      const manualStr = 'manual'
+      if (event.value[2] === manualStr) {
+        if (!this.presetNames.includes(manualStr)) {
+          this.presetNames.push(manualStr)
+        }
+        if (this.selectedPreset !== manualStr) {
+          this.selectedPreset = manualStr
+        }
+      }
+    });
     // handle window resize
     window.addEventListener('resize', this.dwvApp.onResize)
 
@@ -247,27 +353,41 @@ export default {
       } else if (tool === 'WindowLevel') {
         res = 'contrast'
       } else if (tool === 'Draw') {
-        res = 'straighten'
+        if (this.selectedShape === 'Ruler') {
+          res = 'straighten';
+        } else if (this.selectedShape === 'Arrow') {
+          res = 'call_made';
+        } else if (this.selectedShape === 'Rectangle') {
+          res = 'crop_landscape';
+        } else if (this.selectedShape === 'Circle') {
+          res = 'radio_button_unchecked';
+        } else if (this.selectedShape === 'Ellipse') {
+          res = 'sports_rugby';
+        } else if (this.selectedShape === 'Protractor') {
+          res = 'square_foot';
+        } else if (this.selectedShape === 'Roi') {
+          res = 'polyline';
+        }
       }
       return res
     },
-    onChangeTool(tool) {
+    setSelectedTool(tool) {
       this.selectedTool = tool
-      this.selectedToolIndex = this.toolNames.findIndex(
-        (element) => element === tool
-      )
-      for (const t of this.toolNames) {
-        this.activateTool(t, false)
-      }
-      this.activateTool(tool, true)
-      this.dwvApp.setTool(tool)
-      if (tool === 'Draw') {
-        this.onChangeShape(this.tools.Draw.options[0])
+      this.applySelectedTool()
+    },
+    applySelectedTool() {
+      this.dwvApp.setTool(this.selectedTool)
+      const lg = this.dwvApp.getActiveLayerGroup();
+      if (this.selectedTool === 'Draw') {
+        this.dwvApp.setToolFeatures({shapeName: this.selectedShape})
+        // reuse created draw layer
+        if (lg.getNumberOfLayers() > 1) {
+          lg.setActiveLayer(1);
+        }
       } else {
         // if draw was created, active is now a draw layer...
         // reset to view layer
-        const lg = this.dwvApp.getActiveLayerGroup();
-        lg?.setActiveLayer(0);
+        lg.setActiveLayer(0);
       }
     },
     canRunTool(tool) {
@@ -280,13 +400,6 @@ export default {
         res = true
       }
       return res
-    },
-    activateTool(tool, flag) {
-      if (flag) {
-        document.getElementById(tool).classList.add('active')
-      } else {
-        document.getElementById(tool).classList.remove('active')
-      }
     },
     toggleOrientation() {
       if (typeof this.orientation !== 'undefined') {
@@ -312,10 +425,17 @@ export default {
         this.dwvApp.render(dataId)
       }
     },
-    onChangeShape(shape) {
-      if (this.dwvApp && this.selectedTool === 'Draw') {
-        this.dwvApp.setToolFeatures({shapeName: shape})
+    applySelectedPreset() {
+      const lg = this.dwvApp.getActiveLayerGroup()
+      if (lg !== undefined) {
+        const vl = lg.getViewLayersFromActive()[0]
+        const vc = vl.getViewController()
+        vc.setWindowLevelPreset(this.selectedPreset)
       }
+    },
+    applySelectedShape() {
+    // will apply selected tool and shape
+      this.setSelectedTool('Draw')
     },
     onReset() {
       this.dwvApp.resetLayout()
@@ -579,5 +699,48 @@ button {
   text-align: center;
   font-size: 8pt;
   margin: 1em;
+}
+
+/* toolbar */
+.toolbar-item {
+  margin: 10px 3px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.toolbar-item button {
+  height: 100%;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+/* select wrapper */
+.select-wrapper {
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.select-wrapper select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.select-wrapper button {
+  padding: 0;
+  margin: 0 0 0 1px;
+
+  width: 20px !important;
+}
+.select-wrapper select:enabled:hover {
+  cursor: pointer;
 }
 </style>
