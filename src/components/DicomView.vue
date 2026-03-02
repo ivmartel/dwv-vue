@@ -19,7 +19,7 @@
             :variant="tool === selectedTool ? 'flat' : 'tonal'"
             :disabled="!dataLoaded || !canRunTool(tool)"
             :icon="getToolIcon(tool)"
-            @click="setSelectedTool(tool)"
+            @click="onChangeTool(tool)"
           />
           <div
             v-if="tool === 'WindowLevel'"
@@ -37,8 +37,9 @@
             <select
               id="presetSelect"
               key="presetSelect"
-              v-model="selectedPreset"
+              :value="selectedPreset"
               :style="{ colorScheme: 'light' }"
+              @change="onChangePreset"
             >
               <option
                 v-for="preset in presetNames"
@@ -65,8 +66,9 @@
             <select
               id="shapeSelect"
               key="shapeSelect"
-              v-model="selectedShape"
+              :value="selectedShape"
               :style="{ colorScheme: 'light' }"
+              @change="onChangeShape"
             >
               <option
                 v-for="shape in shapeNames"
@@ -158,14 +160,7 @@
 <script>
 // import
 import { ref, version, isProxy, toRaw, watch } from 'vue'
-import {
-  App,
-  AppOptions,
-  ViewConfig,
-  ToolConfig,
-  getDwvVersion
-} from 'dwv'
-import {overlayConfig} from './overlays.js';
+import { DwvService } from './dwv.service.js';
 import TagsTable from './TagsTable.vue'
 
 export default {
@@ -178,174 +173,79 @@ export default {
     return { count }
   },
   data() {
-    const shapes = [
-      'Ruler',
-      'Arrow',
-      'Rectangle',
-      'Circle',
-      'Ellipse',
-      'Protractor',
-      'Roi'
-    ];
-    let res = {
+    const dwvService = new DwvService()
+    const shapeNames = dwvService.getShapeNames()
+
+    return {
+      dwvService,
       versions: {
-        dwv: getDwvVersion(),
+        dwv: dwvService.getDwvVersion(),
         vue: version
       },
-      shapeNames: shapes,
-      selectedShape: shapes[0],
-      tools: {
-        Scroll: new ToolConfig(),
-        ZoomAndPan: new ToolConfig(),
-        WindowLevel: new ToolConfig(),
-        Draw: new ToolConfig(shapes)
-      },
-      selectedTool: 'Select Tool',
-      canScroll: false,
-      canWindowLevel: false,
+      toolNames: dwvService.getToolNames(),
+      shapeNames,
       presetNames: [],
+      selectedTool: '',
+      selectedShape: shapeNames[0],
       selectedPreset: '',
       loadProgress: 0,
       dataLoaded: false,
       metaData: undefined,
-      orientation: undefined,
       showDicomTags: false,
       dropboxDivId: 'dropBox',
       dropboxClassName: 'dropBox',
       borderClassName: 'dropBoxBorder',
       hoverClassName: 'hover'
     }
-    res.toolNames = Object.keys(res.tools)
-    if (isProxy(this)) {
-      res.dwvApp = toRaw(this).dwvApp
-    }
-    return res
-  },
-  watch: {
-    selectedPreset() {
-      this.applySelectedPreset();
-    },
-    selectedShape() {
-      this.applySelectedShape();
-    }
   },
   mounted() {
-    // create app
-    this.dwvApp = new App()
-    // initialise app
-    const viewConfig0 = new ViewConfig('layerGroup0')
-    const viewConfigs = {'*': [viewConfig0]}
-    const options = new AppOptions(viewConfigs)
-    options.tools = this.tools
-    options.overlayConfig = overlayConfig
-    this.dwvApp.init(options)
-    // handle load events
-    let nLoadItem = null
-    let nReceivedLoadError = null
-    let nReceivedLoadAbort = null
-    let isFirstRender = null
-    this.dwvApp.addEventListener('loadstart', (/*event*/) => {
-      // reset flags
-      this.dataLoaded = false
-      nLoadItem = 0
-      nReceivedLoadError = 0
-      nReceivedLoadAbort = 0
-      isFirstRender = true
-      // hide drop box
-      this.showDropbox(false)
+    // watch load progress
+    this.dwvService.addEventListener('loadprogress', (event) => {
+      this.loadProgress = event.detail.value
+      this.autoShowDropbox()
     })
-    this.dwvApp.addEventListener('loadprogress', event => {
-      this.loadProgress = event.loaded
-    })
-    this.dwvApp.addEventListener('renderend', (event) => {
-      if (isFirstRender) {
-        isFirstRender = false
-        const vl = this.dwvApp.getViewLayersByDataId(event.dataid)[0]
-        const vc = vl.getViewController()
-        // available tools
-        if (this.toolNames.includes('Scroll') && vc.canScroll()) {
-          this.canScroll = true
-        }
-        if (this.toolNames.includes('WindowLevel') && vc.isMonochrome()) {
-          this.canWindowLevel = true
-        }
-        // selected tools
-        let selectedTool = this.toolNames[0]
-        if (selectedTool === 'Scroll' &&
-          !vc.canScroll() &&
-          this.toolNames.length > 0) {
-          selectedTool = this.toolNames[1]
-        }
-        this.setSelectedTool(selectedTool)
-
-        // get window level presets
-        if (this.toolNames.includes('WindowLevel')) {
-          this.presetNames = vc.getWindowLevelPresetsNames()
-          this.selectedPreset = this.presetNames[0]
+    // watch data ready
+    this.dwvService.addEventListener('dataready', (event) => {
+      const dataReady = event.detail.value
+      if (dataReady) {
+        const runnableTool = this.dwvService.getFirstRunnableTool()
+        if (runnableTool !== undefined) {
+          this.selectedTool = runnableTool
+          this.applyTool(runnableTool)
         }
       }
     })
-    this.dwvApp.addEventListener('load', (event) => {
-      // set dicom tags
-      this.metaData = this.dwvApp.getMetaData(event.dataid)
-      // set data loaded flag
-      this.dataLoaded = true
+    // watch data loaded
+    this.dwvService.addEventListener('dataloaded', (event) => {
+      this.dataLoaded = event.detail.value
+      this.metaData = this.dwvService.getMetaData()
+      this.autoShowDropbox()
     })
-    this.dwvApp.addEventListener('loadend', (/*event*/) => {
-      if (nReceivedLoadError) {
-        this.loadProgress = 0
-        alert('Received errors during load. Check log for details.')
-        // show drop box if nothing has been loaded
-        if (!nLoadItem) {
-          this.showDropbox(true)
-        }
-      }
-      if (nReceivedLoadAbort) {
-        this.loadProgress = 0
-        alert('Load was aborted.')
-        this.showDropbox(true)
-      }
+    // watch preset names
+    this.dwvService.addEventListener('presetnames', (event) => {
+      this.presetNames = event.detail.value
+      const presetNames = this.presetNames
+      this.selectedPreset = presetNames[0]
     })
-    this.dwvApp.addEventListener('loaditem', (/*event*/) => {
-      ++nLoadItem
-    })
-    this.dwvApp.addEventListener('loaderror', (/*event*/) => {
-      // console.error('load error', event)
-      ++nReceivedLoadError
-    })
-    this.dwvApp.addEventListener('loadabort', (/*event*/) => {
-      ++nReceivedLoadAbort
-    })
-
-    // handle key events
-    this.dwvApp.addEventListener('keydown', event => {
-      this.dwvApp.defaultOnKeydown(event)
-    })
-    // listen to 'wlchange'
-    this.dwvApp.addEventListener('wlchange', event => {
-      // value: [center, width, name]
+    // watch is manual preset
+    this.dwvService.addEventListener('ismanualpreset', (event) => {
+      const isManual = event.detail.value
+      const preset = this.selectedPreset
       const manualStr = 'manual'
-      if (event.value[2] === manualStr) {
-        if (!this.presetNames.includes(manualStr)) {
-          this.presetNames.push(manualStr)
-        }
-        if (this.selectedPreset !== manualStr) {
-          this.selectedPreset = manualStr
-        }
+      if (isManual && preset !== manualStr) {
+        this.selectedPreset = manualStr
       }
-    });
-    // handle window resize
-    window.addEventListener('resize', this.dwvApp.onResize)
+    })
 
     // setup drop box
     this.setupDropbox()
 
     // possible load from location
-    this.dwvApp.loadFromUri(window.location.href)
+    this.dwvService.loadFromUri(window.location.href)
   },
   methods: {
     getToolIcon(tool) {
-      var res
+      let res
       if (tool === 'Scroll') {
         res = 'menu'
       } else if (tool === 'ZoomAndPan') {
@@ -353,92 +253,64 @@ export default {
       } else if (tool === 'WindowLevel') {
         res = 'contrast'
       } else if (tool === 'Draw') {
-        if (this.selectedShape === 'Ruler') {
-          res = 'straighten';
-        } else if (this.selectedShape === 'Arrow') {
-          res = 'call_made';
-        } else if (this.selectedShape === 'Rectangle') {
-          res = 'crop_landscape';
-        } else if (this.selectedShape === 'Circle') {
-          res = 'radio_button_unchecked';
-        } else if (this.selectedShape === 'Ellipse') {
-          res = 'sports_rugby';
-        } else if (this.selectedShape === 'Protractor') {
-          res = 'square_foot';
-        } else if (this.selectedShape === 'Roi') {
-          res = 'polyline';
-        }
+        res = this.getShapeIcon(this.selectedShape)
       }
       return res
     },
-    setSelectedTool(tool) {
-      this.selectedTool = tool
-      this.applySelectedTool()
-    },
-    applySelectedTool() {
-      this.dwvApp.setTool(this.selectedTool)
-      const lg = this.dwvApp.getActiveLayerGroup();
-      if (this.selectedTool === 'Draw') {
-        this.dwvApp.setToolFeatures({shapeName: this.selectedShape})
-        // reuse created draw layer
-        if (lg.getNumberOfLayers() > 1) {
-          lg.setActiveLayer(1);
-        }
-      } else {
-        // if draw was created, active is now a draw layer...
-        // reset to view layer
-        lg.setActiveLayer(0);
+    getShapeIcon(shape) {
+      let res
+      if (shape === 'Ruler') {
+        res = 'straighten'
+      } else if (shape === 'Arrow') {
+        res = 'call_made'
+      } else if (shape === 'Rectangle') {
+        res = 'crop_landscape'
+      } else if (shape === 'Circle') {
+        res = 'radio_button_unchecked'
+      } else if (shape === 'Ellipse') {
+        res = 'sports_rugby'
+      } else if (shape === 'Protractor') {
+        res = 'square_foot'
+      } else if (shape === 'Roi') {
+        res = 'polyline'
       }
+      return res
+    },
+    onChangeTool(tool) {
+      this.selectedTool = tool
+      this.applyTool(tool)
+    },
+    onChangeShape(event) {
+      const shape = event.currentTarget.value
+      this.selectedTool = 'Draw'
+      this.selectedShape = shape
+      this.applyShape(shape)
+    },
+    onChangePreset(event) {
+      const preset = event.currentTarget.value
+      this.selectedPreset = preset
+      this.applyPreset(preset)
+    },
+    applyTool(tool, features) {
+      if (typeof features === 'undefined' && tool === 'Draw') {
+        features = {shapeName: this.selectedShape}
+      }
+      this.dwvService.applyTool(tool, features)
+    },
+    applyShape(shape) {
+      this.applyTool('Draw', {shapeName: shape})
+    },
+    applyPreset(preset) {
+      this.dwvService.applyPreset(preset)
     },
     canRunTool(tool) {
-      let res
-      if (tool === 'Scroll') {
-        res = this.canScroll
-      } else if (tool === 'WindowLevel') {
-        res = this.canWindowLevel
-      } else {
-        res = true
-      }
-      return res
+      return this.dwvService.canRunTool(tool)
     },
     toggleOrientation() {
-      if (typeof this.orientation !== 'undefined') {
-        if (this.orientation === 'axial') {
-          this.orientation = 'coronal'
-        } else if (this.orientation === 'coronal') {
-          this.orientation = 'sagittal'
-        } else if (this.orientation === 'sagittal') {
-          this.orientation = 'axial'
-        }
-      } else {
-        // default is most probably axial
-        this.orientation = 'coronal'
-      }
-      // update data view config
-      const viewConfig0 = new ViewConfig('layerGroup0')
-      viewConfig0.orientation = this.orientation
-      const viewConfigs = {'*': [viewConfig0]}
-      this.dwvApp.setDataViewConfigs(viewConfigs)
-      // render data
-      const dataIds = this.dwvApp.getDataIds()
-      for (const dataId of dataIds) {
-        this.dwvApp.render(dataId)
-      }
-    },
-    applySelectedPreset() {
-      const lg = this.dwvApp.getActiveLayerGroup()
-      if (lg !== undefined) {
-        const vl = lg.getViewLayersFromActive()[0]
-        const vc = vl.getViewController()
-        vc.setWindowLevelPreset(this.selectedPreset)
-      }
-    },
-    applySelectedShape() {
-    // will apply selected tool and shape
-      this.setSelectedTool('Draw')
+      this.dwvService.toggleOrientation()
     },
     onReset() {
-      this.dwvApp.resetLayout()
+      this.dwvService.reset()
     },
     setupDropbox() {
       this.showDropbox(true)
@@ -467,12 +339,18 @@ export default {
     onDrop(event) {
       this.defaultHandleDragEvent(event)
       // load files
-      this.dwvApp.loadFiles(event.dataTransfer.files)
+      this.dwvService.loadFiles(event.dataTransfer.files)
     },
     onInputFile(event) {
       if (event.target && event.target.files) {
-        this.dwvApp.loadFiles(event.target.files)
+        this.dwvService.loadFiles(event.target.files)
       }
+    },
+    autoShowDropbox() {
+      const isLoaded = this.dataLoaded
+      const progress = this.loadProgress
+      const isLoading = progress !== 0 && progress !== 100
+      this.showDropbox(!isLoading && !isLoaded)
     },
     showDropbox(show) {
       const box = document.getElementById(this.dropboxDivId)
