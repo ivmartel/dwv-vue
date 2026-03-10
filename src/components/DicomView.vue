@@ -159,7 +159,7 @@
 
 <script>
 // import
-import { ref, version, isProxy, toRaw, watch } from 'vue'
+import { ref, version } from 'vue'
 import { DwvService } from './dwv.service.js';
 import TagsTable from './TagsTable.vue'
 
