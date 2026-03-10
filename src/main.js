@@ -8,7 +8,7 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, md } from 'vuetify/iconsets/md'
 
-import { DwvService } from './dwv.service.js';
+import { DwvService } from './services/dwv.service.js';
 
 import App from './App.vue'
 

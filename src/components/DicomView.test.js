@@ -5,7 +5,7 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { createVuetify } from 'vuetify'
 
-import { DwvService } from '../dwv.service.js';
+import { DwvService } from '../services/dwv.service.js';
 import DicomView from './DicomView.vue'
 import TagsTable from './TagsTable.vue'
 
