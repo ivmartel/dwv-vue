@@ -159,8 +159,7 @@
 
 <script>
 // import
-import { ref, version } from 'vue'
-import { DwvService } from './dwv.service.js';
+import { ref, version, inject } from 'vue'
 import TagsTable from './TagsTable.vue'
 
 export default {
@@ -173,7 +172,7 @@ export default {
     return { count }
   },
   data() {
-    const dwvService = new DwvService()
+    const dwvService = inject('DwvService')
     const shapeNames = dwvService.getShapeNames()
 
     return {
