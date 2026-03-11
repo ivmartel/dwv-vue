@@ -207,6 +207,7 @@ export default {
 }
 .info {
   font-size: 80%;
+  text-shadow: 1px 1px light-dark(#fff, #000);
   max-width: 50%;
   max-height: 50%;
   overflow: auto;
@@ -217,6 +218,7 @@ export default {
 /* center */
 .info-c {
   font-size: 120%;
+  text-shadow: 1px 1px light-dark(#fff, #000);
 }
 /* top left */
 .info-tl {
