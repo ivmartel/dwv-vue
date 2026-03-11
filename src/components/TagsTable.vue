@@ -5,7 +5,7 @@
     flat
   >
     <v-container>
-      <v-row no-gutters>
+      <v-row density="compact">
         <v-col>
           <!-- search -->
           <v-text-field
