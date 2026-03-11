@@ -207,10 +207,12 @@ export default {
 }
 .info {
   font-size: 80%;
-  text-shadow: 1px 1px light-dark(#fff, #000);
   max-width: 50%;
   max-height: 50%;
   overflow: auto;
+
+  color: #cde;
+  text-shadow: 1px 1px #000;
 }
 /* position indicators (c, tl, tc, bl...)
   need to be in sync with those defined
@@ -218,7 +220,9 @@ export default {
 /* center */
 .info-c {
   font-size: 120%;
-  text-shadow: 1px 1px light-dark(#fff, #000);
+
+  color: #ff0;
+  text-shadow: 1px 1px #000;
 }
 /* top left */
 .info-tl {
