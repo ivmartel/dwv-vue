@@ -159,12 +159,10 @@ export default {
   props: {
     'tagsData': {
       type: Object,
-      default(rawProps) {
-        return {}
-      }
+      required: true
     }
   },
-  setup(props) {
+  setup() {
     const count = ref(0)
     return { count }
   },
