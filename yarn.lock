@@ -3174,7 +3174,7 @@ __metadata:
     vitest: "npm:^4.0.18"
     vue: "npm:^3.5.29"
     vue-eslint-parser: "npm:^10.4.0"
-    vuetify: "npm:^4.0.1"
+    vuetify: "npm:^4.0.2"
   languageName: unknown
   linkType: soft
 
@@ -6932,9 +6932,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vuetify@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "vuetify@npm:4.0.1"
+"vuetify@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "vuetify@npm:4.0.2"
   peerDependencies:
     typescript: ">=4.7"
     vite-plugin-vuetify: ">=2.1.0"
@@ -6947,7 +6947,7 @@ __metadata:
       optional: true
     webpack-plugin-vuetify:
       optional: true
-  checksum: 10c0/83dcbda66739243c165783b825bf47957f230d20fdc57c5bd78064e4496fd977f9743f83ad05ac772a3688a8fbaffd2f190a49c7843199f8f8eba087719ddc73
+  checksum: 10c0/9cdd11aa42c26dc00d2abf6df084e2a78675911eefede0b0e54759b1920fda68cf173b1fda43abdf514bb6e6ce73210babdf114c15c226276f056fce66e2930b
   languageName: node
   linkType: hard
 
