@@ -34,7 +34,7 @@
     "vite-plugin-pwa": "^1.2.0",
     "vitest": "^4.1.0",
     "vue-eslint-parser": "^10.4.0",
-    "vuetify": "^4.0.3"
+    "vuetify": "^4.0.4"
   },
   "packageManager": "yarn@4.12.0"
 }
