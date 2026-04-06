@@ -2839,7 +2839,7 @@ __metadata:
     eslint-plugin-vue: "npm:^10.8.0"
     globals: "npm:^17.0.0"
     jsdom: "npm:^29.0.1"
-    vite: "npm:^8.0.4"
+    vite: "npm:^8.0.5"
     vite-plugin-pwa: "npm:^1.2.0"
     vitest: "npm:^4.1.2"
     vue: "npm:^3.5.32"
@@ -6405,9 +6405,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^8.0.4":
-  version: 8.0.4
-  resolution: "vite@npm:8.0.4"
+"vite@npm:^8.0.5":
+  version: 8.0.5
+  resolution: "vite@npm:8.0.5"
   dependencies:
     fsevents: "npm:~2.3.3"
     lightningcss: "npm:^1.32.0"
@@ -6458,7 +6458,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10c0/28c840fd663acfc6c41720412e607e67e58166e399dc44b5d394372d34fb963f382a80dfb4741ba2b471f3bcbbc6901a137eb83dc1280854970d10ce78fa098b
+  checksum: 10c0/bfc22896b2661753c01c398a058f1859bdbd3ebe55f3d8505ab629b39e5f68790c0a6f55f8644b6692b0b9b8e210f698082ef9f4fd0d76509f4a46762fbfbba2
   languageName: node
   linkType: hard
 
