@@ -30,7 +30,7 @@
     "eslint-plugin-vue": "^10.8.0",
     "globals": "^17.5.0",
     "jsdom": "^29.0.2",
-    "vite": "^8.0.9",
+    "vite": "^8.0.10",
     "vite-plugin-pwa": "^1.2.0",
     "vitest": "^4.1.4",
     "vue-eslint-parser": "^10.4.0",
