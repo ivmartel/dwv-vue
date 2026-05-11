@@ -27,7 +27,7 @@
     "@vue/test-utils": "^2.4.10",
     "canvas": "^3.2.3",
     "eslint": "^10.3.0",
-    "eslint-plugin-vue": "^10.9.0",
+    "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",
     "jsdom": "^29.1.1",
     "vite": "^8.0.10",
