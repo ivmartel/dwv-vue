@@ -3281,7 +3281,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.1.7"
     "@vue/test-utils": "npm:^2.4.10"
     canvas: "npm:^3.2.3"
-    dwv: "npm:0.36.2"
+    dwv: "npm:0.36.3"
     eslint: "npm:^10.4.1"
     eslint-plugin-vue: "npm:^10.9.1"
     globals: "npm:^17.6.0"
@@ -3295,14 +3295,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dwv@npm:0.36.2":
-  version: 0.36.2
-  resolution: "dwv@npm:0.36.2"
+"dwv@npm:0.36.3":
+  version: 0.36.3
+  resolution: "dwv@npm:0.36.3"
   dependencies:
     jszip: "npm:^3.10.1"
     konva: "npm:~10.2.0"
     magic-wand-tool: "npm:~1.1.7"
-  checksum: 10c0/d6d7409e2d0840ddd209981f39bd7adbd7892b24d7ee8b8be538887c22ad6865f9df4f38360fe5a02202bfe67e6aeace017f47fcfbf6c338b8c91714f0bc1765
+  checksum: 10c0/da9c21c6c58ec22559209016a2be0d9d3e09cb22367cb500d3953e85c2e5621b9ac0e278d8c253ef3c7cffff333b96a98d9d34bbdfc7e2fb621c1d96a0861b76
   languageName: node
   linkType: hard
 
