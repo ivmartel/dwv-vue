@@ -14,7 +14,7 @@
 <script>
 // import
 import { provide } from 'vue'
-import { DwvService } from '../services/dwv.service.js'
+import { DwvAppService } from '../services/DwvAppService.js'
 import { AnnotationService } from '../services/AnnotationService.js'
 import DwvHeader from './DwvHeader.vue'
 import DwvContent from './DwvContent.vue'
@@ -32,18 +32,18 @@ export default {
   },
   setup() {
     // services shared with child components
-    const dwvService = new DwvService()
-    const annotService = new AnnotationService(dwvService)
+    const dwvAppService = new DwvAppService()
+    const annotService = new AnnotationService(dwvAppService)
     annotService.connect()
-    provide('DwvService', dwvService)
+    provide('DwvAppService', dwvAppService)
     provide('AnnotationService', annotService)
     return {
-      dwvService,
+      dwvAppService,
     }
   },
   mounted() {
     // possible load from location
-    this.dwvService.loadFromUri(window.location.href)
+    this.dwvAppService.loadFromUri(window.location.href)
   },
 }
 </script>

@@ -104,9 +104,9 @@ export class AnnotationService extends EventTarget {
   /**
    * The dwv service.
    *
-   * @type {import('./dwv.service.js').DwvService}
+   * @type {import('./DwvAppService.js').DwvAppService}
    */
-  #dwvService;
+  #dwvAppService;
 
   /**
    * The group states indexed by data id (in order of addition).
@@ -159,12 +159,12 @@ export class AnnotationService extends EventTarget {
   };
 
   /**
-   * @param {import('./dwv.service.js').DwvService} dwvService The
+   * @param {import('./DwvAppService.js').DwvAppService} dwvAppService The
    *   associated dwv service.
    */
-  constructor(dwvService) {
+  constructor(dwvAppService) {
     super();
-    this.#dwvService = dwvService;
+    this.#dwvAppService = dwvAppService;
   }
 
   // store contract
@@ -200,7 +200,7 @@ export class AnnotationService extends EventTarget {
    */
   connect() {
     for (const [type, handler] of Object.entries(this.#handlers)) {
-      this.#dwvService.addEventListener(type, handler);
+      this.#dwvAppService.addEventListener(type, handler);
     }
   }
 
@@ -210,7 +210,7 @@ export class AnnotationService extends EventTarget {
    */
   dispose() {
     for (const [type, handler] of Object.entries(this.#handlers)) {
-      this.#dwvService.removeEventListener(type, handler);
+      this.#dwvAppService.removeEventListener(type, handler);
     }
     for (const dataId of this.#editableListeners.keys()) {
       this.#removeEditableListener(dataId);
@@ -240,7 +240,7 @@ export class AnnotationService extends EventTarget {
       annotationId,
       {colour: annotation.colour},
       {colour},
-      (cmd) => this.#dwvService.addToUndoStack(cmd)
+      (cmd) => this.#dwvAppService.addToUndoStack(cmd)
     );
   }
 
@@ -258,7 +258,7 @@ export class AnnotationService extends EventTarget {
     const drawController = new DrawController(annotationGroup);
     drawController.removeAnnotationWithCommand(
       annotationId,
-      (cmd) => this.#dwvService.addToUndoStack(cmd)
+      (cmd) => this.#dwvAppService.addToUndoStack(cmd)
     );
   }
 
@@ -270,7 +270,7 @@ export class AnnotationService extends EventTarget {
    * @param {boolean} visible True to show the annotation.
    */
   setAnnotationVisibility(dataId, annotationId, visible) {
-    for (const layer of this.#dwvService.getDrawLayersByDataId(dataId)) {
+    for (const layer of this.#dwvAppService.getDrawLayersByDataId(dataId)) {
       layer.setAnnotationVisibility(annotationId, visible);
     }
     this.#updateAnnotation(dataId, annotationId,
@@ -285,7 +285,7 @@ export class AnnotationService extends EventTarget {
    * @returns {boolean} False if no draw layer was found.
    */
   setLabelsVisibility(dataId, visible) {
-    const drawLayer = this.#dwvService.getDrawLayersByDataId(dataId)[0];
+    const drawLayer = this.#dwvAppService.getDrawLayersByDataId(dataId)[0];
     if (typeof drawLayer === 'undefined') {
       logger.warn(`Cannot find draw layer with id ${dataId}`);
       return false;
@@ -319,7 +319,7 @@ export class AnnotationService extends EventTarget {
       logger.warn('No centroid for annotation');
       return;
     }
-    for (const layer of this.#dwvService.getDrawLayersByDataId(dataId)) {
+    for (const layer of this.#dwvAppService.getDrawLayersByDataId(dataId)) {
       layer.setCurrentPosition(annotCentroid);
     }
   }
@@ -398,7 +398,7 @@ export class AnnotationService extends EventTarget {
    * @returns {object|undefined} The annotation group.
    */
   #getAnnotationGroup(dataId) {
-    return this.#dwvService.getData(dataId)?.annotationGroup;
+    return this.#dwvAppService.getData(dataId)?.annotationGroup;
   }
 
   /**

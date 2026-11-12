@@ -33,10 +33,10 @@ import { inject } from 'vue'
 
 export default {
   data() {
-    const dwvService = inject('DwvService')
+    const dwvAppService = inject('DwvAppService')
 
     return {
-      dwvService,
+      dwvAppService,
       loadProgress: 0,
       dataLoaded: false,
       dropboxDivId: 'dropBox',
@@ -47,12 +47,12 @@ export default {
   },
   mounted() {
     // watch load progress
-    this.dwvService.addEventListener('loadprogress', (event) => {
+    this.dwvAppService.addEventListener('loadprogress', (event) => {
       this.loadProgress = event.detail.value
       this.autoShowDropbox()
     })
     // watch data loaded
-    this.dwvService.addEventListener('dataloaded', (event) => {
+    this.dwvAppService.addEventListener('dataloaded', (event) => {
       this.dataLoaded = event.detail.value
       this.autoShowDropbox()
     })
@@ -65,7 +65,7 @@ export default {
     if (typeof ResizeObserver !== 'undefined') {
       const layerDiv = document.getElementById('layerGroup0')
       this.resizeObserver = new ResizeObserver(() => {
-        this.dwvService.onResize()
+        this.dwvAppService.onResize()
       })
       this.resizeObserver.observe(layerDiv)
     }
@@ -98,11 +98,11 @@ export default {
     onDrop(event) {
       this.defaultHandleDragEvent(event)
       // load files
-      this.dwvService.loadFiles(event.dataTransfer.files)
+      this.dwvAppService.loadFiles(event.dataTransfer.files)
     },
     onInputFile(event) {
       if (event.target && event.target.files) {
-        this.dwvService.loadFiles(event.target.files)
+        this.dwvAppService.loadFiles(event.target.files)
       }
     },
     autoShowDropbox() {

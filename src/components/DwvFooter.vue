@@ -22,11 +22,11 @@ import { version, inject } from 'vue'
 
 export default {
   data() {
-    const dwvService = inject('DwvService')
+    const dwvAppService = inject('DwvAppService')
 
     return {
       versions: {
-        dwv: dwvService.getDwvVersion(),
+        dwv: dwvAppService.getDwvVersion(),
         vue: version
       }
     }

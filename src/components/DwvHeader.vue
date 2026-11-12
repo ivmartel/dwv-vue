@@ -141,12 +141,12 @@ export default {
     TagsTable
   },
   data() {
-    const dwvService = inject('DwvService')
-    const shapeNames = dwvService.getShapeNames()
+    const dwvAppService = inject('DwvAppService')
+    const shapeNames = dwvAppService.getShapeNames()
 
     return {
-      dwvService,
-      toolNames: dwvService.getToolNames(),
+      dwvAppService,
+      toolNames: dwvAppService.getToolNames(),
       shapeNames,
       presetNames: [],
       selectedTool: '',
@@ -160,14 +160,14 @@ export default {
   },
   mounted() {
     // watch load progress
-    this.dwvService.addEventListener('loadprogress', (event) => {
+    this.dwvAppService.addEventListener('loadprogress', (event) => {
       this.loadProgress = event.detail.value
     })
     // watch data ready
-    this.dwvService.addEventListener('dataready', (event) => {
+    this.dwvAppService.addEventListener('dataready', (event) => {
       const dataReady = event.detail.value
       if (dataReady) {
-        const runnableTool = this.dwvService.getFirstRunnableTool()
+        const runnableTool = this.dwvAppService.getFirstRunnableTool()
         if (runnableTool !== undefined) {
           this.selectedTool = runnableTool
           this.applyTool(runnableTool)
@@ -175,18 +175,18 @@ export default {
       }
     })
     // watch data loaded
-    this.dwvService.addEventListener('dataloaded', (event) => {
+    this.dwvAppService.addEventListener('dataloaded', (event) => {
       this.dataLoaded = event.detail.value
-      this.metaData = this.dwvService.getMetaData()
+      this.metaData = this.dwvAppService.getMetaData()
     })
     // watch preset names
-    this.dwvService.addEventListener('presetnames', (event) => {
+    this.dwvAppService.addEventListener('presetnames', (event) => {
       this.presetNames = event.detail.value
       const presetNames = this.presetNames
       this.selectedPreset = presetNames[0]
     })
     // watch is manual preset
-    this.dwvService.addEventListener('ismanualpreset', (event) => {
+    this.dwvAppService.addEventListener('ismanualpreset', (event) => {
       const isManual = event.detail.value
       const preset = this.selectedPreset
       const manualStr = 'manual'
@@ -231,22 +231,22 @@ export default {
       if (typeof features === 'undefined' && tool === 'Draw') {
         features = {shapeName: this.selectedShape}
       }
-      this.dwvService.applyTool(tool, features)
+      this.dwvAppService.applyTool(tool, features)
     },
     applyShape(shape) {
       this.applyTool('Draw', {shapeName: shape})
     },
     applyPreset(preset) {
-      this.dwvService.applyPreset(preset)
+      this.dwvAppService.applyPreset(preset)
     },
     canRunTool(tool) {
-      return this.dwvService.canRunTool(tool)
+      return this.dwvAppService.canRunTool(tool)
     },
     toggleOrientation() {
-      this.dwvService.toggleOrientation()
+      this.dwvAppService.toggleOrientation()
     },
     onReset() {
-      this.dwvService.reset()
+      this.dwvAppService.reset()
     }
   }
 }
