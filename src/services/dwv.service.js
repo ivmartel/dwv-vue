@@ -271,6 +271,29 @@ export class DwvService extends EventTarget {
     });
     // handle window resize
     window.addEventListener('resize', this.#dwvApp.onResize);
+
+    // forward data and annotation events
+    const forwarded = {
+      dataadd: (event) => ({dataid: event.dataid}),
+      dataremove: (event) => ({dataid: event.dataid}),
+      drawlayeradd: (event) => ({dataid: event.dataid}),
+      annotationadd: (event) => ({dataid: event.dataid, data: event.data}),
+      annotationupdate: (event) => ({
+        dataid: event.dataid,
+        data: event.data,
+        keys: event.keys
+      }),
+      annotationremove: (event) => ({dataid: event.dataid, data: event.data}),
+      annotationselect: (event) => ({
+        dataid: event.dataid,
+        annotationid: event.annotationid
+      })
+    };
+    for (const [type, getDetail] of Object.entries(forwarded)) {
+      this.#dwvApp.addEventListener(type, (event) => {
+        this.#dispatch(type, getDetail(event));
+      });
+    }
   }
 
   /**
@@ -399,5 +422,41 @@ export class DwvService extends EventTarget {
    */
   reset() {
     this.#dwvApp.resetZoomPan();
+  }
+
+  /**
+   * Refit the view to its container.
+   */
+  onResize() {
+    this.#dwvApp.onResize();
+  }
+
+  /**
+   * Get the data with the input id.
+   *
+   * @param {string} dataId The data id.
+   * @returns {object|undefined} The data.
+   */
+  getData(dataId) {
+    return this.#dwvApp.getData(dataId);
+  }
+
+  /**
+   * Get the draw layers associated to a data id.
+   *
+   * @param {string} dataId The data id.
+   * @returns {object[]} The layers.
+   */
+  getDrawLayersByDataId(dataId) {
+    return this.#dwvApp.getDrawLayersByDataId(dataId);
+  }
+
+  /**
+   * Add a command to the undo stack.
+   *
+   * @param {object} cmd The command to add.
+   */
+  addToUndoStack(cmd) {
+    this.#dwvApp.addToUndoStack(cmd);
   }
 }

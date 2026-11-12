@@ -6,6 +6,7 @@ import * as directives from 'vuetify/directives'
 import { createVuetify } from 'vuetify'
 
 import { DwvService } from '../services/dwv.service.js';
+import { AnnotationService } from '../services/AnnotationService.js';
 import DicomView from './DicomView.vue'
 import TagsTable from './TagsTable.vue'
 
@@ -15,12 +16,14 @@ const vuetify = createVuetify({
 })
 
 describe('DicomViewComponent', () => {
+  const dwvService = new DwvService()
   const component = mount(DicomView,
     {
       global: {
         plugins: [vuetify],
         provide: {
-          'DwvService': new DwvService()
+          'DwvService': dwvService,
+          'AnnotationService': new AnnotationService(dwvService)
         },
         components: {
           'TagsTable': TagsTable
@@ -40,5 +43,11 @@ describe('DicomViewComponent', () => {
     const legend = component.get('.legend')
     expect(legend).toBeDefined()
     expect(legend.text()).toContain('Powered by')
+  })
+
+  test('renders the closed right panel', () => {
+    const panel = component.get('#rightPanel')
+    expect(panel.attributes('aria-hidden')).toBe('true')
+    expect(component.find('.right-panel-toggle-strip').exists()).toBe(true)
   })
 })

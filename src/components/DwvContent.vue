@@ -59,6 +59,19 @@ export default {
 
     // setup drop box
     this.showDropbox(true)
+
+    // refit the view whenever its size changes
+    // (for ex when the right panel opens, closes or is resized)
+    if (typeof ResizeObserver !== 'undefined') {
+      const layerDiv = document.getElementById('layerGroup0')
+      this.resizeObserver = new ResizeObserver(() => {
+        this.dwvService.onResize()
+      })
+      this.resizeObserver.observe(layerDiv)
+    }
+  },
+  unmounted() {
+    this.resizeObserver?.disconnect()
   },
   methods: {
     defaultHandleDragEvent(event) {

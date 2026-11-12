@@ -1,7 +1,12 @@
 <template>
   <div class="dwv">
     <DwvHeader />
-    <DwvContent class="content" />
+    <div class="main">
+      <DwvContent class="view" />
+      <RightPanel>
+        <AnnotationList />
+      </RightPanel>
+    </div>
     <DwvFooter />
   </div>
 </template>
@@ -12,12 +17,16 @@ import { inject } from 'vue'
 import DwvHeader from './DwvHeader.vue'
 import DwvContent from './DwvContent.vue'
 import DwvFooter from './DwvFooter.vue'
+import RightPanel from './RightPanel.vue'
+import AnnotationList from './AnnotationList.vue'
 
 export default {
   components: {
     DwvHeader,
     DwvContent,
-    DwvFooter
+    DwvFooter,
+    RightPanel,
+    AnnotationList
   },
   data() {
     const dwvService = inject('DwvService')
@@ -38,8 +47,15 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.content {
+.main {
   /* occupy space left (others should be default:0) */
   flex-grow: 1;
+  min-height: 0;
+  display: flex;
+}
+.view {
+  /* image view takes the width left by the right panel */
+  flex: 1;
+  min-width: 0;
 }
 </style>
