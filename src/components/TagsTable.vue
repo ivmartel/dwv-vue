@@ -20,14 +20,13 @@
         <v-col>
           <!-- instance slider -->
           <v-slider
-            value="0"
+            v-model="sliderIndex"
             step="1"
             :max="sliderMax"
             :min="sliderMin"
             title="Instance number"
             width="90%"
             hide-details
-            @update:model-value="onSliderChange"
           >
             <template #append>
               <div
@@ -164,39 +163,54 @@ export default {
   data: () => ({
     search: '',
     searched: [],
+    sliderIndex: 0,
     sliderMin: undefined,
     sliderMax: undefined,
     instanceNumber: 0,
     instanceNumbers: []
   }),
-  created() {
-    // set slider with instance numbers ('00200013')
-    const instanceElement = this.tagsData['00200013']
-    if (typeof instanceElement !== 'undefined') {
-      let instanceNumberValue = instanceElement.value
-      if (typeof instanceNumberValue === 'string') {
-        instanceNumberValue = [instanceNumberValue]
+  watch: {
+    // new data loaded while the dialog content is kept mounted
+    tagsData() {
+      this.initFromTags()
+    },
+    sliderIndex(index) {
+      if (this.instanceNumbers.length !== 0) {
+        this.instanceNumber = this.instanceNumbers[index]
       }
-      // convert string to numbers
-      this.instanceNumbers = instanceNumberValue.map(Number)
-      this.instanceNumbers.sort((a, b) => a - b)
-
-      this.sliderMin = 0
-      this.sliderMax = this.instanceNumbers.length - 1
-      this.instanceNumber = this.instanceNumbers[this.sliderMin]
+      this.searchOnTable()
     }
-
-    const metaArray = getMetaArray(this.tagsData, this.instanceNumber)
-    this.searched = metaArray
+  },
+  created() {
+    this.initFromTags()
   },
   methods: {
+    initFromTags() {
+      this.instanceNumbers = []
+      this.sliderMin = undefined
+      this.sliderMax = undefined
+      this.instanceNumber = 0
+      // set slider with instance numbers ('00200013')
+      const instanceElement = this.tagsData['00200013']
+      if (typeof instanceElement !== 'undefined') {
+        let instanceNumberValue = instanceElement.value
+        if (typeof instanceNumberValue === 'string') {
+          instanceNumberValue = [instanceNumberValue]
+        }
+        // convert string to numbers
+        this.instanceNumbers = instanceNumberValue.map(Number)
+        this.instanceNumbers.sort((a, b) => a - b)
+
+        this.sliderMin = 0
+        this.sliderMax = this.instanceNumbers.length - 1
+        this.instanceNumber = this.instanceNumbers[0]
+      }
+      this.sliderIndex = 0
+      this.searchOnTable()
+    },
     searchOnTable() {
       const metaArray = getMetaArray(this.tagsData, this.instanceNumber)
       this.searched = searchAll(metaArray, this.search)
-    },
-    onSliderChange(event) {
-      this.instanceNumber = this.instanceNumbers[event]
-      this.searchOnTable()
     }
   }
 }
