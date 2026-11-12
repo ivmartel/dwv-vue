@@ -14,8 +14,8 @@
 <script>
 // import
 import { provide } from 'vue'
-import { DwvAppService } from '../services/DwvAppService.js'
-import { AnnotationService } from '../services/AnnotationService.js'
+import { DwvAppService } from '../services/dwvAppService.js'
+import { AnnotationService } from '../services/annotationService.js'
 import DwvHeader from './DwvHeader.vue'
 import DwvContent from './DwvContent.vue'
 import DwvFooter from './DwvFooter.vue'

@@ -104,7 +104,7 @@ export class AnnotationService extends EventTarget {
   /**
    * The dwv service.
    *
-   * @type {import('./DwvAppService.js').DwvAppService}
+   * @type {import('./dwvAppService.js').DwvAppService}
    */
   #dwvAppService;
 
@@ -159,7 +159,7 @@ export class AnnotationService extends EventTarget {
   };
 
   /**
-   * @param {import('./DwvAppService.js').DwvAppService} dwvAppService The
+   * @param {import('./dwvAppService.js').DwvAppService} dwvAppService The
    *   associated dwv service.
    */
   constructor(dwvAppService) {
