@@ -134,6 +134,7 @@
 // import
 import { inject } from 'vue'
 import TagsTable from './TagsTable.vue'
+import { getShapeIcon } from './shapeIcons.js'
 
 export default {
   components: {
@@ -209,23 +210,7 @@ export default {
       return res
     },
     getShapeIcon(shape) {
-      let res
-      if (shape === 'Ruler') {
-        res = 'straighten'
-      } else if (shape === 'Arrow') {
-        res = 'call_made'
-      } else if (shape === 'Rectangle') {
-        res = 'crop_landscape'
-      } else if (shape === 'Circle') {
-        res = 'radio_button_unchecked'
-      } else if (shape === 'Ellipse') {
-        res = 'sports_rugby'
-      } else if (shape === 'Protractor') {
-        res = 'square_foot'
-      } else if (shape === 'Roi') {
-        res = 'polyline'
-      }
-      return res
+      return getShapeIcon(shape)
     },
     onChangeTool(tool) {
       this.selectedTool = tool
