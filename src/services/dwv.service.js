@@ -90,7 +90,7 @@ export class DwvService extends EventTarget {
    *
    * @type {string[]}
    */
-  #presetNames;
+  #presetNames = [];
 
   constructor() {
     super();
