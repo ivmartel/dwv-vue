@@ -97,9 +97,7 @@ export class DwvService extends EventTarget {
 
     // initialise app
     this.#layerGroupName = 'layerGroup0';
-    const viewConfig0 = new ViewConfig(this.#layerGroupName);
-    const viewConfigs = {'*': [viewConfig0]};
-    const appOptions = new AppOptions(viewConfigs);
+    const appOptions = new AppOptions(this.#getViewConfigs());
     appOptions.tools = this.#tools;
     appOptions.overlayConfig = overlayConfig;
     this.#dwvApp.init(appOptions);
@@ -145,6 +143,19 @@ export class DwvService extends EventTarget {
   }
 
   /**
+   * Get the data view configs for the current orientation.
+   *
+   * @returns {object} The view configs.
+   */
+  #getViewConfigs() {
+    const viewConfig0 = new ViewConfig(this.#layerGroupName);
+    if (typeof this.#orientation !== 'undefined') {
+      viewConfig0.orientation = this.#orientation;
+    }
+    return {'*': [viewConfig0]};
+  }
+
+  /**
    * Dispatch a CustomEvent.
    *
    * @param {string} type The event type.
@@ -181,6 +192,11 @@ export class DwvService extends EventTarget {
       nReceivedLoadError = 0;
       nReceivedLoadAbort = 0;
       isFirstRender = true;
+      // reset orientation so new data opens with its default one
+      if (typeof this.#orientation !== 'undefined') {
+        this.#orientation = undefined;
+        this.#dwvApp.setDataViewConfigs(this.#getViewConfigs());
+      }
     });
     this.#dwvApp.addEventListener('loadprogress', (event) => {
       this.#dispatch('loadprogress', {value: event.loaded});
@@ -370,10 +386,7 @@ export class DwvService extends EventTarget {
       this.#orientation = 'coronal';
     }
     // update data view config
-    const viewConfig0 = new ViewConfig(this.#layerGroupName);
-    viewConfig0.orientation = this.#orientation;
-    const viewConfigs = {'*': [viewConfig0]};
-    this.#dwvApp.setDataViewConfigs(viewConfigs);
+    this.#dwvApp.setDataViewConfigs(this.#getViewConfigs());
     // render data
     const dataIds = this.#dwvApp.getDataIds();
     for (const dataId of dataIds) {
