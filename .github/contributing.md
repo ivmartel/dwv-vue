@@ -1,10 +1,10 @@
-Contributing to dwv-simplistic
+Contributing to dwv-vue
 ==============================
 
 First off, thanks for taking the time to contribute!
 
-The following is a set of guidelines for contributing to dwv-simplistic,
-which is hosted at https://github.com/ivmartel/dwv-simplistic on GitHub.
+The following is a set of guidelines for contributing to dwv-vue,
+which is hosted at https://github.com/ivmartel/dwv-vue on GitHub.
 
 Steps
 -----
