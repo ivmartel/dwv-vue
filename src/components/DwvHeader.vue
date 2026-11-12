@@ -132,16 +132,12 @@
 
 <script>
 // import
-import { ref, inject } from 'vue'
+import { inject } from 'vue'
 import TagsTable from './TagsTable.vue'
 
 export default {
   components: {
     TagsTable
-  },
-  setup() {
-    const count = ref(0)
-    return { count }
   },
   data() {
     const dwvService = inject('DwvService')

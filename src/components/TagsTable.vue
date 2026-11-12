@@ -53,7 +53,6 @@
 </template>
 
 <script>
-import { ref } from 'vue'
 import {getTagFromKey} from 'dwv'
 
 const toLower = text => {
@@ -161,10 +160,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-  setup() {
-    const count = ref(0)
-    return { count }
   },
   data: () => ({
     search: '',

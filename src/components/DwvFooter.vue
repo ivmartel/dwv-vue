@@ -18,13 +18,9 @@
 
 <script>
 // import
-import { ref, version, inject } from 'vue'
+import { version, inject } from 'vue'
 
 export default {
-  setup() {
-    const count = ref(0)
-    return { count }
-  },
   data() {
     const dwvService = inject('DwvService')
 

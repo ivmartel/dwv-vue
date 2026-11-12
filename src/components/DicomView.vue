@@ -8,7 +8,7 @@
 
 <script>
 // import
-import { ref, inject } from 'vue'
+import { inject } from 'vue'
 import DwvHeader from './DwvHeader.vue'
 import DwvContent from './DwvContent.vue'
 import DwvFooter from './DwvFooter.vue'
@@ -18,10 +18,6 @@ export default {
     DwvHeader,
     DwvContent,
     DwvFooter
-  },
-  setup() {
-    const count = ref(0)
-    return { count }
   },
   data() {
     const dwvService = inject('DwvService')
