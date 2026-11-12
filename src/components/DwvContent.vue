@@ -7,13 +7,11 @@
       <div
         id="dropBox"
         class="dropBox dropBoxBorder"
-        @dragOver="onBoxDragOver"
-        @dragLeave="onBoxDragLeave"
-        @drop="onDrop"
       >
+        <!-- drag events are handled via addEventListener in showDropbox -->
         <p>
           Drag and drop data here or
-          <label htmlFor="input-file">
+          <label for="input-file">
             <a id="input-file-link"> click here</a>
             <input
               id="input-file"
@@ -56,7 +54,6 @@ export default {
     // watch data loaded
     this.dwvService.addEventListener('dataloaded', (event) => {
       this.dataLoaded = event.detail.value
-      this.metaData = this.dwvService.getMetaData()
       this.autoShowDropbox()
     })
 
