@@ -13,7 +13,9 @@
 
 <script>
 // import
-import { inject } from 'vue'
+import { provide } from 'vue'
+import { DwvService } from '../services/dwv.service.js'
+import { AnnotationService } from '../services/AnnotationService.js'
 import DwvHeader from './DwvHeader.vue'
 import DwvContent from './DwvContent.vue'
 import DwvFooter from './DwvFooter.vue'
@@ -28,8 +30,13 @@ export default {
     RightPanel,
     AnnotationList
   },
-  data() {
-    const dwvService = inject('DwvService')
+  setup() {
+    // services shared with child components
+    const dwvService = new DwvService()
+    const annotService = new AnnotationService(dwvService)
+    annotService.connect()
+    provide('DwvService', dwvService)
+    provide('AnnotationService', annotService)
     return {
       dwvService,
     }

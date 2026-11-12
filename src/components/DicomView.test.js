@@ -5,8 +5,6 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { createVuetify } from 'vuetify'
 
-import { DwvService } from '../services/dwv.service.js';
-import { AnnotationService } from '../services/AnnotationService.js';
 import DicomView from './DicomView.vue'
 import TagsTable from './TagsTable.vue'
 
@@ -16,15 +14,10 @@ const vuetify = createVuetify({
 })
 
 describe('DicomViewComponent', () => {
-  const dwvService = new DwvService()
   const component = mount(DicomView,
     {
       global: {
         plugins: [vuetify],
-        provide: {
-          'DwvService': dwvService,
-          'AnnotationService': new AnnotationService(dwvService)
-        },
         components: {
           'TagsTable': TagsTable
         }
