@@ -16,6 +16,7 @@ Package manager is Yarn 4 (via corepack). Do not use npm to add packages.
 | Unit tests (watch) | `yarn run test` |
 | Unit tests (single run + coverage, as CI) | `yarn run test-ci` |
 | Production build | `yarn run build` |
+| Library build (to `dist/dwv-vue-lib/`) | `yarn run build-lib` |
 
 Before considering a change done, run `yarn run lint` and `yarn run test-ci`;
 CI (`.github/workflows/nodejs-ci.yml`) runs both, then builds.
@@ -24,7 +25,8 @@ CI (`.github/workflows/nodejs-ci.yml`) runs both, then builds.
 
 ```text
 src/
-├─ main.js               Vue app + Vuetify setup (Material Design icons)
+├─ index.js              Library entry point (exports DicomView)
+├─ main.js               Demo app: Vue app + Vuetify setup (Material Design icons)
 ├─ App.vue
 ├─ components/
 │  ├─ DicomView.vue      Root view: creates and provides the services
@@ -42,6 +44,8 @@ src/
    └─ quantification.js    Quantification formatting
 doc/design/              Design specs (one per component)
 public/assets/workers/   dwv web workers (copied from node_modules/dwv/dist)
+vite.config.js           Demo app build
+vite.lib.config.js       Library build
 ```
 
 ## Architecture
@@ -108,3 +112,15 @@ component, add a spec following the same structure.
 - `build-app-trunk` / `build-app-stable` set the base path for GitHub Pages. CI
   deploys `main` to `demo/trunk` and `vX.Y.Z` tags to `demo/stable` on the
   `gh-pages` branch. Don't change these paths without updating the workflow.
+
+## Library package
+
+- The npm package is the library build only: `src/index.js` bundled by
+  `vite.lib.config.js` into `dist/dwv-vue-lib/` (`dwv-vue.js` +
+  `style.css`), `prepack` builds it. `main.js`, `App.vue`, `style.css` and
+  `public/` are the demo app and are not packaged.
+- `vue` and `vuetify` are peer dependencies (the host app provides them and
+  installs Vuetify with its components and the `md` iconset); `dwv` is a
+  dependency. All three are external in the bundle: keep the externals in
+  `vite.lib.config.js` in sync with `package.json`.
+- Only export from `src/index.js` what is meant as public API.
