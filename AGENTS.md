@@ -105,6 +105,6 @@ component, add a spec following the same structure.
 
 ## Builds and deploy
 
-- `build-trunk` / `build-stable` set the base path for GitHub Pages. CI
+- `build-app-trunk` / `build-app-stable` set the base path for GitHub Pages. CI
   deploys `main` to `demo/trunk` and `vX.Y.Z` tags to `demo/stable` on the
   `gh-pages` branch. Don't change these paths without updating the workflow.

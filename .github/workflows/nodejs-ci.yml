@@ -44,13 +44,13 @@ jobs:
       env:
         BUILD_TYPE: ${{ steps.build-type.outputs.type }}
       # not deployed builds use the trunk configuration
-      run: yarn run build-${BUILD_TYPE:-trunk}
+      run: yarn run build-app-${BUILD_TYPE:-trunk}
     - name: Upload build
       if: steps.build-type.outputs.type != ''
       uses: actions/upload-artifact@v7
       with:
         name: dist
-        path: dist
+        path: dist/dwv-vue-app
         if-no-files-found: error
         retention-days: 1
 

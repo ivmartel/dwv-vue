@@ -9,8 +9,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build-trunk": "vite build --mode development --base /dwv-vue/demo/trunk",
-    "build-stable": "vite build --mode production --base /dwv-vue/demo/stable",
+    "build-app-trunk": "vite build --mode development --base /dwv-vue/demo/trunk",
+    "build-app-stable": "vite build --mode production --base /dwv-vue/demo/stable",
     "preview": "vite preview",
     "test": "vitest",
     "test-ci": "vitest run --coverage",
