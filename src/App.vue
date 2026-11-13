@@ -3,7 +3,7 @@ import DicomView from './components/DicomView.vue'
 </script>
 
 <template>
-  <DicomView />
+  <DicomView load-from-window-location />
 </template>
 
 <style>

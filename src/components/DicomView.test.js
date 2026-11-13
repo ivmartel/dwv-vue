@@ -56,4 +56,53 @@ describe('DicomViewComponent', () => {
     appDispose.mockRestore()
     annotDispose.mockRestore()
   })
+
+  describe('data loading', () => {
+    const mockLoads = () => ({
+      fromUri: vi.spyOn(DwvAppService.prototype, 'loadFromUri')
+        .mockImplementation(() => {}),
+      urls: vi.spyOn(DwvAppService.prototype, 'loadURLs')
+        .mockImplementation(() => {})
+    })
+
+    test('does not load without inputs', () => {
+      const loads = mockLoads()
+      const wrapper = mount(DicomView, mountOptions)
+      expect(loads.fromUri).not.toHaveBeenCalled()
+      expect(loads.urls).not.toHaveBeenCalled()
+      wrapper.unmount()
+      vi.restoreAllMocks()
+    })
+
+    test('loads from the window location', () => {
+      const loads = mockLoads()
+      const wrapper = mount(DicomView, {
+        ...mountOptions,
+        props: { loadFromWindowLocation: true }
+      })
+      expect(loads.fromUri).toHaveBeenCalledWith(window.location.href)
+      wrapper.unmount()
+      vi.restoreAllMocks()
+    })
+
+    test('loads the uri and urls, on mount and on change', async () => {
+      const loads = mockLoads()
+      const wrapper = mount(DicomView, {
+        ...mountOptions,
+        props: { uri: 'https://host/?input=a', urls: ['https://host/b.dcm'] }
+      })
+      expect(loads.fromUri).toHaveBeenCalledWith('https://host/?input=a')
+      expect(loads.urls).toHaveBeenCalledWith(['https://host/b.dcm'])
+      await wrapper.setProps({
+        uri: 'https://host/?input=c',
+        urls: ['https://host/d.dcm']
+      })
+      expect(loads.fromUri).toHaveBeenLastCalledWith('https://host/?input=c')
+      expect(loads.urls).toHaveBeenLastCalledWith(['https://host/d.dcm'])
+      expect(loads.fromUri).toHaveBeenCalledTimes(2)
+      expect(loads.urls).toHaveBeenCalledTimes(2)
+      wrapper.unmount()
+      vi.restoreAllMocks()
+    })
+  })
 })

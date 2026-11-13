@@ -13,7 +13,7 @@
 
 <script>
 // import
-import { onUnmounted, provide, useId } from 'vue'
+import { onMounted, onUnmounted, provide, useId, watch } from 'vue'
 import { DwvAppService } from '../services/dwvAppService.js'
 import { AnnotationService } from '../services/annotationService.js'
 import DwvHeader from './DwvHeader.vue'
@@ -30,7 +30,31 @@ export default {
     RightPanel,
     AnnotationList
   },
-  setup() {
+  props: {
+    /**
+     * URI to load data from, with a dwv 'input' query parameter,
+     *   for ex: 'https://host/?input=https%3A%2F%2Fhost%2Fdata.dcm'.
+     */
+    uri: {
+      type: String,
+      default: undefined
+    },
+    /**
+     * List of data urls to load.
+     */
+    urls: {
+      type: Array,
+      default: undefined
+    },
+    /**
+     * Load data from the window location (page url) on mount.
+     */
+    loadFromWindowLocation: {
+      type: Boolean,
+      default: false
+    }
+  },
+  setup(props) {
     // viewer id: unique in the page, used as html id prefix
     const viewerId = useId()
     provide('viewerId', viewerId)
@@ -40,18 +64,31 @@ export default {
     annotService.connect()
     provide('DwvAppService', dwvAppService)
     provide('AnnotationService', annotService)
+    // load data: on mount and when the inputs change
+    const loadUri = (uri) => {
+      if (uri) {
+        dwvAppService.loadFromUri(uri)
+      }
+    }
+    const loadUrls = (urls) => {
+      if (urls && urls.length !== 0) {
+        dwvAppService.loadURLs(urls)
+      }
+    }
+    onMounted(() => {
+      if (props.loadFromWindowLocation) {
+        loadUri(window.location.href)
+      }
+      loadUri(props.uri)
+      loadUrls(props.urls)
+    })
+    watch(() => props.uri, loadUri)
+    watch(() => props.urls, loadUrls)
     // release the services (children are unmounted before)
     onUnmounted(() => {
       annotService.dispose()
       dwvAppService.dispose()
     })
-    return {
-      dwvAppService,
-    }
-  },
-  mounted() {
-    // possible load from location
-    this.dwvAppService.loadFromUri(window.location.href)
   },
 }
 </script>
