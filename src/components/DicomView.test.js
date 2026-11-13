@@ -39,7 +39,7 @@ describe('DicomViewComponent', () => {
   })
 
   test('renders the closed right panel', () => {
-    const panel = component.get('#rightPanel')
+    const panel = component.get('[id$="-rightPanel"]')
     expect(panel.attributes('aria-hidden')).toBe('true')
     expect(component.find('.right-panel-toggle-strip').exists()).toBe(true)
   })

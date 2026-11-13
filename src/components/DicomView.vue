@@ -13,7 +13,7 @@
 
 <script>
 // import
-import { provide } from 'vue'
+import { provide, useId } from 'vue'
 import { DwvAppService } from '../services/dwvAppService.js'
 import { AnnotationService } from '../services/annotationService.js'
 import DwvHeader from './DwvHeader.vue'
@@ -31,8 +31,11 @@ export default {
     AnnotationList
   },
   setup() {
+    // viewer id: unique in the page, used as html id prefix
+    const viewerId = useId()
+    provide('viewerId', viewerId)
     // services shared with child components
-    const dwvAppService = new DwvAppService()
+    const dwvAppService = new DwvAppService(viewerId)
     const annotService = new AnnotationService(dwvAppService)
     annotService.connect()
     provide('DwvAppService', dwvAppService)

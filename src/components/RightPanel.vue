@@ -74,7 +74,7 @@
 
 <script setup>
 // Foldable and resizable side panel, see doc/design/rightPanel.md
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, inject, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import {
   PANEL_INITIAL_WIDTH,
   PANEL_MIN_WIDTH,
@@ -83,7 +83,8 @@ import {
   getMaxPanelWidth
 } from './panelWidth.js'
 
-const panelId = 'rightPanel'
+// id prefixed with the viewer id
+const panelId = inject('viewerId') + '-rightPanel'
 
 const isOpen = ref(false)
 const width = ref(PANEL_INITIAL_WIDTH)

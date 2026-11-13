@@ -1,20 +1,20 @@
 <template>
   <div class="content">
     <div
-      id="layerGroup0"
+      :id="layerGroupDivId"
       class="layerGroup"
     >
       <div
-        id="dropBox"
+        :id="dropboxDivId"
         class="dropBox dropBoxBorder"
       >
         <!-- drag events are handled via addEventListener in showDropbox -->
         <p>
           Drag and drop data here or
-          <label for="input-file">
-            <a id="input-file-link"> click here</a>
+          <label :for="inputFileId">
+            <a> click here</a>
             <input
-              id="input-file"
+              :id="inputFileId"
               type="file"
               multiple
               style="display: none"
@@ -32,14 +32,22 @@
 import { inject } from 'vue'
 
 export default {
+  setup() {
+    // element ids, prefixed with the viewer id
+    const viewerId = inject('viewerId')
+    return {
+      dropboxDivId: viewerId + '-dropBox',
+      inputFileId: viewerId + '-input-file'
+    }
+  },
   data() {
     const dwvAppService = inject('DwvAppService')
 
     return {
       dwvAppService,
+      layerGroupDivId: dwvAppService.getLayerGroupDivId(),
       loadProgress: 0,
       dataLoaded: false,
-      dropboxDivId: 'dropBox',
       dropboxClassName: 'dropBox',
       borderClassName: 'dropBoxBorder',
       hoverClassName: 'hover'
@@ -63,7 +71,7 @@ export default {
     // refit the view whenever its size changes
     // (for ex when the right panel opens, closes or is resized)
     if (typeof ResizeObserver !== 'undefined') {
-      const layerDiv = document.getElementById('layerGroup0')
+      const layerDiv = document.getElementById(this.layerGroupDivId)
       this.resizeObserver = new ResizeObserver(() => {
         this.dwvAppService.onResize()
       })
@@ -116,7 +124,7 @@ export default {
       if (!box) {
         return
       }
-      const layerDiv = document.getElementById('layerGroup0')
+      const layerDiv = document.getElementById(this.layerGroupDivId)
 
       if (show) {
         // reset css class

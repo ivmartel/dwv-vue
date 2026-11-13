@@ -13,7 +13,7 @@ const vuetify = createVuetify({ components, directives })
 function mountPanel() {
   return mount(RightPanel, {
     attachTo: document.body,
-    global: { plugins: [vuetify] },
+    global: { plugins: [vuetify], provide: { viewerId: 'viewer0' } },
     slots: { default: '<p class="slot-content">content</p>' }
   })
 }

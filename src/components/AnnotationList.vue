@@ -5,7 +5,6 @@
   >
     <li
       v-for="group in state.groups"
-      :id="getGroupId(group.dataId)"
       :key="group.dataId"
       class="group"
     >
@@ -84,7 +83,7 @@
               title="Show/hide quantification"
               :aria-pressed="String(isExpanded(group.dataId, annotation.id))"
               :aria-expanded="String(isExpanded(group.dataId, annotation.id))"
-              :aria-controls="'qd-' + getAnnotationId(group.dataId, annotation.id)"
+              :aria-controls="getDetailsId(group.dataId, annotation.id)"
               @click="toggleDetails(group.dataId, annotation.id)"
             >
               <v-icon
@@ -131,7 +130,7 @@
 
           <div
             v-if="isExpanded(group.dataId, annotation.id)"
-            :id="'qd-' + getAnnotationId(group.dataId, annotation.id)"
+            :id="getDetailsId(group.dataId, annotation.id)"
             class="details"
           >
             <template
@@ -203,12 +202,13 @@ function onServiceError(event) {
   alert(event.detail.error.message)
 }
 
-// element ids
-function getGroupId(dataId) {
-  return `annotationgroup${dataId}`
-}
+// element ids, prefixed with the viewer id
+const viewerId = inject('viewerId')
 function getAnnotationId(dataId, annotationId) {
-  return `${getGroupId(dataId)}-annotation${annotationId}`
+  return `${viewerId}-annotationgroup${dataId}-annotation${annotationId}`
+}
+function getDetailsId(dataId, annotationId) {
+  return `${viewerId}-qd-annotationgroup${dataId}-annotation${annotationId}`
 }
 
 // selection

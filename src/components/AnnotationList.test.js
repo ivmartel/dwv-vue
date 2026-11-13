@@ -56,7 +56,7 @@ function mountList(service) {
   return mount(AnnotationList, {
     global: {
       plugins: [vuetify],
-      provide: { AnnotationService: service }
+      provide: { AnnotationService: service, viewerId: 'viewer0' }
     }
   })
 }
@@ -83,7 +83,7 @@ describe('AnnotationList', () => {
       }]
     })
     const wrapper = mountList(service)
-    const item = wrapper.get('#annotationgroup1-annotationa1')
+    const item = wrapper.get('#viewer0-annotationgroup1-annotationa1')
     expect(item.get('.annotation-label').text()).toBe('ruler 1')
     // locked group
     expect(wrapper.get('[title="Lock/unlock annotation group"]')
@@ -91,7 +91,7 @@ describe('AnnotationList', () => {
     expect(item.get('input[type="color"]').element.disabled).toBe(true)
     expect(item.get('[title="Delete annotation"]').element.disabled).toBe(true)
     // not viewable
-    expect(wrapper.get('#annotationgroup1-annotationa2 .annotation-label')
+    expect(wrapper.get('#viewer0-annotationgroup1-annotationa2 .annotation-label')
       .classes()).toContain('not-viewable')
 
     await item.get('.annotation-content').trigger('click')
@@ -112,20 +112,21 @@ describe('AnnotationList', () => {
         annotations: [annotation, { ...annotation, id: 'a2', quantification: {} }]
       }]
     }))
-    const info = wrapper.get('#annotationgroup1-annotationa1 [title="Show/hide quantification"]')
+    const info = wrapper.get('#viewer0-annotationgroup1-annotationa1 [title="Show/hide quantification"]')
     expect(info.attributes('aria-expanded')).toBe('false')
-    expect(info.attributes('aria-controls')).toBe('qd-annotationgroup1-annotationa1')
+    expect(info.attributes('aria-controls'))
+      .toBe('viewer0-qd-annotationgroup1-annotationa1')
     await info.trigger('click')
     expect(info.attributes('aria-expanded')).toBe('true')
     expect(info.attributes('aria-pressed')).toBe('true')
-    const details = wrapper.get('#qd-annotationgroup1-annotationa1')
+    const details = wrapper.get('#viewer0-qd-annotationgroup1-annotationa1')
     expect(details.get('.quantification-title').text()).toBe('Geometry')
     expect(details.get('dt').text()).toBe('length')
     expect(details.get('dd').text()).toBe('12.35 mm')
 
-    await wrapper.get('#annotationgroup1-annotationa2 [title="Show/hide quantification"]')
+    await wrapper.get('#viewer0-annotationgroup1-annotationa2 [title="Show/hide quantification"]')
       .trigger('click')
-    expect(wrapper.get('#qd-annotationgroup1-annotationa2').text())
+    expect(wrapper.get('#viewer0-qd-annotationgroup1-annotationa2').text())
       .toBe('No quantification')
   })
 
@@ -134,10 +135,10 @@ describe('AnnotationList', () => {
     const service = getFakeService({ groups: [group] })
     const wrapper = mountList(service)
     const scroll = vi.fn()
-    wrapper.get('#annotationgroup1-annotationa1').element.scrollIntoView = scroll
+    wrapper.get('#viewer0-annotationgroup1-annotationa1').element.scrollIntoView = scroll
     service.setState({ groups: [group], selected: { dataId: '1', annotationId: 'a1' } })
     await nextTick()
     await nextTick()
-    expect(wrapper.get('#annotationgroup1-annotationa1').classes()).toContain('selected')
+    expect(wrapper.get('#viewer0-annotationgroup1-annotationa1').classes()).toContain('selected')
   })
 })

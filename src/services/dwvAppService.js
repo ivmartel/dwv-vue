@@ -65,11 +65,18 @@ export class DwvAppService extends EventTarget {
   #orientation;
 
   /**
-   * Name of the main layer group.
+   * Viewer id, unique in the page, used as html id prefix.
    *
    * @type {string}
    */
-  #layerGroupName;
+  #viewerId;
+
+  /**
+   * Id of the html div of the main layer group.
+   *
+   * @type {string}
+   */
+  #layerGroupDivId;
 
   /**
    * DWV app.
@@ -92,11 +99,16 @@ export class DwvAppService extends EventTarget {
    */
   #presetNames = [];
 
-  constructor() {
+  /**
+   * @param {string} viewerId The viewer id, unique in the page,
+   *   used as html id prefix.
+   */
+  constructor(viewerId) {
     super();
 
     // initialise app
-    this.#layerGroupName = 'layerGroup0';
+    this.#viewerId = viewerId;
+    this.#layerGroupDivId = viewerId + '-layerGroup';
     const appOptions = new AppOptions(this.#getViewConfigs());
     appOptions.tools = this.#tools;
     appOptions.overlayConfig = overlayConfig;
@@ -113,6 +125,24 @@ export class DwvAppService extends EventTarget {
    */
   getDwvVersion() {
     return getDwvVersion();
+  }
+
+  /**
+   * Get the viewer id, unique in the page, used as html id prefix.
+   *
+   * @returns {string} The viewer id.
+   */
+  getViewerId() {
+    return this.#viewerId;
+  }
+
+  /**
+   * Get the id of the html div of the main layer group.
+   *
+   * @returns {string} The div id.
+   */
+  getLayerGroupDivId() {
+    return this.#layerGroupDivId;
   }
 
   /**
@@ -148,7 +178,7 @@ export class DwvAppService extends EventTarget {
    * @returns {object} The view configs.
    */
   #getViewConfigs() {
-    const viewConfig0 = new ViewConfig(this.#layerGroupName);
+    const viewConfig0 = new ViewConfig(this.#layerGroupDivId);
     if (typeof this.#orientation !== 'undefined') {
       viewConfig0.orientation = this.#orientation;
     }

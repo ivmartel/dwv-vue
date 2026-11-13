@@ -12,7 +12,6 @@
     >
       <div class="toolbar-item">
         <v-btn
-          :id="tool"
           :title="tool"
           class="rounded-lg"
           :variant="tool === selectedTool ? 'flat' : 'tonal'"
@@ -22,7 +21,6 @@
         />
         <div
           v-if="tool === 'WindowLevel'"
-          id="presetSelectDiv"
           key="presetSelectDiv"
           class="select-wrapper"
         >
@@ -34,7 +32,6 @@
             icon="keyboard_arrow_down"
           />
           <select
-            id="presetSelect"
             key="presetSelect"
             :value="selectedPreset"
             :style="{ colorScheme: 'light' }"
@@ -42,7 +39,6 @@
           >
             <option
               v-for="preset in presetNames"
-              :id="preset"
               :key="preset"
             >
               {{ preset }}
@@ -51,7 +47,6 @@
         </div>
         <div
           v-if="tool === 'Draw'"
-          id="shapeSelectDiv"
           key="shapeSelectDiv"
           class="select-wrapper"
         >
@@ -63,7 +58,6 @@
             icon="keyboard_arrow_down"
           />
           <select
-            id="shapeSelect"
             key="shapeSelect"
             :value="selectedShape"
             :style="{ colorScheme: 'light' }"
@@ -71,7 +65,6 @@
           >
             <option
               v-for="shape in shapeNames"
-              :id="shape"
               :key="shape"
             >
               {{ shape }}
