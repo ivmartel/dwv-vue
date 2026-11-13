@@ -93,7 +93,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .dwv {
   height: 90%;
   display: flex;
