@@ -448,6 +448,16 @@ export class DwvAppService extends EventTarget {
   }
 
   /**
+   * Release the resources: stop the loads, reset the dwv app and
+   *   remove the window listeners. The service cannot be used afterwards.
+   */
+  dispose() {
+    window.removeEventListener('resize', this.#dwvApp.onResize);
+    this.#dwvApp.abortAllLoads();
+    this.#dwvApp.reset();
+  }
+
+  /**
    * Reset the layout.
    */
   reset() {

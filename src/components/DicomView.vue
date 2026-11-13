@@ -13,7 +13,7 @@
 
 <script>
 // import
-import { provide, useId } from 'vue'
+import { onUnmounted, provide, useId } from 'vue'
 import { DwvAppService } from '../services/dwvAppService.js'
 import { AnnotationService } from '../services/annotationService.js'
 import DwvHeader from './DwvHeader.vue'
@@ -40,6 +40,11 @@ export default {
     annotService.connect()
     provide('DwvAppService', dwvAppService)
     provide('AnnotationService', annotService)
+    // release the services (children are unmounted before)
+    onUnmounted(() => {
+      annotService.dispose()
+      dwvAppService.dispose()
+    })
     return {
       dwvAppService,
     }
