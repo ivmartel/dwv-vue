@@ -1,8 +1,11 @@
 # AGENTS.md
 
-Guidance for coding agents working on dwv-vue: a medical image viewer built
-with [DWV](https://github.com/ivmartel/dwv), Vue 3 and Vuetify, bundled with
-Vite. Not certified for diagnostic use. Licence: GPL-3.0.
+Guidance for coding agents working on dwv-vue: a medical image viewer
+component library built with [DWV](https://github.com/ivmartel/dwv), Vue 3
+and Vuetify, bundled with Vite. The main deliverable is the npm package
+providing the `DicomView` component (see [Library package](#library-package));
+the repository also contains a demo app that uses it, deployed to GitHub
+Pages. Not certified for diagnostic use. Licence: GPL-3.0.
 
 ## Commands
 
@@ -11,11 +14,11 @@ Package manager is Yarn 4 (via corepack). Do not use npm to add packages.
 | Task | Command |
 | --- | --- |
 | Install | `yarn install` |
-| Dev server (localhost:5173) | `yarn run dev` |
+| Demo app dev server (localhost:5173) | `yarn run dev` |
 | Lint | `yarn run lint` |
 | Unit tests (watch) | `yarn run test` |
 | Unit tests (single run + coverage, as CI) | `yarn run test-ci` |
-| Production build | `yarn run build` |
+| Demo app build (to `dist/dwv-vue-app/`) | `yarn run build` |
 | Library build (to `dist/dwv-vue-lib/`) | `yarn run build-lib` |
 
 Before considering a change done, run `yarn run lint` and `yarn run test-ci`;
@@ -124,3 +127,6 @@ component, add a spec following the same structure.
   dependency. All three are external in the bundle: keep the externals in
   `vite.lib.config.js` in sync with `package.json`.
 - Only export from `src/index.js` what is meant as public API.
+- The public API is documented in the README "Use as a library" section
+  (setup, `DicomView` properties, web workers): update it when the API or
+  the host app requirements change.

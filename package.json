@@ -1,7 +1,7 @@
 {
   "name": "dwv-vue",
   "version": "0.11.0-beta.0",
-  "description": "Medical viewer using DWV (DICOM Web Viewer) and Vue.js.",
+  "description": "Medical image viewer component for Vue.js, using DWV (DICOM Web Viewer).",
   "author": "ivmartel",
   "license": "GPL-3.0",
   "repository": {
