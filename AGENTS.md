@@ -1,11 +1,86 @@
 # AGENTS.md
 
-Guidance for coding agents working on dwv-vue: a medical image viewer
-component library built with [DWV](https://github.com/ivmartel/dwv), Vue 3
-and Vuetify, bundled with Vite. The main deliverable is the npm package
+Guidance for coding agents working in this repository.
+
+## Project overview
+
+Medical (DICOM) image viewer component built on
+[DWV](https://github.com/ivmartel/dwv), Vue 3 and Vuetify, bundled with Vite.
+Shipped with a demo application. Not certified for diagnostic use. License:
+GPL-3.0.
+
+The main deliverable is the npm package
 providing the `DicomView` component (see [Library package](#library-package));
 the repository also contains a demo app that uses it, deployed to GitHub
-Pages. Not certified for diagnostic use. Licence: GPL-3.0.
+Pages. The library only exposes what consumers need.
+
+## Requirements
+
+- Viewer inputs:
+  - `uri` (string, watched): URI with search arguments describing the data
+    to load (for ex. `https://www.demo.com/index.html?input=file.dcm`, see
+    the dwv `App.loadFromUri` method),
+  - `urls` (string[], watched): urls of the data to load,
+  - `loadFromWindowLocation` (boolean, default false): use the window
+    location as input URI if it has search arguments,
+  - `showLegend` (boolean, default false): show the footer legend
+    ("Powered by" dwv and Vue.js, with their versions).
+
+  The data inputs are checked in order `uri`, `urls`, then
+  `loadFromWindowLocation`; the first one that is set is used.
+- Toolbar: load progress, the dwv tools (scroll, zoom and pan, window level
+  with presets, draw with shapes), reset, orientation toggle and DICOM tags
+  dialog. Tools are disabled until data is loaded and when they cannot run
+  on it (for ex. window level on colour images).
+- Image window: renders the loaded data with dwv and its overlays; data is
+  loaded from the viewer inputs, or by drag and drop or file selection
+  (local files) through a drop box shown while no data is loaded. It refits
+  when its size changes (for ex. when
+  the right panel opens, closes or is resized).
+- Annotation list: in the right panel, lists the annotation groups and their
+  annotations and lets the user navigate to, inspect and edit them, and save
+  a group as DICOM SR. It only displays the annotation state, every action
+  goes through the annotation service.
+- Several viewers must work on the same page:
+  - each viewer owns its own dwv app and state, no global singletons for
+    viewer state,
+  - HTML element ids are built from a unique viewer id
+    (e.g. `<viewerId>-layerGroup`),
+  - DOM queries are done within the viewer root element rather than
+    `document`,
+  - dialogs are attached to their viewer context.
+
+## Design specs
+
+Component behaviour and style are described in framework-agnostic design
+specs (`doc/design/`: purpose, placement, data, structure, actions,
+accessibility). Read the spec before changing a component and update it in
+the same change; add one for any significant new component. The viewer is
+modelled on [dwv-simplistic](https://github.com/ivmartel/dwv-simplistic);
+some modules are ports of it (see the notes at the top of files and the
+specs): keep their behaviour aligned unless the spec says otherwise, and
+look there for reference behaviour when adding features.
+
+## Architecture
+
+- **Services hold the logic, components display state.** `DicomView.vue`
+  creates one `DwvAppService` and one `AnnotationService` per viewer and
+  shares them with `provide('DwvAppService', ...)` /
+  `provide('AnnotationService', ...)`. Child components get them with
+  `inject(...)`. Do not create services in child components and do not call
+  the dwv `App` directly from components. Services keep their state private
+  and expose it read only: components never mutate it (for ex. the plain data
+  annotation state of `AnnotationService`), every change goes through a
+  service method.
+- Services extend `EventTarget` and notify changes with `CustomEvent`s
+  (`DwvAppService` re-dispatches the dwv app events and adds its own);
+  components subscribe on mount and unsubscribe on unmount.
+- `DicomView.vue` creates the viewer id with `useId()`, passes it to
+  `DwvAppService` and provides it as `'viewerId'`; components get it with
+  `inject('viewerId')`, without a fallback: components are always mounted
+  inside a `DicomView`. Element ids are `<viewerId>-<name>`, never
+  hard-coded. Only add an id when something references it
+  (`getElementById`, `<label for>`, `aria-controls`, dwv's layer group...).
 
 ## Commands
 
@@ -53,37 +128,6 @@ vite.config.js           Demo app build
 vite.lib.config.js       Library build
 tsconfig.lib.json        Library type declarations (generated from the JS)
 ```
-
-## Architecture
-
-- **Services hold the logic, components display state.** `DicomView.vue`
-  creates one `DwvAppService` and one `AnnotationService` per viewer and
-  shares them with `provide('DwvAppService', ...)` /
-  `provide('AnnotationService', ...)`. Child components get them with
-  `inject(...)`. Do not create services in child components and do not call
-  the dwv `App` directly from components.
-- Services extend `EventTarget` and notify changes with `CustomEvent`s;
-  components subscribe on mount and unsubscribe on unmount.
-- Annotation state exposed by `AnnotationService` is plain data: components
-  must not mutate it, every change goes through a service method.
-- Element ids must be unique in the page (several viewers may be on one
-  page): prefix them with the viewer id, `<viewerId>-<name>`, never hard-code
-  them. `DicomView.vue` creates the viewer id with `useId()`, passes it to
-  `DwvAppService` and provides it as `'viewerId'`; components get it with
-  `inject('viewerId')`, without a fallback: components are always mounted
-  inside a `DicomView`. Only add an id when something references it
-  (`getElementById`, `<label for>`, `aria-controls`, dwv's layer group...).
-- Several modules are ports of
-  [dwv-simplistic](https://github.com/ivmartel/dwv-simplistic) (see the notes
-  at the top of files and the design docs). Keep behaviour aligned with the
-  referenced source unless the design doc says otherwise.
-
-## Design docs
-
-`doc/design/*.md` are the specs for components (purpose, placement, data,
-structure, actions, accessibility). When changing a component's behaviour,
-update its design doc in the same change; when adding a significant
-component, add a spec following the same structure.
 
 ## Code style
 
@@ -140,7 +184,6 @@ component, add a spec following the same structure.
   `/** @type {import('vue').PropType<string[]>} */ (Array)` for a prop),
   not loose `object` / `Array`. `typescript` stays below 7 until vue-tsc
   (Volar) supports it.
-- Only export from `src/index.js` what is meant as public API.
 - The public API is documented in the README "Use as a library" section
   (setup, `DicomView` properties, web workers): update it when the API or
   the host app requirements change.
