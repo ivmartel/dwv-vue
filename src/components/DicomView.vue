@@ -7,7 +7,7 @@
         <AnnotationList />
       </RightPanel>
     </div>
-    <DwvFooter />
+    <DwvFooter v-if="showLegend" />
   </div>
 </template>
 
@@ -51,6 +51,13 @@ export default {
      * Load data from the window location (page url) on mount.
      */
     loadFromWindowLocation: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * Show the footer legend (dwv and Vue.js versions).
+     */
+    showLegend: {
       type: Boolean,
       default: false
     }

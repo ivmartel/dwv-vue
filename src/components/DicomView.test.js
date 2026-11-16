@@ -33,11 +33,18 @@ describe('DicomViewComponent', () => {
     expect(component).not.toBeNull()
   })
 
-  // Mount an instance and inspect the render output
-  test('renders the beginning of the legend', () => {
-    const legend = component.get('.legend')
-    expect(legend).toBeDefined()
+  test('does not render the legend by default', () => {
+    expect(component.find('.legend').exists()).toBe(false)
+  })
+
+  test('renders the legend with showLegend', () => {
+    const wrapper = mount(DicomView, {
+      ...mountOptions,
+      props: { showLegend: true }
+    })
+    const legend = wrapper.get('.legend')
     expect(legend.text()).toContain('Powered by')
+    wrapper.unmount()
   })
 
   test('renders the closed right panel', () => {
