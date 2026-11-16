@@ -86,7 +86,9 @@ The viewer takes its height from its parent element: give it one.
 | `load-from-window-location` | `Boolean` | `false` | Load the data given in the page url (`?input=...`) |
 | `show-legend` | `Boolean` | `false` | Show the footer legend (dwv and Vue.js versions) |
 
-The data is loaded when the viewer is mounted and when `uri` or `urls` change. Data can also be
+Only the first set data input is used, in order `uri`, `urls`, then
+`load-from-window-location`. The data is loaded when the viewer is mounted and
+when `uri` or `urls` change (a `urls` change is ignored while `uri` is set). Data can also be
 loaded via drag and drop or the file input of the viewer.
 
 ### Web workers

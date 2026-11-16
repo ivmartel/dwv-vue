@@ -72,26 +72,30 @@ export default {
     annotService.connect()
     provide('DwvAppService', dwvAppService)
     provide('AnnotationService', annotService)
-    // load data: on mount and when the inputs change
-    const loadUri = (uri) => {
-      if (uri) {
+    // load data: the first set input in order uri, urls, window location,
+    // on mount and when uri or urls change
+    const hasUri = (uri) => !!uri
+    const hasUrls = (urls) => !!urls && urls.length !== 0
+    onMounted(() => {
+      if (hasUri(props.uri)) {
+        dwvAppService.loadFromUri(props.uri)
+      } else if (hasUrls(props.urls)) {
+        dwvAppService.loadURLs(props.urls)
+      } else if (props.loadFromWindowLocation) {
+        dwvAppService.loadFromUri(window.location.href)
+      }
+    })
+    watch(() => props.uri, (uri) => {
+      if (hasUri(uri)) {
         dwvAppService.loadFromUri(uri)
       }
-    }
-    const loadUrls = (urls) => {
-      if (urls && urls.length !== 0) {
+    })
+    watch(() => props.urls, (urls) => {
+      // uri takes precedence
+      if (hasUrls(urls) && !hasUri(props.uri)) {
         dwvAppService.loadURLs(urls)
       }
-    }
-    onMounted(() => {
-      if (props.loadFromWindowLocation) {
-        loadUri(window.location.href)
-      }
-      loadUri(props.uri)
-      loadUrls(props.urls)
     })
-    watch(() => props.uri, loadUri)
-    watch(() => props.urls, loadUrls)
     // release the services (children are unmounted before)
     onUnmounted(() => {
       annotService.dispose()
