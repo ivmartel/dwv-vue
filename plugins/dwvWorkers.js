@@ -34,7 +34,7 @@ export function getDwvWorkersDir() {
  * @param {object} [options] The plugin options.
  * @param {string} [options.workersDir] The dwv workers folder,
  *   defaults to the one of the dwv package used by dwv-vue.
- * @returns {object} The Vite plugin.
+ * @returns {import('vite').Plugin} The Vite plugin.
  */
 export function dwvWorkers(options = {}) {
   const workersDir = options.workersDir ?? getDwvWorkersDir()

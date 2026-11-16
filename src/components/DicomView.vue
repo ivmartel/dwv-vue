@@ -43,7 +43,8 @@ export default {
      * List of data urls to load.
      */
     urls: {
-      type: Array,
+      // typed for the generated library declarations
+      type: /** @type {import('vue').PropType<string[]>} */ (Array),
       default: undefined
     },
     /**

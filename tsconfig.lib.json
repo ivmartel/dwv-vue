@@ -1,0 +1,19 @@
+{
+  // Library type declarations: 'yarn run build-types' (part of 'build-lib').
+  // Generated from the JavaScript sources and their JSDoc, no type checking.
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist/dwv-vue-lib/types",
+    "rootDir": ".",
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
+    "types": [],
+    "skipLibCheck": true
+  },
+  "include": ["src/index.js", "plugins/dwvWorkers.js"]
+}

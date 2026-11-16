@@ -20,10 +20,17 @@
   ],
   "type": "module",
   "module": "./dist/dwv-vue-lib/dwv-vue.js",
+  "types": "./dist/dwv-vue-lib/types/src/index.d.ts",
   "exports": {
-    ".": "./dist/dwv-vue-lib/dwv-vue.js",
+    ".": {
+      "types": "./dist/dwv-vue-lib/types/src/index.d.ts",
+      "default": "./dist/dwv-vue-lib/dwv-vue.js"
+    },
     "./style.css": "./dist/dwv-vue-lib/style.css",
-    "./vite-plugin": "./plugins/dwvWorkers.js"
+    "./vite-plugin": {
+      "types": "./dist/dwv-vue-lib/types/plugins/dwvWorkers.d.ts",
+      "default": "./plugins/dwvWorkers.js"
+    }
   },
   "files": [
     "dist/dwv-vue-lib/**",
@@ -37,7 +44,8 @@
     "build": "vite build",
     "build-app-trunk": "vite build --mode development --base /dwv-vue/demo/trunk",
     "build-app-stable": "vite build --mode production --base /dwv-vue/demo/stable",
-    "build-lib": "vite build --config vite.lib.config.js",
+    "build-lib": "vite build --config vite.lib.config.js && yarn run build-types",
+    "build-types": "vue-tsc -p tsconfig.lib.json",
     "preview": "vite preview",
     "test": "vitest",
     "test-ci": "vitest run --coverage",
@@ -61,11 +69,13 @@
     "eslint-plugin-vue": "^10.12.1",
     "globals": "^17.7.0",
     "jsdom": "^29.1.1",
+    "typescript": "^6.0.3",
     "vite": "^8.1.3",
     "vite-plugin-pwa": "^2.0.0",
     "vitest": "^4.1.10",
     "vue": "^3.5.39",
     "vue-eslint-parser": "^10.4.1",
+    "vue-tsc": "^3.3.14",
     "vuetify": "^4.3.3"
   },
   "packageManager": "yarn@4.18.0"

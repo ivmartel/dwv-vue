@@ -21,6 +21,8 @@ yarn add dwv-vue vue vuetify
 `vue` (3.5+) and `vuetify` (4) are peer dependencies: your app provides them. `dwv` is installed
 with the package.
 
+The package includes TypeScript declarations for `DicomView` and the Vite plugin.
+
 ### Setup
 
 The viewer uses [Vuetify](https://vuetifyjs.com) components and its Material Design icons:
@@ -121,7 +123,8 @@ cp node_modules/dwv/dist/assets/workers/* <static-folder>/assets/workers/
  - `test-ci`: run unit tests once with coverage (as the CI)
  - `build`: build the demo app to `dist/dwv-vue-app`
  - `build-app-trunk`, `build-app-stable`: build the demo app for the GitHub pages deployment
- - `build-lib`: build the library to `dist/dwv-vue-lib` (also run by `yarn pack`)
+ - `build-lib`: build the library and its type declarations to `dist/dwv-vue-lib` (also run by `yarn pack`)
+ - `build-types`: generate the library type declarations (part of `build-lib`)
  - `preview`: serve the built demo app
 
 Unit tests use [Vitest](https://vitest.dev).

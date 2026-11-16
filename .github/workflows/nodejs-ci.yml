@@ -40,6 +40,8 @@ jobs:
       run: yarn run lint
     - name: Run tests
       run: yarn run test-ci
+    - name: Build library (with type declarations)
+      run: yarn run build-lib
     - name: Build
       env:
         BUILD_TYPE: ${{ steps.build-type.outputs.type }}

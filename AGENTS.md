@@ -51,6 +51,7 @@ plugins/
                          (node code, exported as 'dwv-vue/vite-plugin')
 vite.config.js           Demo app build
 vite.lib.config.js       Library build
+tsconfig.lib.json        Library type declarations (generated from the JS)
 ```
 
 ## Architecture
@@ -131,6 +132,14 @@ component, add a spec following the same structure.
   installs Vuetify with its components and the `md` iconset); `dwv` is a
   dependency. All three are external in the bundle: keep the externals in
   `vite.lib.config.js` in sync with `package.json`.
+- Type declarations are generated, never hand-written: `build-lib` runs
+  `build-types` (`vue-tsc -p tsconfig.lib.json`) after the bundle, from the
+  JavaScript sources and their JSDoc, into `dist/dwv-vue-lib/types/`
+  (`package.json` `types` / `exports` point there). Public props and
+  functions need precise types for this: use JSDoc (for ex.
+  `/** @type {import('vue').PropType<string[]>} */ (Array)` for a prop),
+  not loose `object` / `Array`. `typescript` stays below 7 until vue-tsc
+  (Volar) supports it.
 - Only export from `src/index.js` what is meant as public API.
 - The public API is documented in the README "Use as a library" section
   (setup, `DicomView` properties, web workers): update it when the API or
