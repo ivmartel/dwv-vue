@@ -55,7 +55,7 @@
     "@vitest/coverage-v8": "^4.1.10",
     "@vue/test-utils": "^2.4.11",
     "canvas": "^3.2.3",
-    "eslint": "^10.6.0",
+    "eslint": "^10.14.0",
     "eslint-plugin-vue": "^10.9.2",
     "globals": "^17.7.0",
     "jsdom": "^29.1.1",
