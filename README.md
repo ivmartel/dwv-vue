@@ -70,7 +70,7 @@ import { DicomView } from 'dwv-vue'
 
 <template>
   <div style="height: 600px">
-    <DicomView :urls="['https://example.com/data/image.dcm']" />
+    <DicomView urls="https://example.com/data/image.dcm" />
   </div>
 </template>
 ```
@@ -82,7 +82,7 @@ The viewer takes its height from its parent element: give it one.
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | `uri` | `String` | | URI with a dwv `input` query parameter, for example `https://host/?input=https%3A%2F%2Fhost%2Fdata.dcm` |
-| `urls` | `String[]` | | List of data urls to load |
+| `urls` | `String` | | White space separated list of data urls to load |
 | `load-from-window-location` | `Boolean` | `false` | Load the data given in the page url (`?input=...`) |
 | `show-legend` | `Boolean` | `false` | Show the footer legend (dwv and Vue.js versions) |
 

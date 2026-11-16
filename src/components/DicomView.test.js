@@ -98,7 +98,7 @@ describe('DicomViewComponent', () => {
         ...mountOptions,
         props: {
           uri: 'https://host/?input=a',
-          urls: ['https://host/b.dcm'],
+          urls: 'https://host/b.dcm',
           loadFromWindowLocation: true
         }
       })
@@ -106,7 +106,7 @@ describe('DicomViewComponent', () => {
       expect(loads.fromUri).toHaveBeenCalledWith('https://host/?input=a')
       expect(loads.urls).not.toHaveBeenCalled()
       // urls change ignored while uri is set
-      await wrapper.setProps({ urls: ['https://host/c.dcm'] })
+      await wrapper.setProps({ urls: 'https://host/c.dcm' })
       expect(loads.urls).not.toHaveBeenCalled()
       // uri change reloads
       await wrapper.setProps({ uri: 'https://host/?input=d' })
@@ -121,15 +121,16 @@ describe('DicomViewComponent', () => {
       const wrapper = mount(DicomView, {
         ...mountOptions,
         props: {
-          urls: ['https://host/b.dcm'],
+          urls: 'https://host/b.dcm',
           loadFromWindowLocation: true
         }
       })
       expect(loads.urls).toHaveBeenCalledWith(['https://host/b.dcm'])
       expect(loads.fromUri).not.toHaveBeenCalled()
       // urls change reloads
-      await wrapper.setProps({ urls: ['https://host/c.dcm'] })
-      expect(loads.urls).toHaveBeenLastCalledWith(['https://host/c.dcm'])
+      await wrapper.setProps({ urls: ' https://host/c.dcm\n  https://host/d.dcm ' })
+      expect(loads.urls).toHaveBeenLastCalledWith(
+        ['https://host/c.dcm', 'https://host/d.dcm'])
       expect(loads.urls).toHaveBeenCalledTimes(2)
       wrapper.unmount()
       vi.restoreAllMocks()

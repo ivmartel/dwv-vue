@@ -40,11 +40,11 @@ export default {
       default: undefined
     },
     /**
-     * List of data urls to load.
+     * White space separated list of data urls to load,
+     *   for ex: 'https://host/a.dcm https://host/b.dcm'.
      */
     urls: {
-      // typed for the generated library declarations
-      type: /** @type {import('vue').PropType<string[]>} */ (Array),
+      type: String,
       default: undefined
     },
     /**
@@ -75,12 +75,14 @@ export default {
     // load data: the first set input in order uri, urls, window location,
     // on mount and when uri or urls change
     const hasUri = (uri) => !!uri
-    const hasUrls = (urls) => !!urls && urls.length !== 0
+    // urls: white space separated list to array
+    const splitUrls = (urls) => urls ? urls.split(/\s+/).filter(
+      (item) => item !== '') : []
     onMounted(() => {
       if (hasUri(props.uri)) {
         dwvAppService.loadFromUri(props.uri)
-      } else if (hasUrls(props.urls)) {
-        dwvAppService.loadURLs(props.urls)
+      } else if (splitUrls(props.urls).length !== 0) {
+        dwvAppService.loadURLs(splitUrls(props.urls))
       } else if (props.loadFromWindowLocation) {
         dwvAppService.loadFromUri(window.location.href)
       }
@@ -92,8 +94,9 @@ export default {
     })
     watch(() => props.urls, (urls) => {
       // uri takes precedence
-      if (hasUrls(urls) && !hasUri(props.uri)) {
-        dwvAppService.loadURLs(urls)
+      const list = splitUrls(urls)
+      if (list.length !== 0 && !hasUri(props.uri)) {
+        dwvAppService.loadURLs(list)
       }
     })
     // release the services (children are unmounted before)

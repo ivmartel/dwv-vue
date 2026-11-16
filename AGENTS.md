@@ -20,7 +20,7 @@ Pages. The library only exposes what consumers need.
   - `uri` (string, watched): URI with search arguments describing the data
     to load (for ex. `https://www.demo.com/index.html?input=file.dcm`, see
     the dwv `App.loadFromUri` method),
-  - `urls` (string[], watched): white space separated urls of the data to load,
+  - `urls` (string, watched): white space separated urls of the data to load,
   - `loadFromWindowLocation` (boolean, default false): use the window
     location as input URI if it has search arguments,
   - `showLegend` (boolean, default false): show the footer legend
