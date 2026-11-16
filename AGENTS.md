@@ -46,7 +46,9 @@ src/
    ├─ overlays.js          Overlay configuration
    └─ quantification.js    Quantification formatting
 doc/design/              Design specs (one per component)
-public/assets/workers/   dwv web workers (copied from node_modules/dwv/dist)
+plugins/
+└─ dwvWorkers.js         Vite plugin serving / emitting the dwv web workers
+                         (node code, exported as 'dwv-vue/vite-plugin')
 vite.config.js           Demo app build
 vite.lib.config.js       Library build
 ```
@@ -106,9 +108,11 @@ component, add a spec following the same structure.
 ## dwv specifics
 
 - `dwv` is pinned to an exact version in `package.json`.
-- dwv web workers are not picked up by Vite: they are served from
-  `public/assets/workers`. When updating dwv, copy the new workers from
-  `node_modules/dwv/dist` there (see README).
+- dwv web workers are not picked up by Vite: dwv loads them from
+  `assets/workers/` relative to the page base url. The `dwvWorkers` Vite
+  plugin (`plugins/dwvWorkers.js`, used by `vite.config.js`) serves them
+  from the installed dwv package in dev and emits them in the build: do not
+  copy them into `public/`.
 
 ## Builds and deploy
 
@@ -120,8 +124,9 @@ component, add a spec following the same structure.
 
 - The npm package is the library build only: `src/index.js` bundled by
   `vite.lib.config.js` into `dist/dwv-vue-lib/` (`dwv-vue.js` +
-  `style.css`), `prepack` builds it. `main.js`, `App.vue`, `style.css` and
-  `public/` are the demo app and are not packaged.
+  `style.css`), `prepack` builds it, plus `plugins/dwvWorkers.js` as is
+  (`dwv-vue/vite-plugin`). `main.js`, `App.vue`, `style.css` and `public/`
+  are the demo app and are not packaged.
 - `vue` and `vuetify` are peer dependencies (the host app provides them and
   installs Vuetify with its components and the `md` iconset); `dwv` is a
   dependency. All three are external in the bundle: keep the externals in

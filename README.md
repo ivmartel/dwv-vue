@@ -89,15 +89,28 @@ loaded via drag and drop or the file input of the viewer.
 ### Web workers
 
 dwv decodes compressed data (JPEG, JPEG 2000, RLE...) in web workers that it loads from
-`assets/workers/` relative to the page base url. Your app needs to serve them there: copy them from
-the dwv package, for example in a Vite app:
+`assets/workers/` relative to the page base url. Your app needs to serve them there.
 
-```sh
-mkdir -p public/assets/workers
-cp node_modules/dwv/dist/assets/workers/* public/assets/workers/
+In a [Vite](https://vite.dev) app, use the plugin provided by dwv-vue: it serves the workers with
+the dev server and adds them to the build, always matching the dwv version used by dwv-vue.
+
+```js
+// vite.config.js
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { dwvWorkers } from 'dwv-vue/vite-plugin'
+
+export default defineConfig({
+  plugins: [vue(), dwvWorkers()]
+})
 ```
 
-Copy them again when the dwv version changes.
+Otherwise, copy them from the dwv package so that they are served at `assets/workers/`, for
+example to a static folder, and copy them again when the dwv version changes:
+
+```sh
+cp node_modules/dwv/dist/assets/workers/* <static-folder>/assets/workers/
+```
 
 ## Available Scripts
 
@@ -136,13 +149,12 @@ yarn run dev
 You can now open a browser at http://localhost:5173 and enjoy!
 
 ## DWVs' Web workers
-Web workers used in dwv do not get automatically imported in the dev environment or build,
-they need to be available in the `public/assets` folder. Do not forget to update them if they are
-changed when updating dwv.
+Web workers used in dwv do not get automatically imported by Vite in the dev environment or build:
+dwv creates them from `assets/workers/` relative to the page base url (the webpack processing of the
+dwv bundle changes the `new Worker(new URL('./worker.js', import.meta.url))` creation that Vite
+understands, see the webpack [issue](https://github.com/webpack/webpack/issues/12719)).
 
-Note: vite can process a worker creation and add it to the `dist` assets if it is created with
-`new Worker(new URL('./worker.js, import.meta.url))`. But webpack modifies this creation
-when creating the dwv bundle... See the webpack [issue](https://github.com/webpack/webpack/issues/12719).
-The vite processing works only for build (`yarn run build && yarn run preview`), but not for
-dev... The only way I got it to work is by copying the workers to the deps cache folder:
-`cp node_modules/dwv/dist/*worker* node_modules/.vite/deps`.
+The demo app uses the [plugins/dwvWorkers.js](plugins/dwvWorkers.js) Vite plugin (also exported
+as `dwv-vue/vite-plugin`, see [Web workers](#web-workers)): it serves the workers of the installed
+dwv package with the dev server and adds them to the build. There is no copy to update when
+updating dwv.

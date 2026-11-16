@@ -16,5 +16,14 @@ export default [
       // override/add rules settings here, such as:
       // 'vue/no-unused-vars': 'error'
     }
+  },
+  {
+    // vite plugins run in node
+    files: ['plugins/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
   }
 ]

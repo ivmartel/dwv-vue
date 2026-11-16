@@ -22,10 +22,12 @@
   "module": "./dist/dwv-vue-lib/dwv-vue.js",
   "exports": {
     ".": "./dist/dwv-vue-lib/dwv-vue.js",
-    "./style.css": "./dist/dwv-vue-lib/style.css"
+    "./style.css": "./dist/dwv-vue-lib/style.css",
+    "./vite-plugin": "./plugins/dwvWorkers.js"
   },
   "files": [
-    "dist/dwv-vue-lib/**"
+    "dist/dwv-vue-lib/**",
+    "plugins/dwvWorkers.js"
   ],
   "sideEffects": [
     "**/*.css"
@@ -39,7 +41,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test-ci": "vitest run --coverage",
-    "lint": "eslint src/**/*.{js,vue}",
+    "lint": "eslint src/**/*.{js,vue} plugins/*.js",
     "prepack": "yarn run build-lib"
   },
   "dependencies": {
