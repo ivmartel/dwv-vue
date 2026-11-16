@@ -27,7 +27,9 @@ Pages. The library only exposes what consumers need.
     ("Powered by" dwv and Vue.js, with their versions).
 
   The data inputs are checked in order `uri`, `urls`, then
-  `loadFromWindowLocation`; the first one that is set is used.
+  `loadFromWindowLocation`; the first one that is set is used. `uri` and
+  `urls` are watched: when one changes to a new value, it is loaded on top
+  of the existing data (`loadFromWindowLocation` is only read on init).
 - Toolbar: load progress, the dwv tools (scroll, zoom and pan, window level
   with presets, draw with shapes), reset, orientation toggle and DICOM tags
   dialog. Tools are disabled until data is loaded and when they cannot run
