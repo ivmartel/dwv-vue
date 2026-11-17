@@ -1,6 +1,6 @@
 # Node.js CI workflow
 
-# base href is set in the npm build script (and then publicPath in vue.config.js)
+# base href is set in the build script (vite --base)
 
 name: Node.js CI
 

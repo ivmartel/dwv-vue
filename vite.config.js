@@ -3,10 +3,15 @@ import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 import { dwvWorkers } from './plugins/dwvWorkers.js'
 
+// Demo app build: 'yarn run build'
+// (the library uses vite.lib.config.js)
 // https://vitejs.dev/config/
 export default defineConfig({
+  // the demo app sources (index.html, public/...)
+  root: 'demo',
   build: {
-    outDir: 'dist/dwv-vue-app'
+    outDir: '../dist/dwv-vue-app',
+    emptyOutDir: true
   },
   plugins: [
     vue(),

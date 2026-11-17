@@ -104,10 +104,8 @@ CI (`.github/workflows/nodejs-ci.yml`) runs both, then builds.
 ## Layout
 
 ```text
-src/
+src/                     Library sources
 ├─ index.js              Library entry point (exports DwvViewer)
-├─ main.js               Demo app: Vue app + Vuetify setup (Material Design icons)
-├─ App.vue
 ├─ components/
 │  ├─ DwvViewer.vue      Root view: creates and provides the services
 │  ├─ DwvHeader.vue      Toolbar (load, tools, reset...)
@@ -122,6 +120,12 @@ src/
    ├─ annotationService.js Annotation state and actions on top of DwvAppService
    ├─ overlays.js          Overlay configuration
    └─ quantification.js    Quantification formatting
+demo/                    Demo app (not packaged), Vite root of vite.config.js
+├─ index.html
+├─ main.js               Vue app + Vuetify setup (Material Design icons)
+├─ App.vue               Uses DwvViewer from the library entry point
+├─ style.css
+└─ public/               Static assets (icons, favicon...)
 doc/design/              Design specs (one per component)
 plugins/
 └─ dwvWorkers.js         Vite plugin serving / emitting the dwv web workers
@@ -172,8 +176,8 @@ tsconfig.lib.json        Library type declarations (generated from the JS)
 - The npm package is the library build only: `src/index.js` bundled by
   `vite.lib.config.js` into `dist/dwv-vue-lib/` (`dwv-vue.js` +
   `style.css`), `prepack` builds it, plus `plugins/dwvWorkers.js` as is
-  (`dwv-vue/vite-plugin`). `main.js`, `App.vue`, `style.css` and `public/`
-  are the demo app and are not packaged.
+  (`dwv-vue/vite-plugin`). The `demo/` folder is the demo app and is not
+  packaged; it imports the viewer from `src/index.js`, as a consumer would.
 - `vue` and `vuetify` are peer dependencies (the host app provides them and
   installs Vuetify with its components and the `md` iconset); `dwv` is a
   dependency. All three are external in the bundle: keep the externals in

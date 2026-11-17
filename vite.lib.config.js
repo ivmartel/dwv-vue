@@ -7,8 +7,6 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     outDir: 'dist/dwv-vue-lib',
-    // the public folder (icons, workers...) is for the demo app
-    copyPublicDir: false,
     lib: {
       entry: 'src/index.js',
       formats: ['es'],

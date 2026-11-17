@@ -1,5 +1,5 @@
 <script setup>
-import DwvViewer from './components/DwvViewer.vue'
+import { DwvViewer } from '../src/index.js'
 </script>
 
 <template>

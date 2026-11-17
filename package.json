@@ -49,7 +49,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test-ci": "vitest run --coverage",
-    "lint": "eslint src/**/*.{js,vue} plugins/*.js",
+    "lint": "eslint src/**/*.{js,vue} demo/*.{js,vue} plugins/*.js",
     "prepack": "yarn run build-lib"
   },
   "dependencies": {
