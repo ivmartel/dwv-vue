@@ -129,7 +129,7 @@ demo/                    Demo app (not packaged), Vite root of vite.config.js
 doc/design/              Design specs (one per component)
 plugins/
 └─ dwvWorkers.js         Vite plugin serving / emitting the dwv web workers
-                         (node code, exported as 'dwv-vue/vite-plugin')
+                         (node code, exported as '@ivmartel/dwv-vue/vite-plugin')
 vite.config.js           Demo app build
 vite.lib.config.js       Library build
 tsconfig.lib.json        Library type declarations (generated from the JS)
@@ -176,7 +176,7 @@ tsconfig.lib.json        Library type declarations (generated from the JS)
 - The npm package is the library build only: `src/index.js` bundled by
   `vite.lib.config.js` into `dist/dwv-vue-lib/` (`dwv-vue.js` +
   `style.css`), `prepack` builds it, plus `plugins/dwvWorkers.js` as is
-  (`dwv-vue/vite-plugin`). The `demo/` folder is the demo app and is not
+  (`@ivmartel/dwv-vue/vite-plugin`). The `demo/` folder is the demo app and is not
   packaged; it imports the viewer from `src/index.js`, as a consumer would.
 - `vue` and `vuetify` are peer dependencies (the host app provides them and
   installs Vuetify with its components and the `md` iconset); `dwv` is a

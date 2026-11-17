@@ -1,4 +1,4 @@
-// Vite plugin providing the dwv web workers, exported as 'dwv-vue/vite-plugin'.
+// Vite plugin providing the dwv web workers, exported as '@ivmartel/dwv-vue/vite-plugin'.
 //
 // dwv loads its workers from 'assets/workers/' relative to the page base url
 // (document.baseURI). Vite does not pick them up from the dwv bundle: this

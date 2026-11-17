@@ -15,7 +15,7 @@ dwv-vue is not certified for diagnostic use. Released under GNU GPL-3.0 license 
 dwv-vue is available as an npm package that provides the `DwvViewer` Vue component.
 
 ```sh
-yarn add dwv-vue vue vuetify
+yarn add @ivmartel/dwv-vue vue vuetify
 ```
 
 `vue` (3.5+) and `vuetify` (4) are peer dependencies: your app provides them. `dwv` is installed
@@ -44,7 +44,7 @@ import * as directives from 'vuetify/directives'
 import { aliases, md } from 'vuetify/iconsets/md'
 
 // dwv-vue styles
-import 'dwv-vue/style.css'
+import '@ivmartel/dwv-vue/style.css'
 
 import App from './App.vue'
 
@@ -65,7 +65,7 @@ Then use the component, several viewers can be on the same page:
 
 ```vue
 <script setup>
-import { DwvViewer } from 'dwv-vue'
+import { DwvViewer } from '@ivmartel/dwv-vue'
 </script>
 
 <template>
@@ -103,7 +103,7 @@ the dev server and adds them to the build, always matching the dwv version used 
 // vite.config.js
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { dwvWorkers } from 'dwv-vue/vite-plugin'
+import { dwvWorkers } from '@ivmartel/dwv-vue/vite-plugin'
 
 export default defineConfig({
   plugins: [vue(), dwvWorkers()]
@@ -161,6 +161,6 @@ dwv bundle changes the `new Worker(new URL('./worker.js', import.meta.url))` cre
 understands, see the webpack [issue](https://github.com/webpack/webpack/issues/12719)).
 
 The demo app uses the [plugins/dwvWorkers.js](plugins/dwvWorkers.js) Vite plugin (also exported
-as `dwv-vue/vite-plugin`, see [Web workers](#web-workers)): it serves the workers of the installed
+as `@ivmartel/dwv-vue/vite-plugin`, see [Web workers](#web-workers)): it serves the workers of the installed
 dwv package with the dev server and adds them to the build. There is no copy to update when
 updating dwv.

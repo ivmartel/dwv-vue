@@ -1677,6 +1677,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ivmartel/dwv-vue@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@ivmartel/dwv-vue@workspace:."
+  dependencies:
+    "@eslint/js": "npm:^10.0.1"
+    "@napi-rs/canvas": "npm:^1.0.13"
+    "@vitejs/plugin-vue": "npm:^6.0.11"
+    "@vitest/coverage-v8": "npm:^4.1.10"
+    "@vue/test-utils": "npm:^2.4.11"
+    dwv: "npm:0.36.3"
+    eslint: "npm:^10.14.0"
+    eslint-plugin-vue: "npm:^10.12.1"
+    globals: "npm:^17.7.0"
+    jsdom: "npm:^31.0.1"
+    typescript: "npm:^6.0.3"
+    vite: "npm:^8.1.3"
+    vite-plugin-pwa: "npm:^2.0.0"
+    vitest: "npm:^4.1.10"
+    vue: "npm:^3.5.39"
+    vue-eslint-parser: "npm:^10.4.1"
+    vue-tsc: "npm:^3.3.14"
+    vuetify: "npm:^4.3.3"
+  peerDependencies:
+    vue: ^3.5.0
+    vuetify: ^4.3.3
+  languageName: unknown
+  linkType: soft
+
 "@jridgewell/gen-mapping@npm:^0.3.12":
   version: 0.3.13
   resolution: "@jridgewell/gen-mapping@npm:0.3.13"
@@ -3551,34 +3579,6 @@ __metadata:
   checksum: 10c0/199f2a0c1c16593ca0a145dbf76a962f8033ce3129f01284d48c45ed4e14fea9bbacd7b3610b6cdc33486cef20385ac054948fefc6272fcce645c09468f93031
   languageName: node
   linkType: hard
-
-"dwv-vue@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "dwv-vue@workspace:."
-  dependencies:
-    "@eslint/js": "npm:^10.0.1"
-    "@napi-rs/canvas": "npm:^1.0.13"
-    "@vitejs/plugin-vue": "npm:^6.0.11"
-    "@vitest/coverage-v8": "npm:^4.1.10"
-    "@vue/test-utils": "npm:^2.4.11"
-    dwv: "npm:0.36.3"
-    eslint: "npm:^10.14.0"
-    eslint-plugin-vue: "npm:^10.12.1"
-    globals: "npm:^17.7.0"
-    jsdom: "npm:^31.0.1"
-    typescript: "npm:^6.0.3"
-    vite: "npm:^8.1.3"
-    vite-plugin-pwa: "npm:^2.0.0"
-    vitest: "npm:^4.1.10"
-    vue: "npm:^3.5.39"
-    vue-eslint-parser: "npm:^10.4.1"
-    vue-tsc: "npm:^3.3.14"
-    vuetify: "npm:^4.3.3"
-  peerDependencies:
-    vue: ^3.5.0
-    vuetify: ^4.3.3
-  languageName: unknown
-  linkType: soft
 
 "dwv@npm:0.36.3":
   version: 0.36.3

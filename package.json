@@ -1,5 +1,5 @@
 {
-  "name": "dwv-vue",
+  "name": "@ivmartel/dwv-vue",
   "version": "0.11.0-beta.0",
   "description": "Medical image viewer component for Vue.js, using DWV (DICOM Web Viewer).",
   "author": "ivmartel",
@@ -10,6 +10,9 @@
   },
   "homepage": "https://github.com/ivmartel/dwv-vue",
   "bugs": "https://github.com/ivmartel/dwv-vue/issues",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "dicom",
     "medical",
