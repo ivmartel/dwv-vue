@@ -7,7 +7,7 @@ import { createVuetify } from 'vuetify'
 
 import { DwvAppService } from '../services/dwvAppService.js'
 import { AnnotationService } from '../services/annotationService.js'
-import DicomView from './DicomView.vue'
+import DwvViewer from './DwvViewer.vue'
 import TagsTable from './TagsTable.vue'
 
 const vuetify = createVuetify({
@@ -24,8 +24,8 @@ const mountOptions = {
   }
 }
 
-describe('DicomViewComponent', () => {
-  const component = mount(DicomView, mountOptions)
+describe('DwvViewerComponent', () => {
+  const component = mount(DwvViewer, mountOptions)
 
   // Inspect the component instance on mount
   test('renders the component', () => {
@@ -38,7 +38,7 @@ describe('DicomViewComponent', () => {
   })
 
   test('renders the legend with showLegend', () => {
-    const wrapper = mount(DicomView, {
+    const wrapper = mount(DwvViewer, {
       ...mountOptions,
       props: { showLegend: true }
     })
@@ -56,7 +56,7 @@ describe('DicomViewComponent', () => {
   test('releases the services on unmount', () => {
     const appDispose = vi.spyOn(DwvAppService.prototype, 'dispose')
     const annotDispose = vi.spyOn(AnnotationService.prototype, 'dispose')
-    const wrapper = mount(DicomView, mountOptions)
+    const wrapper = mount(DwvViewer, mountOptions)
     wrapper.unmount()
     expect(appDispose).toHaveBeenCalledTimes(1)
     expect(annotDispose).toHaveBeenCalledTimes(1)
@@ -74,7 +74,7 @@ describe('DicomViewComponent', () => {
 
     test('does not load without inputs', () => {
       const loads = mockLoads()
-      const wrapper = mount(DicomView, mountOptions)
+      const wrapper = mount(DwvViewer, mountOptions)
       expect(loads.fromUri).not.toHaveBeenCalled()
       expect(loads.urls).not.toHaveBeenCalled()
       wrapper.unmount()
@@ -83,7 +83,7 @@ describe('DicomViewComponent', () => {
 
     test('loads from the window location', () => {
       const loads = mockLoads()
-      const wrapper = mount(DicomView, {
+      const wrapper = mount(DwvViewer, {
         ...mountOptions,
         props: { loadFromWindowLocation: true }
       })
@@ -94,7 +94,7 @@ describe('DicomViewComponent', () => {
 
     test('uri takes precedence over urls and window location', async () => {
       const loads = mockLoads()
-      const wrapper = mount(DicomView, {
+      const wrapper = mount(DwvViewer, {
         ...mountOptions,
         props: {
           uri: 'https://host/?input=a',
@@ -118,7 +118,7 @@ describe('DicomViewComponent', () => {
 
     test('urls take precedence over window location', async () => {
       const loads = mockLoads()
-      const wrapper = mount(DicomView, {
+      const wrapper = mount(DwvViewer, {
         ...mountOptions,
         props: {
           urls: 'https://host/b.dcm',

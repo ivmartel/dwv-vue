@@ -1,9 +1,9 @@
 <script setup>
-import DicomView from './components/DicomView.vue'
+import DwvViewer from './components/DwvViewer.vue'
 </script>
 
 <template>
-  <DicomView
+  <DwvViewer
     load-from-window-location
     show-legend
   />

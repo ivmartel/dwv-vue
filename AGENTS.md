@@ -10,7 +10,7 @@ Shipped with a demo application.
 Not certified for diagnostic use. License: GPL-3.0.
 
 The main deliverable is the npm package
-providing the `DicomView` component (see [Library package](#library-package));
+providing the `DwvViewer` component (see [Library package](#library-package));
 the repository also contains a demo app that uses it, deployed to GitHub
 Pages. The library only exposes what consumers need.
 
@@ -65,7 +65,7 @@ look there for reference behaviour when adding features.
 
 ## Architecture
 
-- **Services hold the logic, components display state.** `DicomView.vue`
+- **Services hold the logic, components display state.** `DwvViewer.vue`
   creates one `DwvAppService` and one `AnnotationService` per viewer and
   shares them with `provide('DwvAppService', ...)` /
   `provide('AnnotationService', ...)`. Child components get them with
@@ -77,10 +77,10 @@ look there for reference behaviour when adding features.
 - Services extend `EventTarget` and notify changes with `CustomEvent`s
   (`DwvAppService` re-dispatches the dwv app events and adds its own);
   components subscribe on mount and unsubscribe on unmount.
-- `DicomView.vue` creates the viewer id with `useId()`, passes it to
+- `DwvViewer.vue` creates the viewer id with `useId()`, passes it to
   `DwvAppService` and provides it as `'viewerId'`; components get it with
   `inject('viewerId')`, without a fallback: components are always mounted
-  inside a `DicomView`. Element ids are `<viewerId>-<name>`, never
+  inside a `DwvViewer`. Element ids are `<viewerId>-<name>`, never
   hard-coded. Only add an id when something references it
   (`getElementById`, `<label for>`, `aria-controls`, dwv's layer group...).
 
@@ -105,11 +105,11 @@ CI (`.github/workflows/nodejs-ci.yml`) runs both, then builds.
 
 ```text
 src/
-├─ index.js              Library entry point (exports DicomView)
+├─ index.js              Library entry point (exports DwvViewer)
 ├─ main.js               Demo app: Vue app + Vuetify setup (Material Design icons)
 ├─ App.vue
 ├─ components/
-│  ├─ DicomView.vue      Root view: creates and provides the services
+│  ├─ DwvViewer.vue      Root view: creates and provides the services
 │  ├─ DwvHeader.vue      Toolbar (load, tools, reset...)
 │  ├─ DwvContent.vue     Image layer group (dwv rendering target)
 │  ├─ DwvFooter.vue      Versions / legal
@@ -187,5 +187,5 @@ tsconfig.lib.json        Library type declarations (generated from the JS)
   not loose `object` / `Array`. `typescript` stays below 7 until vue-tsc
   (Volar) supports it.
 - The public API is documented in the README "Use as a library" section
-  (setup, `DicomView` properties, web workers): update it when the API or
+  (setup, `DwvViewer` properties, web workers): update it when the API or
   the host app requirements change.

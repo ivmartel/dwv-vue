@@ -2,7 +2,7 @@
 
 Medical image viewer component for [Vue.js](https://vuejs.org/), using [DWV](https://github.com/ivmartel/dwv) (DICOM Web Viewer).
 
-dwv-vue is mainly an npm package that provides a `DicomView` component to add a medical image viewer to your Vue app (see [Use as a library](#use-as-a-library)). The repository also contains a demo app that uses it, deployed at [stable](https://ivmartel.github.io/dwv-vue/demo/stable/) and [trunk](https://ivmartel.github.io/dwv-vue/demo/trunk/) (see [Steps to run the viewer from scratch](#steps-to-run-the-viewer-from-scratch) to run it locally).
+dwv-vue is mainly an npm package that provides a `DwvViewer` component to add a medical image viewer to your Vue app (see [Use as a library](#use-as-a-library)). The repository also contains a demo app that uses it, deployed at [stable](https://ivmartel.github.io/dwv-vue/demo/stable/) and [trunk](https://ivmartel.github.io/dwv-vue/demo/trunk/) (see [Steps to run the viewer from scratch](#steps-to-run-the-viewer-from-scratch) to run it locally).
 
 All coding/implementation contributions and comments are welcome.
 
@@ -12,7 +12,7 @@ dwv-vue is not certified for diagnostic use. Released under GNU GPL-3.0 license 
 
 ## Use as a library
 
-dwv-vue is available as an npm package that provides the `DicomView` Vue component.
+dwv-vue is available as an npm package that provides the `DwvViewer` Vue component.
 
 ```sh
 yarn add dwv-vue vue vuetify
@@ -21,7 +21,7 @@ yarn add dwv-vue vue vuetify
 `vue` (3.5+) and `vuetify` (4) are peer dependencies: your app provides them. `dwv` is installed
 with the package.
 
-The package includes TypeScript declarations for `DicomView` and the Vite plugin.
+The package includes TypeScript declarations for `DwvViewer` and the Vite plugin.
 
 ### Setup
 
@@ -65,12 +65,12 @@ Then use the component, several viewers can be on the same page:
 
 ```vue
 <script setup>
-import { DicomView } from 'dwv-vue'
+import { DwvViewer } from 'dwv-vue'
 </script>
 
 <template>
   <div style="height: 600px">
-    <DicomView urls="https://example.com/data/image.dcm" />
+    <DwvViewer urls="https://example.com/data/image.dcm" />
   </div>
 </template>
 ```

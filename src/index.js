@@ -1,4 +1,4 @@
 // dwv-vue library entry point
-import DicomView from './components/DicomView.vue'
+import DwvViewer from './components/DwvViewer.vue'
 
-export { DicomView }
+export { DwvViewer }
