@@ -67,7 +67,7 @@
     "@napi-rs/canvas": "^1.0.13",
     "@vitejs/plugin-vue": "^6.0.11",
     "@vitest/coverage-v8": "^4.1.10",
-    "@vue/test-utils": "^2.4.11",
+    "@vue/test-utils": "^2.6.0",
     "eslint": "^10.14.0",
     "eslint-plugin-vue": "^10.12.1",
     "globals": "^17.7.0",
