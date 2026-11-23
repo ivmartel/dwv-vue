@@ -1689,7 +1689,7 @@ __metadata:
     dwv: "npm:0.36.3"
     eslint: "npm:^10.14.0"
     eslint-plugin-vue: "npm:^10.12.1"
-    globals: "npm:^17.7.0"
+    globals: "npm:^17.14.0"
     jsdom: "npm:^31.0.1"
     typescript: "npm:^6.0.3"
     vite: "npm:^8.1.3"
@@ -4263,10 +4263,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^17.7.0":
-  version: 17.7.0
-  resolution: "globals@npm:17.7.0"
-  checksum: 10c0/e83f791acf537b85fa1632ac48a45432a1999a61acd9f955b5c2145f66d6b5000a7945029874b6184fa2dfac8d33af03885a5a7ffa457866f1bcf0b40d0c1291
+"globals@npm:^17.14.0":
+  version: 17.14.0
+  resolution: "globals@npm:17.14.0"
+  checksum: 10c0/422d17c24e87170d4aa566b97a53339ae451c2f4d78512594a7ca951cdb939bc4a85c10071e6dcf77ca63de48713a77f2e71eb9214e44880233dff2090e92731
   languageName: node
   linkType: hard
 
