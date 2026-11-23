@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {getTagFromKey} from 'dwv'
+import {getDicomTagInfo, getTagFromKey} from 'dwv'
 
 const toLower = text => {
   if (text) {
@@ -74,14 +74,53 @@ const searchAll = (items, term) => {
   return items
 }
 
-const getMetaArray = (tagData, instanceNumber) => {
+// key of the list of item ids in merged meta data
+const MERGE_ID_KEY = 'mergeId'
+
+/**
+ * Get the item ids of merged meta data, sorted by instance number.
+ * Ids are the item instance numbers, with an optional '-<suffix>'
+ * (for ex. the frame number).
+ *
+ * @param {object} tagData The meta data.
+ * @returns {string[]} The sorted ids, empty if the data is not merged.
+ */
+const getItemIds = (tagData) => {
+  const ids = tagData[MERGE_ID_KEY]
+  if (!Array.isArray(ids)) {
+    return []
+  }
+  return [...ids].sort((a, b) =>
+    a.localeCompare(b, undefined, {numeric: true}))
+}
+
+/**
+ * Get an element value for an item: merged values are objects
+ * indexed by item id, other values are arrays (or typed arrays).
+ *
+ * @param {*} value The element value.
+ * @param {string|undefined} itemId The item id.
+ * @returns {*} The item value.
+ */
+const getItemValue = (value, itemId) => {
+  if (typeof itemId !== 'undefined' &&
+    value !== null &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    !ArrayBuffer.isView(value)) {
+    return value[itemId]
+  }
+  return value
+}
+
+const getMetaArray = (tagData, itemId) => {
   let reducer
   if (isDicomMeta(tagData)) {
-    reducer = getDicomTagReducer(tagData, instanceNumber, '')
+    reducer = getDicomTagReducer(tagData, itemId, '')
   } else {
     reducer = getTagReducer(tagData)
   }
-  const keys = Object.keys(tagData)
+  const keys = Object.keys(tagData).filter(key => key !== MERGE_ID_KEY)
   return keys.reduce(reducer, [])
 }
 
@@ -99,41 +138,31 @@ const getTagReducer = (tagData) => {
   }
 }
 
-const getDicomTagReducer = (tagData, instanceNumber, prefix) => {
+const getDicomTagReducer = (tagData, itemId, prefix) => {
   return (accumulator, currentValue) => {
     const tag = getTagFromKey(currentValue)
-    let key = tag.getNameFromDictionary()
+    let key = getDicomTagInfo(tag)?.getName()
     if (typeof key === 'undefined') {
       // add 'x' to help sorting
       key = 'x' + tag.getKey()
     }
-    const name = key
+    const name = (prefix ? prefix + ' ' : '') + key
     const element = tagData[currentValue]
-    let value = element.value
-    // possible 'merged' object
-    // (use slice method as test for array and typed array)
-    if (typeof value.slice === 'undefined' &&
-      typeof value[instanceNumber] !== 'undefined') {
-      value = value[instanceNumber]
-    }
-    // force instance number (otherwise takes value in non indexed array)
-    if (name === 'InstanceNumber') {
-      value = instanceNumber
+    let value = getItemValue(element.value, itemId)
+    if (typeof value === 'undefined') {
+      value = []
     }
     // recurse for sequence
     if (element.vr === 'SQ') {
       // sequence tag
-      accumulator.push({
-        name: (prefix ? prefix + ' ' : '') + name,
-        value: ''
-      })
+      accumulator.push({name, value: ''})
       // sequence value
       for (let i = 0; i < value.length; ++i) {
         const sqItems = value[i]
         const keys = Object.keys(sqItems)
         const res = keys.reduce(
           getDicomTagReducer(
-            sqItems, instanceNumber, prefix + '[' + i + ']'), []
+            sqItems, itemId, prefix + '[' + i + ']'), []
         )
         accumulator = accumulator.concat(res)
       }
@@ -143,10 +172,7 @@ const getDicomTagReducer = (tagData, instanceNumber, prefix) => {
         value = value.slice(0, 10).toString() +
           '... (len:' + value.length + ')'
       }
-      accumulator.push({
-        name: (prefix ? prefix + ' ' : '') + name,
-        value: value.toString()
-      })
+      accumulator.push({name, value: value.toString()})
     }
     return accumulator
   }
@@ -166,8 +192,8 @@ export default {
     sliderIndex: 0,
     sliderMin: undefined,
     sliderMax: undefined,
-    instanceNumber: 0,
-    instanceNumbers: []
+    instanceNumber: undefined,
+    itemIds: []
   }),
   watch: {
     // new data loaded while the dialog content is kept mounted
@@ -175,8 +201,8 @@ export default {
       this.initFromTags()
     },
     sliderIndex(index) {
-      if (this.instanceNumbers.length !== 0) {
-        this.instanceNumber = this.instanceNumbers[index]
+      if (this.itemIds.length !== 0) {
+        this.instanceNumber = this.itemIds[index]
       }
       this.searchOnTable()
     }
@@ -186,30 +212,24 @@ export default {
   },
   methods: {
     initFromTags() {
-      this.instanceNumbers = []
-      this.sliderMin = undefined
-      this.sliderMax = undefined
-      this.instanceNumber = 0
-      // set slider with instance numbers ('00200013')
-      const instanceElement = this.tagsData['00200013']
-      if (typeof instanceElement !== 'undefined') {
-        let instanceNumberValue = instanceElement.value
-        if (typeof instanceNumberValue === 'string') {
-          instanceNumberValue = [instanceNumberValue]
-        }
-        // convert string to numbers
-        this.instanceNumbers = instanceNumberValue.map(Number)
-        this.instanceNumbers.sort((a, b) => a - b)
-
+      // set slider with the merged item ids
+      this.itemIds = getItemIds(this.tagsData)
+      if (this.itemIds.length !== 0) {
         this.sliderMin = 0
-        this.sliderMax = this.instanceNumbers.length - 1
-        this.instanceNumber = this.instanceNumbers[0]
+        this.sliderMax = this.itemIds.length - 1
+        this.instanceNumber = this.itemIds[0]
+      } else {
+        this.sliderMin = undefined
+        this.sliderMax = undefined
+        // single item: display its instance number ('00200013')
+        this.instanceNumber = this.tagsData['00200013']?.value?.[0]
       }
       this.sliderIndex = 0
       this.searchOnTable()
     },
     searchOnTable() {
-      const metaArray = getMetaArray(this.tagsData, this.instanceNumber)
+      const itemId = this.itemIds.length !== 0 ? this.instanceNumber : undefined
+      const metaArray = getMetaArray(this.tagsData, itemId)
       this.searched = searchAll(metaArray, this.search)
     }
   }

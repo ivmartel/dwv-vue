@@ -164,7 +164,9 @@ export class DwvAppService extends EventTarget {
   }
 
   /**
-   * Get the meta data of the loaded data.
+   * Get the meta data of the last loaded data (without pixel data).
+   * For a multi item data, `mergeId` lists the item ids and
+   *   item dependent element values are indexed by these ids.
    *
    * @returns {object} The meta data.
    */
@@ -229,12 +231,12 @@ export class DwvAppService extends EventTarget {
       }
     });
     this.#dwvApp.addEventListener('loadprogress', (event) => {
-      this.#dispatch('loadprogress', {value: event.loaded});
+      this.#dispatch('loadprogress', {value: event.detail.loaded});
     });
     this.#dwvApp.addEventListener('renderend', (event) => {
       if (isFirstRender) {
         isFirstRender = false;
-        const vl = this.#dwvApp.getViewLayersByDataId(event.dataid)[0];
+        const vl = this.#dwvApp.getViewLayersByDataId(event.detail.dataid)[0];
         const vc = vl.getViewController();
         // available tools
         this.#canScroll = vc.canScroll();
@@ -247,7 +249,8 @@ export class DwvAppService extends EventTarget {
     });
     this.#dwvApp.addEventListener('load', (event) => {
       // set dicom tags
-      this.#metaData = structuredClone(this.#dwvApp.getMetaData(event.dataid));
+      const data = this.#dwvApp.getDataController().get(event.detail.dataid);
+      this.#metaData = structuredClone(data.meta);
       const pixelDataKey = '7FE00010';
       if (typeof this.#metaData[pixelDataKey] !== 'undefined') {
         delete this.#metaData[pixelDataKey];
@@ -267,11 +270,11 @@ export class DwvAppService extends EventTarget {
         alert('Load was aborted.');
       }
     });
-    this.#dwvApp.addEventListener('loaderror', (event) => {
-      console.error(event.error);
+    this.#dwvApp.addEventListener('error', (event) => {
+      console.error(event.detail.error);
       ++nReceivedLoadError;
     });
-    this.#dwvApp.addEventListener('loadabort', (/*event*/) => {
+    this.#dwvApp.addEventListener('abort', (/*event*/) => {
       ++nReceivedLoadAbort;
     });
   }
@@ -285,7 +288,7 @@ export class DwvAppService extends EventTarget {
     this.#dwvApp.addEventListener('wlchange', (event) => {
       // value: [center, width, name]
       const manualStr = 'manual';
-      if (event.value[2] === manualStr) {
+      if (event.detail.value[2] === manualStr) {
         if (!this.#presetNames.includes(manualStr)) {
           this.#setPresetNames([...this.#presetNames, manualStr]);
         }
@@ -297,26 +300,29 @@ export class DwvAppService extends EventTarget {
 
     // handle key events
     this.#dwvApp.addEventListener('keydown', (event) => {
-      this.#dwvApp.defaultOnKeydown(event);
+      this.#dwvApp.defaultOnKeydown(event.detail);
     });
     // handle window resize
     window.addEventListener('resize', this.#dwvApp.onResize);
 
     // forward data and annotation events
     const forwarded = {
-      dataadd: (event) => ({dataid: event.dataid}),
-      dataremove: (event) => ({dataid: event.dataid}),
-      drawlayeradd: (event) => ({dataid: event.dataid}),
-      annotationadd: (event) => ({dataid: event.dataid, data: event.data}),
-      annotationupdate: (event) => ({
-        dataid: event.dataid,
-        data: event.data,
-        keys: event.keys
+      dataadd: ({detail}) => ({dataid: detail.dataid}),
+      dataremove: ({detail}) => ({dataid: detail.dataid}),
+      drawlayeradd: ({detail}) => ({dataid: detail.dataid}),
+      annotationadd: ({detail}) => ({dataid: detail.dataid, data: detail.data}),
+      annotationupdate: ({detail}) => ({
+        dataid: detail.dataid,
+        data: detail.data,
+        keys: detail.keys
       }),
-      annotationremove: (event) => ({dataid: event.dataid, data: event.data}),
-      annotationselect: (event) => ({
-        dataid: event.dataid,
-        annotationid: event.annotationid
+      annotationremove: ({detail}) => ({
+        dataid: detail.dataid,
+        data: detail.data
+      }),
+      annotationselect: ({detail}) => ({
+        dataid: detail.dataid,
+        annotationid: detail.annotationid
       })
     };
     for (const [type, getDetail] of Object.entries(forwarded)) {

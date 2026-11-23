@@ -475,7 +475,7 @@ export class AnnotationService extends EventTarget {
     }
     const listener = (editEvent) => {
       this.#updateGroup(dataId,
-        (group) => ({...group, editable: editEvent.data}));
+        (group) => ({...group, editable: editEvent.detail.data}));
     };
     annotationGroup.addEventListener(
       'annotationgroupeditablechange', listener);
