@@ -3,7 +3,8 @@ import {
   AppOptions,
   ViewConfig,
   ToolConfig,
-  getDwvVersion
+  getDwvVersion,
+  getURLsFromKeyValueUri
 } from 'dwv';
 import { overlayConfig } from './overlays';
 
@@ -227,7 +228,8 @@ export class DwvAppService extends EventTarget {
       // reset orientation so new data opens with its default one
       if (typeof this.#orientation !== 'undefined') {
         this.#orientation = undefined;
-        this.#dwvApp.setDataViewConfigs(this.#getViewConfigs());
+        this.#dwvApp.getStageController().setDataViewConfigs(
+          this.#getViewConfigs());
       }
     });
     this.#dwvApp.addEventListener('loadprogress', (event) => {
@@ -236,7 +238,8 @@ export class DwvAppService extends EventTarget {
     this.#dwvApp.addEventListener('renderend', (event) => {
       if (isFirstRender) {
         isFirstRender = false;
-        const vl = this.#dwvApp.getViewLayersByDataId(event.detail.dataid)[0];
+        const vl = this.#dwvApp.getStageController()
+          .getViewLayersByDataId(event.detail.dataid)[0];
         const vc = vl.getViewController();
         // available tools
         this.#canScroll = vc.canScroll();
@@ -347,12 +350,16 @@ export class DwvAppService extends EventTarget {
   }
 
   /**
-   * Load a from uri.
+   * Load from an uri with an `input` query parameter
+   *   (see dwv `getURLsFromKeyValueUri`).
    *
    * @param {string} uri The uri.
    */
   loadFromUri(uri) {
-    this.#dwvApp.loadFromUri(uri);
+    const urls = getURLsFromKeyValueUri(uri);
+    if (urls !== undefined && urls.length !== 0) {
+      this.#dwvApp.loadURLs(urls);
+    }
   }
 
   /**
@@ -406,7 +413,7 @@ export class DwvAppService extends EventTarget {
       this.#dwvApp.setToolFeatures(features);
     }
 
-    const lg = this.#dwvApp.getActiveLayerGroup();
+    const lg = this.#dwvApp.getStageController().getActiveLayerGroup();
     if (toolName === 'Draw') {
       // reuse created draw layer
       if (lg !== undefined && lg.getNumberOfLayers() > 1) {
@@ -425,7 +432,7 @@ export class DwvAppService extends EventTarget {
    * @param {string} presetName The preset name.
    */
   applyPreset(presetName) {
-    const lg = this.#dwvApp.getActiveLayerGroup();
+    const lg = this.#dwvApp.getStageController().getActiveLayerGroup();
     if (lg !== undefined) {
       const vl = lg.getViewLayersFromActive()[0];
       const vc = vl.getViewController();
@@ -450,11 +457,12 @@ export class DwvAppService extends EventTarget {
       this.#orientation = 'coronal';
     }
     // update data view config
-    this.#dwvApp.setDataViewConfigs(this.#getViewConfigs());
+    const stageController = this.#dwvApp.getStageController();
+    stageController.setDataViewConfigs(this.#getViewConfigs());
     // render data
-    const dataIds = this.#dwvApp.getDataIds();
+    const dataIds = this.#dwvApp.getDataController().getDataIds();
     for (const dataId of dataIds) {
-      this.#dwvApp.render(dataId);
+      stageController.render(dataId);
     }
   }
 
@@ -472,7 +480,7 @@ export class DwvAppService extends EventTarget {
    * Reset the layout.
    */
   reset() {
-    this.#dwvApp.resetZoomPan();
+    this.#dwvApp.getStageController().resetZoomPan();
   }
 
   /**
@@ -489,7 +497,7 @@ export class DwvAppService extends EventTarget {
    * @returns {object|undefined} The data.
    */
   getData(dataId) {
-    return this.#dwvApp.getData(dataId);
+    return this.#dwvApp.getDataController().get(dataId);
   }
 
   /**
@@ -499,7 +507,7 @@ export class DwvAppService extends EventTarget {
    * @returns {object[]} The layers.
    */
   getDrawLayersByDataId(dataId) {
-    return this.#dwvApp.getDrawLayersByDataId(dataId);
+    return this.#dwvApp.getStageController().getDrawLayersByDataId(dataId);
   }
 
   /**
@@ -508,6 +516,6 @@ export class DwvAppService extends EventTarget {
    * @param {object} cmd The command to add.
    */
   addToUndoStack(cmd) {
-    this.#dwvApp.addToUndoStack(cmd);
+    this.#dwvApp.getUndoController().addToUndoStack(cmd);
   }
 }
