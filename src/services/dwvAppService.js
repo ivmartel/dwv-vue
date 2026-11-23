@@ -305,7 +305,7 @@ export class DwvAppService extends EventTarget {
     // handle window resize
     window.addEventListener('resize', this.#dwvApp.onResize);
 
-    // forward data and annotation events
+    // forward data, annotation and tap events
     const forwarded = {
       dataadd: ({detail}) => ({dataid: detail.dataid}),
       dataremove: ({detail}) => ({dataid: detail.dataid}),
@@ -323,6 +323,11 @@ export class DwvAppService extends EventTarget {
       annotationselect: ({detail}) => ({
         dataid: detail.dataid,
         annotationid: detail.annotationid
+      }),
+      tap: ({detail}) => ({
+        position: detail.position,
+        annotations: detail.annotations,
+        segments: detail.segments
       })
     };
     for (const [type, getDetail] of Object.entries(forwarded)) {

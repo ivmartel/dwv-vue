@@ -58,8 +58,9 @@ id: `<viewerId>-qd-annotationgroup<dataId>-annotation<annotationId>`.
 
 ## Annotation row
 
-- **Content button** (shape icon and label): selects the annotation and moves
-  the view to its centroid.
+- **Content button** (shape icon and label): selects the annotation, moves
+  the view to its centroid and highlights it on the canvas (one short opacity
+  pulse, dwv `DrawLayer.highlightAnnotation`).
 - **Shape icon**: depends on the shape; unknown shapes use a question mark.
 
   | Shape | Icon |
@@ -92,6 +93,10 @@ id: `<viewerId>-qd-annotationgroup<dataId>-annotation<annotationId>`.
 | Toggle on | lock / labels / visibility / info pressed | Primary container background, icon in the on primary container colour (through `aria-pressed="true"`) |
 | Empty group | no annotations | Italic "No annotation" in the secondary text colour |
 | No quantification | details open, no numeric values | Italic "No quantification" |
+
+The selection also follows the canvas: selecting a shape with the draw tool,
+or tapping with the scroll or zoom and pan tool (dwv `tap` event), selects the
+tapped annotation; a tap outside any annotation clears the selection.
 
 When the selection changes, from the list or from the canvas, the selected row
 is scrolled into view (`scrollIntoView({block: 'nearest'})`) after rendering.
